@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-neutral-200;
+  }
+  
+  body {
+    @apply bg-white text-neutral-900 antialiased;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold text-neutral-900;
+  }
+
+  a {
+    @apply text-primary-600 hover:text-primary-700 transition-colors;
+  }
+}
+
+@layer utilities {
+  .prose {
+    @apply text-neutral-700 leading-relaxed;
+  }
+  
+  .prose p {
+    @apply mb-4;
+  }
+  
+  .prose ul {
+    @apply list-disc list-inside mb-4;
+  }
+  
+  .prose ol {
+    @apply list-decimal list-inside mb-4;
+  }
+  
+  .prose code {
+    @apply bg-neutral-100 text-primary-700 px-1.5 py-0.5 rounded text-sm font-mono;
+  }
+  
+  .prose pre {
+    @apply bg-neutral-900 text-neutral-100 p-4 rounded-lg overflow-x-auto mb-4;
+  }
+  
+  .prose pre code {
+    @apply bg-transparent text-neutral-100 p-0;
+  }
+}
+
+/* GitBook + ShapeOfAI inspired styling */
+.docs-container {
+  @apply max-w-4xl mx-auto px-6 py-12;
+}
+
+.section-spacing {
+  @apply mb-12;
+}
+
+.card {
+  @apply bg-white border border-neutral-200 rounded-lg p-6 shadow-sm;
+}
+
+.badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.badge-primary {
+  @apply bg-primary-100 text-primary-800;
+}
+
+.badge-neutral {
+  @apply bg-neutral-100 text-neutral-800;
+}
+
