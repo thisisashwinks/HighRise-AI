@@ -315,7 +315,7 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
           </div>
           <div>
             <h3 className="font-semibold text-red-700 mb-3 flex items-center">
-              <span className="mr-2">✗</span> Don't
+              <span className="mr-2">✗</span> Don&apos;t
             </h3>
             <ul className="space-y-2 text-neutral-700">
               {usageGuidelines.dont.map((item, index) => (

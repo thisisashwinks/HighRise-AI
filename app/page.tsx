@@ -41,13 +41,13 @@ export default function Home() {
               <div className="flex-1">
                 <h3 className="text-xl font-semibold text-neutral-900 mb-2">Transparency and Disclosure</h3>
                 <p className="text-neutral-700 mb-3">
-                  AI agents must always disclose their identity to ensure users are aware they're interacting 
+                  AI agents must always disclose their identity to ensure users are aware they&apos;re interacting 
                   with an AI system. This prevents confusion and builds trust through clear communication.
                 </p>
                 <ul className="list-disc list-inside space-y-1 text-sm text-neutral-600 ml-4">
                   <li>Clearly indicate when users are interacting with an AI agent</li>
                   <li>Use consistent visual indicators and labels</li>
-                  <li>Provide context about the AI's capabilities and limitations</li>
+                  <li>Provide context about the AI&apos;s capabilities and limitations</li>
                 </ul>
               </div>
             </div>
@@ -87,7 +87,7 @@ export default function Home() {
                   Users should always know the system is working on their behalf.
                 </p>
                 <ul className="list-disc list-inside space-y-1 text-sm text-neutral-600 ml-4">
-                  <li>Show "Thinking" or processing indicators</li>
+                  <li>Show &quot;Thinking&quot; or processing indicators</li>
                   <li>Provide status updates during long operations</li>
                   <li>Use subtle animations to indicate activity</li>
                 </ul>
@@ -104,7 +104,7 @@ export default function Home() {
               <div className="flex-1">
                 <h3 className="text-xl font-semibold text-neutral-900 mb-2">Transparency of Internal Processes</h3>
                 <p className="text-neutral-700 mb-3">
-                  Clearly convey the AI agent's current state and allow users to inspect reasoning, 
+                  Clearly convey the AI agent&apos;s current state and allow users to inspect reasoning, 
                   tool usage, and decision logic to build trust and understanding.
                 </p>
                 <ul className="list-disc list-inside space-y-1 text-sm text-neutral-600 ml-4">
@@ -315,7 +315,7 @@ export default function Home() {
           <li>Variants</li>
           <li>States</li>
           <li>Props / API Reference</li>
-          <li>Usage Guidelines (Do / Don't)</li>
+          <li>Usage Guidelines (Do / Don&apos;t)</li>
           <li>AI Considerations (for AI-related components)</li>
           <li>Accessibility</li>
           <li>Related Components</li>

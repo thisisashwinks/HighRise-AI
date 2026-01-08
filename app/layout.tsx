@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -18,7 +19,9 @@ export default function RootLayout({
           <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-xl font-bold text-neutral-900">HighRise AI</h1>
+                <Link href="/">
+                  <h1 className="text-xl font-bold text-neutral-900 hover:text-neutral-700 cursor-pointer transition-colors">HighRise AI</h1>
+                </Link>
                 <p className="text-sm text-neutral-600">Component Documentation</p>
               </div>
               <div className="flex gap-4">
