@@ -66,6 +66,10 @@
   @apply bg-white border border-neutral-200 rounded-lg p-6 shadow-sm;
 }
 
+.card-coming-soon {
+  @apply bg-[#f0f0f0] opacity-75 cursor-not-allowed;
+}
+
 .badge {
   @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
 }

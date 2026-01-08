@@ -5,6 +5,12 @@ export interface ComponentMetadata {
   href: string;
 }
 
+export interface ComingSoonComponentMetadata {
+  name: string;
+  category: string;
+  description: string;
+}
+
 export const componentRegistry: ComponentMetadata[] = [
   {
     name: 'Button',
@@ -30,5 +36,74 @@ export const componentRegistry: ComponentMetadata[] = [
     description: 'Dropdown select component with multiple sizes, variants, and search functionality',
     href: '/components/select',
   },
+  {
+    name: 'Dropdown',
+    category: 'Form',
+    description: 'Flexible dropdown menu component with multiple sizes, variants, and tree structures',
+    href: '/components/dropdown',
+  },
+  {
+    name: 'Content Switcher',
+    category: 'Navigation',
+    description: 'Segmented control for switching between related content views or options with clear visual distinction',
+    href: '/components/content-switcher',
+  },
 ];
 
+export const comingSoonComponents: ComingSoonComponentMetadata[] = [
+  {
+    name: 'Checkbox',
+    category: 'Form',
+    description: 'Checkbox component for selecting one or multiple options from a list',
+  },
+  {
+    name: 'Radio',
+    category: 'Form',
+    description: 'Radio button component for selecting a single option from a group of options',
+  },
+  {
+    name: 'Toggle',
+    category: 'Form',
+    description: 'Toggle switch component for binary on/off states and settings',
+  },
+  {
+    name: 'Input Form',
+    category: 'Form',
+    description: 'Complete form input component with validation, labels, and error handling',
+  },
+  {
+    name: 'Text Area',
+    category: 'Form',
+    description: 'Multi-line text input component for longer text entries and messages',
+  },
+  {
+    name: 'Accordion',
+    category: 'Content',
+    description: 'Collapsible content component for organizing and displaying information in expandable sections',
+  },
+  {
+    name: 'Audio Player',
+    category: 'Media',
+    description: 'Audio playback component with controls for playing, pausing, and managing audio content',
+  },
+  {
+    name: 'Loading & Thinking Icons/States',
+    category: 'Feedback',
+    description: 'Visual indicators and animations for loading states and AI thinking processes',
+  },
+  {
+    name: 'Progress Indicator',
+    category: 'Feedback',
+    description: 'Progress bar and loading indicators to show task completion status and progress',
+  },
+  {
+    name: 'Date Picker',
+    category: 'Form',
+    description: 'Date selection component with calendar interface for choosing dates and date ranges',
+  },
+  {
+    name: 'Slider',
+    category: 'Form',
+    description: 'Range slider component for selecting numeric values within a specified range',
+  },
+];

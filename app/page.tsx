@@ -1,9 +1,10 @@
 import Link from 'next/link';
-import { componentRegistry } from '@/data/components';
+import { componentRegistry, comingSoonComponents } from '@/data/components';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 
 export default function Home() {
   const components = componentRegistry;
+  const comingSoon = comingSoonComponents;
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-12">
@@ -41,6 +42,32 @@ export default function Home() {
             </Link>
           ))}
         </div>
+      </section>
+
+      {/* Coming Soon Components */}
+      <section className="mb-12">
+        <h2 className="text-2xl font-semibold text-neutral-900 mb-6">Coming Soon</h2>
+        {comingSoon.length > 0 ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {comingSoon.map((component) => (
+              <div
+                key={component.name}
+                className="card card-coming-soon"
+              >
+                <div className="mb-2 flex items-center gap-2">
+                  <span className="badge badge-neutral">{component.category}</span>
+                  <span className="badge badge-primary">Coming Soon</span>
+                </div>
+                <h3 className="text-xl font-semibold text-neutral-900 mb-2">
+                  {component.name}
+                </h3>
+                <p className="text-sm text-neutral-700">{component.description}</p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-neutral-500 text-sm">No components coming soon at the moment.</p>
+        )}
       </section>
 
       {/* General Guidelines & Principles Section */}
