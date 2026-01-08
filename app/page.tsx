@@ -319,14 +319,18 @@ export default function Home() {
               to accomplish their goals.
             </p>
             <div className="grid md:grid-cols-1 gap-6">
-              <div className="card p-0 overflow-hidden">
-                <div className="relative w-full aspect-video">
+              <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
+                <div className="relative w-full aspect-video bg-neutral-50">
                   <Image
                     src="/examples/ai-usage-modes/Focused 1.png"
                     alt="Focused Mode - AI as the main context"
                     fill
                     style={{ objectFit: 'contain' }}
                   />
+                </div>
+                <div className="p-5">
+                  <h5 className="text-lg font-semibold text-neutral-900 mb-2">AI as Primary Interface</h5>
+                  <p className="text-sm text-neutral-700">The AI system serves as the main interface where users interact directly with AI capabilities to accomplish their primary goals.</p>
                 </div>
               </div>
             </div>
@@ -347,8 +351,8 @@ export default function Home() {
               achieve their goals. The AI assists without taking center stage.
             </p>
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="card p-0 overflow-hidden">
-                <div className="relative w-full aspect-video">
+              <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
+                <div className="relative w-full aspect-video bg-neutral-50">
                   <Image
                     src="/examples/ai-usage-modes/Supportive 1.png"
                     alt="Supportive Mode - AI complements the main context"
@@ -356,15 +360,23 @@ export default function Home() {
                     style={{ objectFit: 'contain' }}
                   />
                 </div>
+                <div className="p-5">
+                  <h5 className="text-lg font-semibold text-neutral-900 mb-2">AI Companion Interface</h5>
+                  <p className="text-sm text-neutral-700">AI provides assistance alongside the main interface, offering helpful suggestions and support without disrupting the primary workflow.</p>
+                </div>
               </div>
-              <div className="card p-0 overflow-hidden">
-                <div className="relative w-full aspect-video">
+              <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
+                <div className="relative w-full aspect-video bg-neutral-50">
                   <Image
                     src="/examples/ai-usage-modes/Supportive 2.png"
                     alt="Supportive Mode - AI assists without taking center stage"
                     fill
                     style={{ objectFit: 'contain' }}
                   />
+                </div>
+                <div className="p-5">
+                  <h5 className="text-lg font-semibold text-neutral-900 mb-2">Contextual AI Assistance</h5>
+                  <p className="text-sm text-neutral-700">AI appears as a supportive element that enhances the user experience by providing contextual help and guidance when needed.</p>
                 </div>
               </div>
             </div>
@@ -384,9 +396,9 @@ export default function Home() {
               AI is blended into specific moments of the user&apos;s flow to help them complete small, 
               discrete tasks. The AI appears contextually when needed.
             </p>
-            <div className="grid md:grid-cols-3 lg:grid-cols-3 gap-6">
-              <div className="card p-0 overflow-hidden">
-                <div className="relative w-full aspect-video">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
+                <div className="relative w-full aspect-video bg-neutral-50">
                   <Image
                     src="/examples/ai-usage-modes/Integrated 1.png"
                     alt="Integrated Mode - AI appears contextually when needed"
@@ -394,9 +406,13 @@ export default function Home() {
                     style={{ objectFit: 'contain' }}
                   />
                 </div>
+                <div className="p-5">
+                  <h5 className="text-lg font-semibold text-neutral-900 mb-2">Contextual AI Suggestions</h5>
+                  <p className="text-sm text-neutral-700">AI appears at the right moment to provide relevant suggestions and assistance within the user's workflow.</p>
+                </div>
               </div>
-              <div className="card p-0 overflow-hidden">
-                <div className="relative w-full aspect-video">
+              <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
+                <div className="relative w-full aspect-video bg-neutral-50">
                   <Image
                     src="/examples/ai-usage-modes/Integrated 2.png"
                     alt="Integrated Mode - AI blended into user flow"
@@ -404,9 +420,13 @@ export default function Home() {
                     style={{ objectFit: 'contain' }}
                   />
                 </div>
+                <div className="p-5">
+                  <h5 className="text-lg font-semibold text-neutral-900 mb-2">Seamless Workflow Integration</h5>
+                  <p className="text-sm text-neutral-700">AI capabilities are naturally woven into the user interface, enhancing tasks without disrupting the flow.</p>
+                </div>
               </div>
-              <div className="card p-0 overflow-hidden">
-                <div className="relative w-full aspect-video">
+              <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
+                <div className="relative w-full aspect-video bg-neutral-50">
                   <Image
                     src="/examples/ai-usage-modes/Integrated 3.png"
                     alt="Integrated Mode - Contextual AI assistance"
@@ -414,9 +434,13 @@ export default function Home() {
                     style={{ objectFit: 'contain' }}
                   />
                 </div>
+                <div className="p-5">
+                  <h5 className="text-lg font-semibold text-neutral-900 mb-2">Smart Task Assistance</h5>
+                  <p className="text-sm text-neutral-700">AI provides intelligent assistance for specific tasks, appearing when users need help completing discrete actions.</p>
+                </div>
               </div>
-              <div className="card p-0 overflow-hidden">
-                <div className="relative w-full aspect-video">
+              <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
+                <div className="relative w-full aspect-video bg-neutral-50">
                   <Image
                     src="/examples/ai-usage-modes/Integrated 4.png"
                     alt="Integrated Mode - Discrete task completion"
@@ -424,9 +448,13 @@ export default function Home() {
                     style={{ objectFit: 'contain' }}
                   />
                 </div>
+                <div className="p-5">
+                  <h5 className="text-lg font-semibold text-neutral-900 mb-2">Focused Task Completion</h5>
+                  <p className="text-sm text-neutral-700">AI helps users complete specific, well-defined tasks efficiently within their current context.</p>
+                </div>
               </div>
-              <div className="card p-0 overflow-hidden">
-                <div className="relative w-full aspect-video">
+              <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
+                <div className="relative w-full aspect-video bg-neutral-50">
                   <Image
                     src="/examples/ai-usage-modes/Integrated 5.png"
                     alt="Integrated Mode - Seamless AI integration"
@@ -434,9 +462,13 @@ export default function Home() {
                     style={{ objectFit: 'contain' }}
                   />
                 </div>
+                <div className="p-5">
+                  <h5 className="text-lg font-semibold text-neutral-900 mb-2">Natural Interface Integration</h5>
+                  <p className="text-sm text-neutral-700">AI features are integrated so naturally that they feel like a native part of the interface experience.</p>
+                </div>
               </div>
-              <div className="card p-0 overflow-hidden">
-                <div className="relative w-full aspect-video">
+              <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
+                <div className="relative w-full aspect-video bg-neutral-50">
                   <Image
                     src="/examples/ai-usage-modes/Integrated 6.png"
                     alt="Integrated Mode - Contextual moments"
@@ -444,9 +476,13 @@ export default function Home() {
                     style={{ objectFit: 'contain' }}
                   />
                 </div>
+                <div className="p-5">
+                  <h5 className="text-lg font-semibold text-neutral-900 mb-2">Context-Aware Interactions</h5>
+                  <p className="text-sm text-neutral-700">AI understands the current context and provides relevant help at the right moments in the user journey.</p>
+                </div>
               </div>
-              <div className="card p-0 overflow-hidden">
-                <div className="relative w-full aspect-video">
+              <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
+                <div className="relative w-full aspect-video bg-neutral-50">
                   <Image
                     src="/examples/ai-usage-modes/Integrated 7.png"
                     alt="Integrated Mode - User flow integration"
@@ -454,9 +490,13 @@ export default function Home() {
                     style={{ objectFit: 'contain' }}
                   />
                 </div>
+                <div className="p-5">
+                  <h5 className="text-lg font-semibold text-neutral-900 mb-2">Flow-Embedded AI</h5>
+                  <p className="text-sm text-neutral-700">AI capabilities are embedded directly into the user flow, making assistance feel intuitive and unobtrusive.</p>
+                </div>
               </div>
-              <div className="card p-0 overflow-hidden">
-                <div className="relative w-full aspect-video">
+              <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
+                <div className="relative w-full aspect-video bg-neutral-50">
                   <Image
                     src="/examples/ai-usage-modes/Integrated 8.png"
                     alt="Integrated Mode - Contextual AI"
@@ -464,15 +504,23 @@ export default function Home() {
                     style={{ objectFit: 'contain' }}
                   />
                 </div>
+                <div className="p-5">
+                  <h5 className="text-lg font-semibold text-neutral-900 mb-2">Just-in-Time AI Help</h5>
+                  <p className="text-sm text-neutral-700">AI appears exactly when needed, providing timely assistance that enhances productivity without distraction.</p>
+                </div>
               </div>
-              <div className="card p-0 overflow-hidden">
-                <div className="relative w-full aspect-video">
+              <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
+                <div className="relative w-full aspect-video bg-neutral-50">
                   <Image
                     src="/examples/ai-usage-modes/Integrated 9.png"
                     alt="Integrated Mode - Seamless assistance"
                     fill
                     style={{ objectFit: 'contain' }}
                   />
+                </div>
+                <div className="p-5">
+                  <h5 className="text-lg font-semibold text-neutral-900 mb-2">Invisible AI Enhancement</h5>
+                  <p className="text-sm text-neutral-700">AI works behind the scenes to enhance user actions, making interactions smoother and more efficient.</p>
                 </div>
               </div>
             </div>
@@ -492,9 +540,9 @@ export default function Home() {
               A unified AI experience that seamlessly combines different modes to create a cohesive 
               user journey.
             </p>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="card p-0 overflow-hidden">
-                <div className="relative w-full aspect-video">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
+                <div className="relative w-full aspect-video bg-neutral-50">
                   <Image
                     src="/examples/ai-usage-modes/One AI 1.png"
                     alt="One AI Experience - Unified AI journey"
@@ -502,9 +550,13 @@ export default function Home() {
                     style={{ objectFit: 'contain' }}
                   />
                 </div>
+                <div className="p-5">
+                  <h5 className="text-lg font-semibold text-neutral-900 mb-2">Unified AI Journey</h5>
+                  <p className="text-sm text-neutral-700">A cohesive experience where different AI modes work together seamlessly to create a unified user journey.</p>
+                </div>
               </div>
-              <div className="card p-0 overflow-hidden">
-                <div className="relative w-full aspect-video">
+              <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
+                <div className="relative w-full aspect-video bg-neutral-50">
                   <Image
                     src="/examples/ai-usage-modes/One AI 2.png"
                     alt="One AI Experience - Cohesive user experience"
@@ -512,15 +564,23 @@ export default function Home() {
                     style={{ objectFit: 'contain' }}
                   />
                 </div>
+                <div className="p-5">
+                  <h5 className="text-lg font-semibold text-neutral-900 mb-2">Cohesive User Experience</h5>
+                  <p className="text-sm text-neutral-700">Multiple AI interaction modes combine to create a seamless and intuitive experience across the entire application.</p>
+                </div>
               </div>
-              <div className="card p-0 overflow-hidden">
-                <div className="relative w-full aspect-video">
+              <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
+                <div className="relative w-full aspect-video bg-neutral-50">
                   <Image
                     src="/examples/ai-usage-modes/One AI 3.png"
                     alt="One AI Experience - Seamless mode combination"
                     fill
                     style={{ objectFit: 'contain' }}
                   />
+                </div>
+                <div className="p-5">
+                  <h5 className="text-lg font-semibold text-neutral-900 mb-2">Seamless Mode Combination</h5>
+                  <p className="text-sm text-neutral-700">Different AI modes transition smoothly, creating a natural flow that adapts to user needs throughout their journey.</p>
                 </div>
               </div>
             </div>

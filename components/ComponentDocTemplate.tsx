@@ -22,7 +22,7 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
   examples,
 }) => {
   return (
-    <div className="max-w-4xl mx-auto px-6 py-12">
+    <div className="max-w-6xl mx-auto px-6 py-12">
       {/* Breadcrumbs */}
       <Breadcrumbs
         items={[
@@ -86,7 +86,7 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
           <p className="text-neutral-700 mb-6">
             See how this component is used in real-world scenarios across different products. Each example shows a different use case with context about where and why the component is applied, and how these patterns could be adapted for HighLevel products.
           </p>
-          <div className="columns-1 md:columns-2 lg:columns-3 gap-6" style={{ columnGap: '1.5rem' }}>
+          <div className="columns-1 md:columns-2 gap-6" style={{ columnGap: '1.5rem' }}>
             {examples.map((example, index) => (
               <div key={index} className="break-inside-avoid mb-6 border border-neutral-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow">
                 {/* Media Section */}
