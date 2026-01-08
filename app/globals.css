@@ -67,7 +67,19 @@
 }
 
 .card-coming-soon {
-  @apply bg-[#f0f0f0] opacity-75 cursor-not-allowed;
+  @apply bg-[#f5f5f5] opacity-75 cursor-not-allowed;
+}
+
+.card-coming-soon .badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.card-coming-soon .badge-primary {
+  @apply bg-primary-200 text-primary-900;
+}
+
+.card-coming-soon .badge-neutral {
+  @apply bg-neutral-200 text-neutral-900;
 }
 
 .badge {

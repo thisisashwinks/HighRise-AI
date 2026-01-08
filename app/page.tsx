@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { componentRegistry, comingSoonComponents } from '@/data/components';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 
@@ -294,8 +295,13 @@ export default function Home() {
             </p>
             <div className="grid md:grid-cols-1 gap-6">
               <div className="card p-0 overflow-hidden">
-                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
-                  <p className="text-sm text-neutral-500">Focused Mode Image 1</p>
+                <div className="relative w-full aspect-video">
+                  <Image
+                    src="/examples/ai-usage-modes/Focused 1.png"
+                    alt="Focused Mode - AI as the main context"
+                    fill
+                    style={{ objectFit: 'contain' }}
+                  />
                 </div>
               </div>
             </div>
@@ -317,13 +323,23 @@ export default function Home() {
             </p>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="card p-0 overflow-hidden">
-                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
-                  <p className="text-sm text-neutral-500">Supportive Mode Image 1</p>
+                <div className="relative w-full aspect-video">
+                  <Image
+                    src="/examples/ai-usage-modes/Supportive 1.png"
+                    alt="Supportive Mode - AI complements the main context"
+                    fill
+                    style={{ objectFit: 'contain' }}
+                  />
                 </div>
               </div>
               <div className="card p-0 overflow-hidden">
-                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
-                  <p className="text-sm text-neutral-500">Supportive Mode Image 2</p>
+                <div className="relative w-full aspect-video">
+                  <Image
+                    src="/examples/ai-usage-modes/Supportive 2.png"
+                    alt="Supportive Mode - AI assists without taking center stage"
+                    fill
+                    style={{ objectFit: 'contain' }}
+                  />
                 </div>
               </div>
             </div>
@@ -345,48 +361,93 @@ export default function Home() {
             </p>
             <div className="grid md:grid-cols-3 lg:grid-cols-3 gap-6">
               <div className="card p-0 overflow-hidden">
-                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
-                  <p className="text-sm text-neutral-500">Integrated Mode Image 1</p>
+                <div className="relative w-full aspect-video">
+                  <Image
+                    src="/examples/ai-usage-modes/Integrated 1.png"
+                    alt="Integrated Mode - AI appears contextually when needed"
+                    fill
+                    style={{ objectFit: 'contain' }}
+                  />
                 </div>
               </div>
               <div className="card p-0 overflow-hidden">
-                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
-                  <p className="text-sm text-neutral-500">Integrated Mode Image 2</p>
+                <div className="relative w-full aspect-video">
+                  <Image
+                    src="/examples/ai-usage-modes/Integrated 2.png"
+                    alt="Integrated Mode - AI blended into user flow"
+                    fill
+                    style={{ objectFit: 'contain' }}
+                  />
                 </div>
               </div>
               <div className="card p-0 overflow-hidden">
-                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
-                  <p className="text-sm text-neutral-500">Integrated Mode Image 3</p>
+                <div className="relative w-full aspect-video">
+                  <Image
+                    src="/examples/ai-usage-modes/Integrated 3.png"
+                    alt="Integrated Mode - Contextual AI assistance"
+                    fill
+                    style={{ objectFit: 'contain' }}
+                  />
                 </div>
               </div>
               <div className="card p-0 overflow-hidden">
-                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
-                  <p className="text-sm text-neutral-500">Integrated Mode Image 4</p>
+                <div className="relative w-full aspect-video">
+                  <Image
+                    src="/examples/ai-usage-modes/Integrated 4.png"
+                    alt="Integrated Mode - Discrete task completion"
+                    fill
+                    style={{ objectFit: 'contain' }}
+                  />
                 </div>
               </div>
               <div className="card p-0 overflow-hidden">
-                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
-                  <p className="text-sm text-neutral-500">Integrated Mode Image 5</p>
+                <div className="relative w-full aspect-video">
+                  <Image
+                    src="/examples/ai-usage-modes/Integrated 5.png"
+                    alt="Integrated Mode - Seamless AI integration"
+                    fill
+                    style={{ objectFit: 'contain' }}
+                  />
                 </div>
               </div>
               <div className="card p-0 overflow-hidden">
-                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
-                  <p className="text-sm text-neutral-500">Integrated Mode Image 6</p>
+                <div className="relative w-full aspect-video">
+                  <Image
+                    src="/examples/ai-usage-modes/Integrated 6.png"
+                    alt="Integrated Mode - Contextual moments"
+                    fill
+                    style={{ objectFit: 'contain' }}
+                  />
                 </div>
               </div>
               <div className="card p-0 overflow-hidden">
-                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
-                  <p className="text-sm text-neutral-500">Integrated Mode Image 7</p>
+                <div className="relative w-full aspect-video">
+                  <Image
+                    src="/examples/ai-usage-modes/Integrated 7.png"
+                    alt="Integrated Mode - User flow integration"
+                    fill
+                    style={{ objectFit: 'contain' }}
+                  />
                 </div>
               </div>
               <div className="card p-0 overflow-hidden">
-                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
-                  <p className="text-sm text-neutral-500">Integrated Mode Image 8</p>
+                <div className="relative w-full aspect-video">
+                  <Image
+                    src="/examples/ai-usage-modes/Integrated 8.png"
+                    alt="Integrated Mode - Contextual AI"
+                    fill
+                    style={{ objectFit: 'contain' }}
+                  />
                 </div>
               </div>
               <div className="card p-0 overflow-hidden">
-                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
-                  <p className="text-sm text-neutral-500">Integrated Mode Image 9</p>
+                <div className="relative w-full aspect-video">
+                  <Image
+                    src="/examples/ai-usage-modes/Integrated 9.png"
+                    alt="Integrated Mode - Seamless assistance"
+                    fill
+                    style={{ objectFit: 'contain' }}
+                  />
                 </div>
               </div>
             </div>
@@ -408,18 +469,33 @@ export default function Home() {
             </p>
             <div className="grid md:grid-cols-3 gap-6">
               <div className="card p-0 overflow-hidden">
-                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
-                  <p className="text-sm text-neutral-500">One AI Experience Image 1</p>
+                <div className="relative w-full aspect-video">
+                  <Image
+                    src="/examples/ai-usage-modes/One AI 1.png"
+                    alt="One AI Experience - Unified AI journey"
+                    fill
+                    style={{ objectFit: 'contain' }}
+                  />
                 </div>
               </div>
               <div className="card p-0 overflow-hidden">
-                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
-                  <p className="text-sm text-neutral-500">One AI Experience Image 2</p>
+                <div className="relative w-full aspect-video">
+                  <Image
+                    src="/examples/ai-usage-modes/One AI 2.png"
+                    alt="One AI Experience - Cohesive user experience"
+                    fill
+                    style={{ objectFit: 'contain' }}
+                  />
                 </div>
               </div>
               <div className="card p-0 overflow-hidden">
-                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
-                  <p className="text-sm text-neutral-500">One AI Experience Image 3</p>
+                <div className="relative w-full aspect-video">
+                  <Image
+                    src="/examples/ai-usage-modes/One AI 3.png"
+                    alt="One AI Experience - Seamless mode combination"
+                    fill
+                    style={{ objectFit: 'contain' }}
+                  />
                 </div>
               </div>
             </div>

@@ -48,6 +48,12 @@ export const componentRegistry: ComponentMetadata[] = [
     description: 'Segmented control for switching between related content views or options with clear visual distinction',
     href: '/components/content-switcher',
   },
+  {
+    name: 'Input Form',
+    category: 'Form',
+    description: 'Comprehensive form component that arranges multiple Input fields in organized sections with flexible column layouts',
+    href: '/components/input-form',
+  },
 ];
 
 export const comingSoonComponents: ComingSoonComponentMetadata[] = [
@@ -65,11 +71,6 @@ export const comingSoonComponents: ComingSoonComponentMetadata[] = [
     name: 'Toggle',
     category: 'Form',
     description: 'Toggle switch component for binary on/off states and settings',
-  },
-  {
-    name: 'Input Form',
-    category: 'Form',
-    description: 'Complete form input component with validation, labels, and error handling',
   },
   {
     name: 'Text Area',
