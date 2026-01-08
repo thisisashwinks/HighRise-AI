@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   size?: '3xs' | '2xs' | 'xs' | 'sm' | 'md' | 'lg';
   variant?: 'default' | 'leading-icon' | 'leading-dropdown' | 'trailing-dropdown' | 'leading-text' | 'payment' | 'tags' | 'trailing-button' | 'phone';
   label?: string;
