@@ -408,7 +408,7 @@ export default function Home() {
                 </div>
                 <div className="p-5">
                   <h5 className="text-lg font-semibold text-neutral-900 mb-2">Contextual AI Suggestions</h5>
-                  <p className="text-sm text-neutral-700">AI appears at the right moment to provide relevant suggestions and assistance within the user's workflow.</p>
+                  <p className="text-sm text-neutral-700">AI appears at the right moment to provide relevant suggestions and assistance within the user&apos;s workflow.</p>
                 </div>
               </div>
               <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
