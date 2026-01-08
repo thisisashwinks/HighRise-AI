@@ -201,8 +201,8 @@ export const ContentSwitcherDocumentation: React.FC = () => {
       figmaDocumentation={{
         title: 'Content Switcher Component Documentation',
         description: 'Complete visual reference showing all content switcher sizes, variants, and states from the design system.',
-        figmaUrl: 'https://www.figma.com/design/QSeD9oVn66FWPsndpW6INE/HighRise-AI-1.1?node-id=26901-4400',
-        figmaNodeId: '26901:4400',
+        figmaUrl: 'https://www.figma.com/design/cxyeQWrtdlVeckwmorSVU1/HighRise-AI-1.1--%3E-Handoff--WIP-?node-id=4-290512',
+        figmaNodeId: '4:290512',
       }}
       examples={[
         {

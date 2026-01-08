@@ -54,6 +54,12 @@ export const componentRegistry: ComponentMetadata[] = [
     description: 'Comprehensive form component that arranges multiple Input fields in organized sections with flexible column layouts',
     href: '/components/input-form',
   },
+  {
+    name: 'Text Area',
+    category: 'Form',
+    description: 'Multi-line text input component for longer text entries, messages, and prompts with auto-resize and validation support',
+    href: '/components/textarea',
+  },
 ];
 
 export const comingSoonComponents: ComingSoonComponentMetadata[] = [
@@ -71,11 +77,6 @@ export const comingSoonComponents: ComingSoonComponentMetadata[] = [
     name: 'Toggle',
     category: 'Form',
     description: 'Toggle switch component for binary on/off states and settings',
-  },
-  {
-    name: 'Text Area',
-    category: 'Form',
-    description: 'Multi-line text input component for longer text entries and messages',
   },
   {
     name: 'Accordion',

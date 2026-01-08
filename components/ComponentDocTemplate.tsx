@@ -86,9 +86,9 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
           <p className="text-neutral-700 mb-6">
             See how this component is used in real-world scenarios across different products. Each example shows a different use case with context about where and why the component is applied, and how these patterns could be adapted for HighLevel products.
           </p>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="columns-1 md:columns-2 lg:columns-3 gap-6" style={{ columnGap: '1.5rem' }}>
             {examples.map((example, index) => (
-              <div key={index} className="border border-neutral-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow">
+              <div key={index} className="break-inside-avoid mb-6 border border-neutral-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow">
                 {/* Media Section */}
                 {example.media && (
                   <div className="relative bg-neutral-50 border-b border-neutral-200">
@@ -170,12 +170,7 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
                   
                   {example.critique && (
                     <div className="mb-4 bg-neutral-50 rounded-lg p-3 border-l-4 border-neutral-300">
-                      <p className="text-xs text-neutral-700" style={{
-                        display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical',
-                        overflow: 'hidden',
-                      }}>{example.critique}</p>
+                      <p className="text-xs text-neutral-700">{example.critique}</p>
                     </div>
                   )}
                   
