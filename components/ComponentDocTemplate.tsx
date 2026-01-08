@@ -113,6 +113,16 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
                           loading="lazy"
                         />
                       </div>
+                    ) : example.media.type === 'html' ? (
+                      <div className="relative w-full" style={{ paddingBottom: '75%', height: 0, minHeight: '400px' }}>
+                        <iframe
+                          src={example.media.url}
+                          className="absolute top-0 left-0 w-full h-full border-0"
+                          title={example.media.alt || example.title}
+                          loading="lazy"
+                          sandbox="allow-scripts allow-same-origin"
+                        />
+                      </div>
                     ) : (
                       <div className="relative w-full bg-neutral-50">
                         <img
@@ -148,12 +158,7 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
                     )}
                   </div>
                   
-                  <p className="text-sm text-neutral-700 mb-4" style={{
-                    display: '-webkit-box',
-                    WebkitLineClamp: 3,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                  }}>{example.description}</p>
+                  <p className="text-sm text-neutral-700 mb-4">{example.description}</p>
                   
                   {example.tags && example.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1 mb-4">
@@ -165,12 +170,6 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
                           {tag}
                         </span>
                       ))}
-                    </div>
-                  )}
-                  
-                  {example.critique && (
-                    <div className="mb-4 bg-neutral-50 rounded-lg p-3 border-l-4 border-neutral-300">
-                      <p className="text-xs text-neutral-700">{example.critique}</p>
                     </div>
                   )}
                   

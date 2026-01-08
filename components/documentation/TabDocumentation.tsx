@@ -4,7 +4,7 @@ import { ComponentDocTemplate } from '../ComponentDocTemplate';
 export const TabDocumentation: React.FC = () => {
   return (
     <ComponentDocTemplate
-      name="Tab"
+      name="Tabs"
       category="Navigation"
       description="A flexible tab component that organizes content into distinct sections. Supports multiple visual styles (Line, Segment, No Border), placements (Top, Bottom, Left, Right), sizes, and optional features like icons, badges, dropdowns, and removable tabs."
       whenToUse={[
@@ -270,54 +270,41 @@ export const TabDocumentation: React.FC = () => {
         'Sidebar'
       ]}
       figmaDocumentation={{
-        title: 'Tab Component Documentation',
+        title: 'Tabs Component Documentation',
         description: 'Complete visual reference showing all tab types, placements, sizes, and configurations from the design system. This comprehensive view includes Line, Segment, and No Border types across all placements and sizes.',
         figmaUrl: 'https://www.figma.com/design/cxyeQWrtdlVeckwmorSVU1/HighRise-AI-1.1--%3E-Handoff--WIP-?node-id=5004-211071',
         figmaNodeId: '5004-211071',
       }}
       examples={[
         {
-          title: 'Mode Switching Tabs in Figma',
-          description: 'Figma uses tabs to switch between Design, Prototype, and Dev modes. Each mode provides different tools and context, with smooth transitions and state preservation.',
-          media: {
-            type: 'video',
-            url: '/examples/tab/tab-mode-figma-switching.mp4',
-            alt: 'Figma mode switching between Design, Prototype, and Dev modes',
-            thumbnailUrl: '/examples/tab/tab-mode-figma-thumb.png',
-          },
-          productName: 'Figma',
-          productUrl: 'https://www.figma.com',
-          tags: ['mode-switching', 'navigation', 'state-preservation'],
-          critique: 'The clear labeling helps users understand the difference between modes. The active state indicator makes it obvious which mode is currently active. However, the transition between modes could be smoother, and users might benefit from a preview of what each mode offers.',
-          highLevelApplication: 'HighLevel could use this pattern for switching between AI-assisted workflows and manual editing in campaign builders, funnel editors, and content creation tools. The tabs should clearly indicate what each mode does, and we could add tooltips or previews to help users understand the difference.',
-        },
-        {
-          title: 'Repository Navigation Tabs in GitHub',
-          description: 'GitHub uses tabs with icons and badges to organize repository content. The tabs show Code, Issues, Pull Requests, and more, with badge counts indicating activity levels.',
+          title: 'Assist & Build Mode',
+          description: 'Tabs used to switch between Assist and Build modes, providing users with two distinct workflows within the same interface. The Assist mode focuses on AI-assisted content creation and suggestions, while Build mode offers manual editing and full control over the content structure.',
           media: {
             type: 'image',
-            url: '/examples/tab/tab-navigation-github-repo.png',
-            alt: 'GitHub repository tabs with icons and badges',
+            url: '/examples/tab/Assist & Build Mode.png',
+            alt: 'Tabs showing Assist and Build mode switching',
           },
-          productName: 'GitHub',
-          productUrl: 'https://github.com',
-          tags: ['navigation', 'badges', 'icons', 'content-organization'],
-          critique: 'Icons and badges add valuable context without cluttering the interface. The badge count helps users understand the importance or activity level of each tab. The icons are universally recognized. However, the badge counts could update in real-time.',
-          highLevelApplication: 'HighLevel could use badges to show unread counts in inbox tabs, pending tasks in workflow tabs, or active campaigns in dashboard tabs. Icons could help users quickly identify different sections (contacts, campaigns, funnels, analytics).',
+          tags: ['mode-switching', 'workflow', 'ai-assist', 'manual-editing'],
         },
         {
-          title: 'Page Section Tabs in Notion',
-          description: 'Notion uses tabs to organize page sections, allowing users to switch between different views without losing context. The tabs maintain state and provide smooth transitions.',
+          title: 'Assist Tabs Example',
+          description: 'The Assist tabs provide an AI-powered interface for content creation and suggestions. Users can leverage intelligent assistance to generate content, receive recommendations, and streamline their workflow with automated features that enhance productivity.',
           media: {
-            type: 'gif',
-            url: '/examples/tab/tab-sections-notion.gif',
-            alt: 'Notion page section tabs switching animation',
+            type: 'image',
+            url: '/examples/tab/Assist Tab Example.png',
+            alt: 'Assist tabs interface with AI-powered features',
           },
-          productName: 'Notion',
-          productUrl: 'https://www.notion.so',
-          tags: ['content-organization', 'sections', 'state-preservation'],
-          critique: 'Tabs reduce cognitive load by showing one section at a time. The visual hierarchy helps users understand the relationship between different content areas. The tabs are clearly labeled and the active state is obvious.',
-          highLevelApplication: 'HighLevel could use this pattern in contact detail pages (Overview, Activity, Notes, Tasks), campaign dashboards (Performance, Audience, Content), and funnel builders (Steps, Settings, Analytics). The tabs should maintain state when switching.',
+          tags: ['assist', 'ai', 'content-creation', 'suggestions'],
+        },
+        {
+          title: 'Build Tabs Example',
+          description: 'The Build tabs offer a manual editing interface where users have full control over content structure and design. This mode provides comprehensive tools for building, customizing, and fine-tuning content without AI assistance, giving users complete creative freedom.',
+          media: {
+            type: 'image',
+            url: '/examples/tab/Build Tab Example.png',
+            alt: 'Build tabs interface with manual editing tools',
+          },
+          tags: ['build', 'manual', 'editing', 'customization'],
         },
       ]}
     />

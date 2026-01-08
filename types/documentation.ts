@@ -52,7 +52,7 @@ export interface ComponentDocProps {
     title: string;
     description: string;
     media?: {
-      type: 'image' | 'video' | 'gif';
+      type: 'image' | 'video' | 'gif' | 'html';
       url: string;
       alt: string;
       thumbnailUrl?: string; // For videos

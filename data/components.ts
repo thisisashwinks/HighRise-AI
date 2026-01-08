@@ -19,9 +19,9 @@ export const componentRegistry: ComponentMetadata[] = [
     href: '/components/button',
   },
   {
-    name: 'Tab',
+    name: 'Tabs',
     category: 'Navigation',
-    description: 'Flexible tab component with multiple styles, placements, and optional features',
+    description: 'Flexible tabs component with multiple styles, placements, and optional features',
     href: '/components/tab',
   },
   {

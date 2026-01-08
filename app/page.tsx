@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { componentRegistry, comingSoonComponents } from '@/data/components';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { GeneralPatternsSection } from '@/components/GeneralPatternsSection';
 
 export default function Home() {
   const components = componentRegistry;
@@ -70,6 +71,30 @@ export default function Home() {
           <p className="text-neutral-500 text-sm">No components coming soon at the moment.</p>
         )}
       </section>
+
+      {/* General Pattern Examples */}
+      <GeneralPatternsSection
+        patterns={[
+          {
+            title: 'Auto-Fill Forms (In Modals)',
+            description:
+              'AI-powered form auto-fill functionality integrated within modal dialogs. This pattern demonstrates how AI can intelligently populate form fields based on context, user history, or external data sources, reducing manual data entry and improving user experience. The AI analyzes available information and suggests or automatically fills form fields, allowing users to review and confirm before submission.',
+            image: {
+              src: '/examples/General patterns/Auto-Fill Forms (In Modals).png',
+              alt: 'Auto-fill forms in modals with AI assistance',
+            },
+          },
+          {
+            title: 'Create Smart Filters using Simple English (In Tables)',
+            description:
+              'Natural language processing for creating intelligent table filters. Users can describe filter criteria in plain English, and the AI interprets the request to generate appropriate filters. This pattern makes complex data filtering accessible to all users, regardless of technical expertise, by translating natural language queries into structured filter operations. The AI understands context, synonyms, and user intent to create accurate filters.',
+            image: {
+              src: '/examples/General patterns/Create Smart Filters using Simple English (In Tables).png',
+              alt: 'Smart filters using natural language in tables',
+            },
+          },
+        ]}
+      />
 
       {/* General Guidelines & Principles Section */}
       <section className="mb-16">
@@ -563,21 +588,32 @@ export default function Home() {
       <section className="bg-blue-50 rounded-lg p-6 border border-blue-100">
         <h2 className="text-xl font-semibold text-neutral-900 mb-3">About This Documentation</h2>
         <p className="text-neutral-700 mb-4">
-          Each component documentation page follows a structured 11-section format covering:
+          This documentation provides comprehensive guidance for building AI-powered components in HighRise AI. 
+          Each component documentation page follows a structured format covering essential aspects of design, 
+          implementation, and AI integration. The documentation includes practical examples, usage patterns, 
+          and best practices to ensure consistent, accessible, and user-friendly AI interactions.
+        </p>
+        <p className="text-neutral-700 mb-4 font-medium">
+          Component documentation pages include:
         </p>
         <ol className="list-decimal list-inside space-y-2 text-neutral-700 text-sm ml-4">
-          <li>Header (name, category, description)</li>
-          <li>When to Use</li>
-          <li>When Not to Use / Anti-patterns</li>
-          <li>Anatomy (numbered parts)</li>
-          <li>Variants</li>
-          <li>States</li>
-          <li>Props / API Reference</li>
-          <li>Usage Guidelines (Do / Don&apos;t)</li>
-          <li>AI Considerations (for AI-related components)</li>
-          <li>Accessibility</li>
-          <li>Related Components</li>
+          <li><strong>Header</strong> - Component name, category, and description</li>
+          <li><strong>When to Use</strong> - Appropriate use cases and contexts</li>
+          <li><strong>When Not to Use / Anti-patterns</strong> - Common mistakes and scenarios to avoid</li>
+          <li><strong>Anatomy</strong> - Visual breakdown of component parts and structure</li>
+          <li><strong>Variants</strong> - Different styles and configurations available</li>
+          <li><strong>States</strong> - Interactive states (default, hover, focus, disabled, etc.)</li>
+          <li><strong>Props / API Reference</strong> - Technical specifications and parameters</li>
+          <li><strong>Usage Guidelines</strong> - Do&apos;s and Don&apos;ts for implementation</li>
+          <li><strong>AI Considerations</strong> - AI-specific behaviors, patterns, and best practices</li>
+          <li><strong>Accessibility</strong> - WCAG compliance and inclusive design guidelines</li>
+          <li><strong>Related Components</strong> - Links to complementary or related components</li>
         </ol>
+        <p className="text-neutral-700 mt-4 text-sm italic">
+          This documentation is designed to help developers and designers create consistent, accessible, 
+          and user-friendly AI-powered interfaces that align with HighRise AI&apos;s design principles 
+          and user experience standards.
+        </p>
       </section>
     </div>
   );

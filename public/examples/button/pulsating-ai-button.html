@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        width: 100%;
+      }
+      
+      .button-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+      }
+      
+      #animationBtn {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        background: #EBE9FE;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      
+      #starSvg {
+        width: 32px;
+        height: 32px;
+        animation: iconPulse 2s ease-in-out infinite;
+      }
+      
+      @keyframes iconPulse {
+        0%, 100% {
+          opacity: 1;
+          transform: scale(0.75);
+        }
+        50% {
+          opacity: 0.7;
+          transform: scale(0.5);
+        }
+      }
+      
+      #animationBtn.generating {
+        background: #EBE9FE;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div class="button-container">
+      <button id="animationBtn" class="generating">
+        <svg id="starSvg" width="32" height="32" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12.738 5.33172L13.2647 4.16505L14.4313 3.63839C14.6913 3.51839 14.6913 3.15172 14.4313 3.03172L13.2647 2.50505L12.738 1.33172C12.618 1.07172 12.2513 1.07172 12.1313 1.33172L11.6047 2.49839L10.4313 3.02505C10.1713 3.14505 10.1713 3.51172 10.4313 3.63172L11.598 4.15839L12.1247 5.33172C12.2447 5.59172 12.618 5.59172 12.738 5.33172Z" fill="#6938EF"/>
+          <path d="M12.1227 10.6637L11.596 11.8304L10.4294 12.3571C10.1694 12.4771 10.1694 12.8438 10.4294 12.9638L11.596 13.4904L12.1227 14.6638C12.2427 14.9238 12.6094 14.9238 12.7294 14.6638L13.256 13.4971L14.4294 12.9704C14.6894 12.8504 14.6894 12.4837 14.4294 12.3637L13.2627 11.8371L12.736 10.6637C12.616 10.4038 12.2427 10.4038 12.1227 10.6637Z" fill="#6938EF"/>
+          <path d="M7.42971 6.33271L6.36971 3.99937C6.13638 3.47938 5.38971 3.47938 5.15638 3.99937L4.09638 6.33271L1.76305 7.39271C1.24305 7.63271 1.24305 8.37271 1.76305 8.60604L4.09638 9.66604L5.15638 11.9994C5.39638 12.5194 6.13638 12.5194 6.36971 11.9994L7.42971 9.66604L9.76305 8.60604C10.283 8.36604 10.283 7.62604 9.76305 7.39271L7.42971 6.33271Z" fill="#6938EF"/>
+        </svg>
+      </button>
+    </div>
+  </body>
+</html>
