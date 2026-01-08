@@ -22,6 +22,27 @@ export default function Home() {
         </p>
       </header>
 
+      <section className="mb-12">
+        <h2 className="text-2xl font-semibold text-neutral-900 mb-6">Components</h2>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {components.map((component) => (
+            <Link
+              key={component.name}
+              href={component.href}
+              className="card hover:shadow-md transition-shadow"
+            >
+              <div className="mb-2">
+                <span className="badge badge-neutral">{component.category}</span>
+              </div>
+              <h3 className="text-xl font-semibold text-neutral-900 mb-2">
+                {component.name}
+              </h3>
+              <p className="text-sm text-neutral-700">{component.description}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {/* General Guidelines & Principles Section */}
       <section className="mb-16">
         <h2 className="text-3xl font-bold text-neutral-900 mb-4">General Guidelines & Principles</h2>
@@ -222,11 +243,167 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Images Section - Placeholder for Figma and Linear blog images */}
+        {/* AI Usage Modes Section */}
         <div className="mb-12">
+          <h3 className="text-2xl font-semibold text-neutral-900 mb-4">AI Usage Modes</h3>
+          <p className="text-lg text-neutral-700 mb-8 max-w-3xl">
+            AI can be integrated into user experiences in different ways, each serving distinct purposes 
+            and user needs. Understanding these modes helps designers choose the right approach for their context.
+          </p>
+
+          {/* Focused Mode */}
+          <div className="mb-12">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center">
+                <svg className="w-5 h-5 text-primary-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <h4 className="text-xl font-semibold text-neutral-900">Focused</h4>
+            </div>
+            <p className="text-neutral-700 mb-4 max-w-2xl">
+              AI is the main context, with a dedicated focus. Users interact primarily with the AI system 
+              to accomplish their goals.
+            </p>
+            <div className="grid md:grid-cols-1 gap-6">
+              <div className="card p-0 overflow-hidden">
+                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
+                  <p className="text-sm text-neutral-500">Focused Mode Image 1</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Supportive Mode */}
+          <div className="mb-12">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center">
+                <svg className="w-5 h-5 text-primary-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </div>
+              <h4 className="text-xl font-semibold text-neutral-900">Supportive</h4>
+            </div>
+            <p className="text-neutral-700 mb-4 max-w-2xl">
+              AI complements the main context and accompanies users along their journey to help them 
+              achieve their goals. The AI assists without taking center stage.
+            </p>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="card p-0 overflow-hidden">
+                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
+                  <p className="text-sm text-neutral-500">Supportive Mode Image 1</p>
+                </div>
+              </div>
+              <div className="card p-0 overflow-hidden">
+                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
+                  <p className="text-sm text-neutral-500">Supportive Mode Image 2</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Integrated Mode */}
+          <div className="mb-12">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center">
+                <svg className="w-5 h-5 text-primary-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1v-3z" />
+                </svg>
+              </div>
+              <h4 className="text-xl font-semibold text-neutral-900">Integrated</h4>
+            </div>
+            <p className="text-neutral-700 mb-4 max-w-2xl">
+              AI is blended into specific moments of the user&apos;s flow to help them complete small, 
+              discrete tasks. The AI appears contextually when needed.
+            </p>
+            <div className="grid md:grid-cols-3 lg:grid-cols-3 gap-6">
+              <div className="card p-0 overflow-hidden">
+                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
+                  <p className="text-sm text-neutral-500">Integrated Mode Image 1</p>
+                </div>
+              </div>
+              <div className="card p-0 overflow-hidden">
+                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
+                  <p className="text-sm text-neutral-500">Integrated Mode Image 2</p>
+                </div>
+              </div>
+              <div className="card p-0 overflow-hidden">
+                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
+                  <p className="text-sm text-neutral-500">Integrated Mode Image 3</p>
+                </div>
+              </div>
+              <div className="card p-0 overflow-hidden">
+                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
+                  <p className="text-sm text-neutral-500">Integrated Mode Image 4</p>
+                </div>
+              </div>
+              <div className="card p-0 overflow-hidden">
+                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
+                  <p className="text-sm text-neutral-500">Integrated Mode Image 5</p>
+                </div>
+              </div>
+              <div className="card p-0 overflow-hidden">
+                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
+                  <p className="text-sm text-neutral-500">Integrated Mode Image 6</p>
+                </div>
+              </div>
+              <div className="card p-0 overflow-hidden">
+                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
+                  <p className="text-sm text-neutral-500">Integrated Mode Image 7</p>
+                </div>
+              </div>
+              <div className="card p-0 overflow-hidden">
+                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
+                  <p className="text-sm text-neutral-500">Integrated Mode Image 8</p>
+                </div>
+              </div>
+              <div className="card p-0 overflow-hidden">
+                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
+                  <p className="text-sm text-neutral-500">Integrated Mode Image 9</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* One AI Experience */}
+          <div className="mb-12">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center">
+                <svg className="w-5 h-5 text-primary-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+              </div>
+              <h4 className="text-xl font-semibold text-neutral-900">One AI Experience</h4>
+            </div>
+            <p className="text-neutral-700 mb-4 max-w-2xl">
+              A unified AI experience that seamlessly combines different modes to create a cohesive 
+              user journey.
+            </p>
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="card p-0 overflow-hidden">
+                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
+                  <p className="text-sm text-neutral-500">One AI Experience Image 1</p>
+                </div>
+              </div>
+              <div className="card p-0 overflow-hidden">
+                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
+                  <p className="text-sm text-neutral-500">One AI Experience Image 2</p>
+                </div>
+              </div>
+              <div className="card p-0 overflow-hidden">
+                <div className="aspect-video bg-neutral-100 flex items-center justify-center">
+                  <p className="text-sm text-neutral-500">One AI Experience Image 3</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Images Section - Placeholder for Figma and Linear blog images */}
+        {/* Hidden for now - uncomment to show */}
+        {/* <div className="mb-12">
           <h3 className="text-2xl font-semibold text-neutral-900 mb-6">Visual Examples</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Placeholder for Figma images - These will be populated with actual images */}
             <div className="card p-0 overflow-hidden">
               <div className="aspect-video bg-neutral-100 flex items-center justify-center">
                 <p className="text-sm text-neutral-500">Figma Image 1</p>
@@ -257,7 +434,6 @@ export default function Home() {
                 <p className="text-sm text-neutral-500">Figma Image 6</p>
               </div>
             </div>
-            {/* Placeholder for Linear blog images */}
             <div className="card p-0 overflow-hidden">
               <div className="aspect-video bg-neutral-100 flex items-center justify-center">
                 <p className="text-sm text-neutral-500">Linear Blog Image 1</p>
@@ -278,28 +454,7 @@ export default function Home() {
             Note: Images from Figma design library and Linear blog will be added here. 
             Please add the actual images by replacing the placeholder divs above with Next.js Image components.
           </p>
-        </div>
-      </section>
-
-      <section className="mb-12">
-        <h2 className="text-2xl font-semibold text-neutral-900 mb-6">Components</h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {components.map((component) => (
-            <Link
-              key={component.name}
-              href={component.href}
-              className="card hover:shadow-md transition-shadow"
-            >
-              <div className="mb-2">
-                <span className="badge badge-neutral">{component.category}</span>
-              </div>
-              <h3 className="text-xl font-semibold text-neutral-900 mb-2">
-                {component.name}
-              </h3>
-              <p className="text-sm text-neutral-700">{component.description}</p>
-            </Link>
-          ))}
-        </div>
+        </div> */}
       </section>
 
       <section className="bg-blue-50 rounded-lg p-6 border border-blue-100">
