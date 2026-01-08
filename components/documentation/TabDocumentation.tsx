@@ -263,36 +263,61 @@ export const TabDocumentation: React.FC = () => {
         ]
       }}
       relatedComponents={[
-        'Tabs',
         'Button',
         'Dropdown',
         'Badge',
         'Accordion',
         'Sidebar'
       ]}
+      figmaDocumentation={{
+        title: 'Tab Component Documentation',
+        description: 'Complete visual reference showing all tab types, placements, sizes, and configurations from the design system. This comprehensive view includes Line, Segment, and No Border types across all placements and sizes.',
+        figmaUrl: 'https://www.figma.com/design/cxyeQWrtdlVeckwmorSVU1/HighRise-AI-1.1--%3E-Handoff--WIP-?node-id=5004-211071',
+        figmaNodeId: '5004-211071',
+      }}
       examples={[
         {
-          title: 'Interactive Component Playground',
-          description: 'Use the controls below to customize the Tab component. Change type, placement, size, and other properties to see how it adapts. This matches the Figma design specifications exactly.',
-          interactive: true,
+          title: 'Mode Switching Tabs in Figma',
+          description: 'Figma uses tabs to switch between Design, Prototype, and Dev modes. Each mode provides different tools and context, with smooth transitions and state preservation.',
+          media: {
+            type: 'video',
+            url: '/examples/tab/tab-mode-figma-switching.mp4',
+            alt: 'Figma mode switching between Design, Prototype, and Dev modes',
+            thumbnailUrl: '/examples/tab/tab-mode-figma-thumb.png',
+          },
+          productName: 'Figma',
+          productUrl: 'https://www.figma.com',
+          tags: ['mode-switching', 'navigation', 'state-preservation'],
+          critique: 'The clear labeling helps users understand the difference between modes. The active state indicator makes it obvious which mode is currently active. However, the transition between modes could be smoother, and users might benefit from a preview of what each mode offers.',
+          highLevelApplication: 'HighLevel could use this pattern for switching between AI-assisted workflows and manual editing in campaign builders, funnel editors, and content creation tools. The tabs should clearly indicate what each mode does, and we could add tooltips or previews to help users understand the difference.',
         },
         {
-          title: 'Tab Component Overview',
-          description: 'Complete visual reference showing all tab types, placements, sizes, and configurations from the design system. This comprehensive view includes Line, Segment, and No Border types across all placements and sizes.',
-          figmaUrl: 'https://www.figma.com/design/cxyeQWrtdlVeckwmorSVU1/HighRise-AI-1.1--%3E-Handoff--WIP-?node-id=5004-211071',
-          figmaNodeId: '5004-211071',
+          title: 'Repository Navigation Tabs in GitHub',
+          description: 'GitHub uses tabs with icons and badges to organize repository content. The tabs show Code, Issues, Pull Requests, and more, with badge counts indicating activity levels.',
+          media: {
+            type: 'image',
+            url: '/examples/tab/tab-navigation-github-repo.png',
+            alt: 'GitHub repository tabs with icons and badges',
+          },
+          productName: 'GitHub',
+          productUrl: 'https://github.com',
+          tags: ['navigation', 'badges', 'icons', 'content-organization'],
+          critique: 'Icons and badges add valuable context without cluttering the interface. The badge count helps users understand the importance or activity level of each tab. The icons are universally recognized. However, the badge counts could update in real-time.',
+          highLevelApplication: 'HighLevel could use badges to show unread counts in inbox tabs, pending tasks in workflow tabs, or active campaigns in dashboard tabs. Icons could help users quickly identify different sections (contacts, campaigns, funnels, analytics).',
         },
         {
-          title: 'Tabs Component Variants',
-          description: 'Interactive view of the complete Tabs component with all type variations (Line, Segment, No Border), placements (Top, Bottom, Left, Right), and sizes (SM, MD, LG, XL, 2XL). Explore how tabs adapt to different contexts.',
-          figmaUrl: 'https://www.figma.com/design/QSeD9oVn66FWPsndpW6INE/HighRise-AI-1.1?node-id=26957-47015',
-          figmaNodeId: '26957-47015',
-        },
-        {
-          title: 'Tab Item States & Features',
-          description: 'Detailed view of individual tab items showing all states (Default, Hover, Active, Disabled), icon configurations, removable tabs, dropdowns, and badges. See how each feature enhances the tab experience.',
-          figmaUrl: 'https://www.figma.com/design/QSeD9oVn66FWPsndpW6INE/HighRise-AI-1.1?node-id=26957-20865',
-          figmaNodeId: '26957-20865',
+          title: 'Page Section Tabs in Notion',
+          description: 'Notion uses tabs to organize page sections, allowing users to switch between different views without losing context. The tabs maintain state and provide smooth transitions.',
+          media: {
+            type: 'gif',
+            url: '/examples/tab/tab-sections-notion.gif',
+            alt: 'Notion page section tabs switching animation',
+          },
+          productName: 'Notion',
+          productUrl: 'https://www.notion.so',
+          tags: ['content-organization', 'sections', 'state-preservation'],
+          critique: 'Tabs reduce cognitive load by showing one section at a time. The visual hierarchy helps users understand the relationship between different content areas. The tabs are clearly labeled and the active state is obvious.',
+          highLevelApplication: 'HighLevel could use this pattern in contact detail pages (Overview, Activity, Notes, Tasks), campaign dashboards (Performance, Audience, Content), and funnel builders (Steps, Settings, Analytics). The tabs should maintain state when switching.',
         },
       ]}
     />

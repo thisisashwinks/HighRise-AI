@@ -42,14 +42,26 @@ export interface ComponentDocProps {
     ariaHints: string[];
   };
   relatedComponents: string[];
-  examples?: Array<{
+  figmaDocumentation?: {
     title: string;
     description?: string;
-    figmaUrl?: string;
+    figmaUrl: string;
     figmaNodeId?: string;
-    imageUrl?: string;
-    code?: string;
-    interactive?: boolean;
+  };
+  examples?: Array<{
+    title: string;
+    description: string;
+    media?: {
+      type: 'image' | 'video' | 'gif';
+      url: string;
+      alt: string;
+      thumbnailUrl?: string; // For videos
+    };
+    productName?: string;
+    productUrl?: string; // Link to the product/feature
+    critique?: string;
+    highLevelApplication?: string;
+    tags?: string[]; // e.g., ['search', 'navigation', 'command-palette']
   }>;
 }
 

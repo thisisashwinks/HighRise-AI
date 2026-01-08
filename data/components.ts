@@ -7,10 +7,10 @@ export interface ComponentMetadata {
 
 export const componentRegistry: ComponentMetadata[] = [
   {
-    name: 'Tabs',
-    category: 'Navigation',
-    description: 'Tabbed interface supporting Assist and Build modes',
-    href: '/components/tabs',
+    name: 'Button',
+    category: 'Action',
+    description: 'Versatile button component with multiple variants, themes, sizes, and states',
+    href: '/components/button',
   },
   {
     name: 'Tab',
@@ -23,6 +23,12 @@ export const componentRegistry: ComponentMetadata[] = [
     category: 'Form',
     description: 'Versatile input field with multiple sizes, variants, and states',
     href: '/components/input',
+  },
+  {
+    name: 'Select',
+    category: 'Form',
+    description: 'Dropdown select component with multiple sizes, variants, and search functionality',
+    href: '/components/select',
   },
 ];
 

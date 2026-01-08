@@ -299,23 +299,55 @@ export const InputDocumentation: React.FC = () => {
         'Label',
         'Button'
       ]}
+      figmaDocumentation={{
+        title: 'Input Component Documentation',
+        description: 'Complete visual reference showing all input sizes, variants, states, and configurations from the design system. Includes examples of all interactive states and special features.',
+        figmaUrl: 'https://www.figma.com/design/cxyeQWrtdlVeckwmorSVU1/HighRise-AI-1.1--%3E-Handoff--WIP-?node-id=135-667989',
+        figmaNodeId: '135-667989',
+      }}
       examples={[
         {
-          title: 'Interactive Component Playground',
-          description: 'Use the controls below to customize the Input component. Change size, variant, and other properties to see how it adapts. This matches the Figma design specifications exactly.',
-          interactive: true,
+          title: 'Command Palette Search in Linear',
+          description: 'Linear uses a command palette (Cmd+K) for quick navigation and actions. The search input appears as an overlay and provides instant results as you type, with keyboard navigation support.',
+          media: {
+            type: 'video',
+            url: '/examples/input/input-search-linear-cmdk.mp4',
+            alt: 'Linear command palette search interaction',
+            thumbnailUrl: '/examples/input/input-search-linear-cmdk-thumb.png',
+          },
+          productName: 'Linear',
+          productUrl: 'https://linear.app',
+          tags: ['search', 'command-palette', 'keyboard-shortcuts'],
+          critique: 'The command palette is discoverable via Cmd+K and provides instant feedback. The fuzzy search works well, but could benefit from recent searches or favorites. The keyboard navigation is excellent.',
+          highLevelApplication: 'HighLevel could implement a similar command palette for quick navigation between contacts, campaigns, and funnels. We could enhance it with AI-powered suggestions based on user behavior and recent activity.',
         },
         {
-          title: 'Input Fields Documentation',
-          description: 'Complete visual reference showing all input sizes, variants, states, and configurations from the design system. Includes examples of all interactive states and special features.',
-          figmaUrl: 'https://www.figma.com/design/cxyeQWrtdlVeckwmorSVU1/HighRise-AI-1.1--%3E-Handoff--WIP-?node-id=135-667989',
-          figmaNodeId: '135-667989',
+          title: 'Payment Form Input with Validation',
+          description: 'Stripe\'s payment form demonstrates real-time validation with clear error states. The inputs format automatically and provide immediate feedback when invalid data is entered.',
+          media: {
+            type: 'image',
+            url: '/examples/input/input-form-stripe-payment.png',
+            alt: 'Stripe payment form with validation states',
+          },
+          productName: 'Stripe',
+          productUrl: 'https://stripe.com',
+          tags: ['form', 'validation', 'payment', 'error-states'],
+          critique: 'Clear error messaging helps users understand what went wrong. The helper text provides format guidance before errors occur. The inline validation reduces form abandonment by catching errors early.',
+          highLevelApplication: 'HighLevel forms could benefit from this validation pattern, especially in lead capture forms and onboarding flows. We could implement real-time validation for email addresses, phone numbers, and custom field formats.',
         },
         {
-          title: 'Input Component Specifications',
-          description: 'Detailed component specifications showing all variants, sizes, and implementation details for the Input component.',
-          figmaUrl: 'https://www.figma.com/design/QSeD9oVn66FWPsndpW6INE/HighRise-AI-1.1?node-id=26683-37578',
-          figmaNodeId: '26683-37578',
+          title: 'Search with Autocomplete in Notion',
+          description: 'Notion\'s search input provides contextual suggestions as you type, with filtering options and recent searches. The input expands to show a full search interface.',
+          media: {
+            type: 'gif',
+            url: '/examples/input/input-search-notion.gif',
+            alt: 'Notion search with autocomplete suggestions',
+          },
+          productName: 'Notion',
+          productUrl: 'https://www.notion.so',
+          tags: ['search', 'autocomplete', 'suggestions'],
+          critique: 'The search suggestions are contextual and helpful. The ability to filter by page type is excellent. However, the search could benefit from keyboard shortcuts for power users.',
+          highLevelApplication: 'HighLevel could use this pattern for searching across contacts, campaigns, and content. We could enhance it with AI-powered suggestions and smart filtering based on user context.',
         },
       ]}
     />
