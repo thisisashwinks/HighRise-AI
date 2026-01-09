@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import './globals.css';
+import { FeedbackButton } from './components/FeedbackButton';
 
 export const metadata: Metadata = {
   title: 'HighLevel – HighRise AI Component Documentation',
@@ -48,8 +49,35 @@ export default function RootLayout({
         <main className="min-h-screen bg-neutral-50">
           {children}
         </main>
+        <FeedbackButton />
         <footer className="border-t border-neutral-200 bg-white mt-16">
           <div className="max-w-7xl mx-auto px-6 py-8">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+              <div className="flex flex-wrap gap-4 justify-center md:justify-start">
+                <Link href="/" className="text-sm text-neutral-700 hover:text-neutral-900 transition-colors">
+                  Home
+                </Link>
+                <Link href="/components" className="text-sm text-neutral-700 hover:text-neutral-900 transition-colors">
+                  Components
+                </Link>
+                <a 
+                  href="https://www.figma.com/design/cxyeQWrtdlVeckwmorSVU1/HighRise-AI-1.1--%3E-Handoff--WIP-?node-id=4-291896&p=f&t=AFyJUY9svQYTZNi0-11" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-neutral-700 hover:text-neutral-900 transition-colors"
+                >
+                  Figma Documentation File
+                </a>
+                <a 
+                  href="https://forms.gle/RCDjJg4Uckt4a8Yp8" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-neutral-700 hover:text-neutral-900 transition-colors"
+                >
+                  Feedback Form
+                </a>
+              </div>
+            </div>
             <p className="text-sm text-neutral-600 text-center">
               HighLevel – HighRise AI Component Documentation
             </p>

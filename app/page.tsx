@@ -675,6 +675,44 @@ export default function Home() {
           and user experience standards.
         </p>
       </section>
+
+      {/* Feedback Form Section */}
+      <section className="mt-12 mb-12">
+        <div className="card">
+          <div className="text-center mb-6">
+            <div className="mb-4">
+              <svg className="w-12 h-12 text-primary-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-bold text-neutral-900 mb-3">
+              Help Us Improve This Documentation
+            </h2>
+            <p className="text-lg text-neutral-700 mb-2">
+              We&apos;re handing off these components to the team and would love your feedback.
+            </p>
+            <p className="text-sm text-neutral-600">
+              Share your thoughts, suggestions, or report any issues you encounter.
+            </p>
+          </div>
+          <div className="w-full" style={{ minHeight: '800px' }}>
+            <iframe
+              src="https://docs.google.com/forms/d/e/1FAIpQLSepob_tzZ4ZvHZvpaHpgcblGnceppleWI_4Ja7aEh0v2kvqfA/viewform?embedded=true"
+              width="100%"
+              height="800"
+              frameBorder="0"
+              marginHeight={0}
+              marginWidth={0}
+              className="w-full border-0"
+              title="Feedback Form"
+              allow="fullscreen"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+            >
+              Loading…
+            </iframe>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
