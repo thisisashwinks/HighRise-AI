@@ -260,12 +260,11 @@ export const ButtonDocumentation: React.FC = () => {
           title: 'Canvas Takeover When AI is Performing Actions',
           description: 'When AI agents are performing actions on behalf of the user, the entire canvas is highlighted with a purple border and shimmer effect. A working bar appears at the bottom with a "Working" indicator and stop button, similar to Perplexity\'s Comet Browser or ChatGPT\'s Atlas browser agents.',
           media: {
-            type: 'html',
-            url: '/examples/button/canvas-takeover.html',
+            type: 'image',
+            url: '/examples/button/Canvas Takeover.png',
             alt: 'Canvas takeover with purple highlight and working indicator',
           },
           tags: ['ai', 'canvas', 'takeover', 'visual-feedback', 'working-state'],
-          critique: 'The canvas takeover provides clear visual feedback that AI is in control and performing actions. The purple highlight with shimmer effect is distinctive and draws attention without being overwhelming. The working bar at the bottom provides both status information and control, allowing users to stop the AI action if needed. This pattern helps users understand when AI agents are actively working on their behalf.',
         },
       ]}
     />
