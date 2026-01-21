@@ -57,6 +57,7 @@ export interface ComponentDocProps {
       alt: string;
       thumbnailUrl?: string; // For videos
     };
+    code?: string; // Code example to display
     productName?: string;
     productUrl?: string; // Link to the product/feature
     critique?: string;

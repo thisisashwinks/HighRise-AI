@@ -160,6 +160,14 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
                   
                   <p className="text-sm text-neutral-700 mb-4">{example.description}</p>
                   
+                  {example.code && (
+                    <div className="mb-4">
+                      <pre className="bg-neutral-900 text-neutral-100 p-4 rounded-lg overflow-x-auto text-sm">
+                        <code>{example.code}</code>
+                      </pre>
+                    </div>
+                  )}
+                  
                   {example.tags && example.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1 mb-4">
                       {example.tags.map((tag, tagIndex) => (
