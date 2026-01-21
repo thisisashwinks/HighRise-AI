@@ -237,8 +237,8 @@ export const CheckboxCardDocumentation: React.FC = () => {
       figmaDocumentation={{
         title: 'Checkbox Card Component Documentation',
         description: 'Complete visual reference showing all checkbox card variants, states, and configurations from the design system. Includes examples with icons, descriptions, custom content, and error states.',
-        figmaUrl: 'https://www.figma.com/design/QSeD9oVn66FWPsndpW6INE/HighRise-AI-1.1?node-id=26951-12512',
-        figmaNodeId: '26951:12512',
+        figmaUrl: 'https://www.figma.com/design/cxyeQWrtdlVeckwmorSVU1/HighRise-AI-1.1--%3E-Handoff--WIP-?node-id=5327-21380',
+        figmaNodeId: '5327:21380',
       }}
       examples={[]}
     />
