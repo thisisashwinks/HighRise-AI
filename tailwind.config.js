@@ -69,6 +69,19 @@ module.exports = {
           800: '#166534',
           900: '#14532d',
         },
+        accent: {
+          purple: {
+            100: '#ebe9fe',
+            300: '#bdb4fe',
+            500: '#7a5af8',
+            600: '#6938ef',
+          },
+        },
+        secondary: {
+          error: {
+            500: '#f04438',
+          },
+        },
       },
       typography: {
         DEFAULT: {

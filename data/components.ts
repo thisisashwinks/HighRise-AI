@@ -60,24 +60,57 @@ export const componentRegistry: ComponentMetadata[] = [
     description: 'Multi-line text input component for longer text entries, messages, and prompts with auto-resize and validation support',
     href: '/components/textarea',
   },
-];
-
-export const comingSoonComponents: ComingSoonComponentMetadata[] = [
   {
     name: 'Checkbox',
     category: 'Form',
-    description: 'Checkbox component for selecting one or multiple options from a list',
+    description: 'Checkbox component for selecting one or multiple options from a list with support for checked, indeterminate, and error states',
+    href: '/components/checkbox',
+  },
+  {
+    name: 'Checkbox Card',
+    category: 'Form',
+    description: 'Card-based checkbox component for selecting options with visual distinction, icons, descriptions, and custom content slots',
+    href: '/components/checkbox-card',
+  },
+  {
+    name: 'Checkbox Group',
+    category: 'Form',
+    description: 'Group component for displaying multiple checkboxes together with consistent styling, horizontal/vertical layouts, and comprehensive state management',
+    href: '/components/checkbox-group',
   },
   {
     name: 'Radio',
     category: 'Form',
-    description: 'Radio button component for selecting a single option from a group of options',
+    description: 'Radio button component for selecting a single option from a group of options with support for checked, error, and disabled states',
+    href: '/components/radio',
+  },
+  {
+    name: 'Radio Card',
+    category: 'Form',
+    description: 'Card-based radio button component for selecting a single option with visual distinction, icons, descriptions, and custom content slots',
+    href: '/components/radio-card',
+  },
+  {
+    name: 'Radio Group',
+    category: 'Form',
+    description: 'Group component for displaying multiple radio buttons together with consistent styling, horizontal/vertical layouts, and comprehensive state management',
+    href: '/components/radio-group',
   },
   {
     name: 'Toggle',
     category: 'Form',
-    description: 'Toggle switch component for binary on/off states and settings',
+    description: 'Toggle switch component for binary on/off states and settings with multiple sizes, states, and optional labels',
+    href: '/components/toggle',
   },
+  {
+    name: 'Toggle Switch Group',
+    category: 'Form',
+    description: 'Group component for displaying multiple toggle switches together with consistent styling, horizontal/vertical layouts, and comprehensive state management',
+    href: '/components/toggle-switch-group',
+  },
+];
+
+export const comingSoonComponents: ComingSoonComponentMetadata[] = [
   {
     name: 'Accordion',
     category: 'Content',
