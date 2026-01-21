@@ -343,7 +343,7 @@ export const ToDosAccordion: React.FC<ToDosAccordionProps> = ({
                               size={config.checkboxSize}
                               checked={isCompleted}
                               disabled={todo.disabled}
-                              onChange={(checked) => handleTodoToggle(section.id, todo.id, checked)}
+                              onChange={(e) => handleTodoToggle(section.id, todo.id, e.target.checked)}
                               className="mt-0.5"
                             />
                             <div className="flex-1 min-w-0">
