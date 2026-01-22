@@ -1,5 +1,5 @@
-import { CheckboxDocumentation } from '@/components/documentation/CheckboxDocumentation';
+import { CheckboxOverviewDocumentation } from '@/components/documentation/CheckboxOverviewDocumentation';
 
 export default function CheckboxPage() {
-  return <CheckboxDocumentation />;
+  return <CheckboxOverviewDocumentation />;
 }

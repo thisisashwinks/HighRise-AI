@@ -1,6 +1,5 @@
 import React from 'react';
 import { ComponentDocTemplate } from '../ComponentDocTemplate';
-import { Radio } from '../Radio';
 
 export const RadioDocumentation: React.FC = () => {
   return (
@@ -214,58 +213,7 @@ export const RadioDocumentation: React.FC = () => {
         figmaUrl: 'https://www.figma.com/design/cxyeQWrtdlVeckwmorSVU1/HighRise-AI-1.1--%3E-Handoff--WIP-?node-id=5328-27167',
         figmaNodeId: '5328:27167',
       }}
-      examples={[
-        {
-          title: 'Basic Radio States',
-          description: 'Demonstrates all radio states: default unselected, selected, and disabled. Shows how the radio appearance changes based on state.',
-          code: `<Radio name="option" label="Option 1" />
-<Radio name="option" label="Option 2" checked />
-<Radio name="option" label="Option 3" disabled />`,
-          tags: ['basic', 'states', 'interactive'],
-        },
-        {
-          title: 'Radio Sizes',
-          description: 'All available radio sizes from 3XS (10px) to LG (20px). Shows how radio dimensions scale while maintaining consistent styling.',
-          code: `<Radio size="3xs" name="size" label="3XS" />
-<Radio size="2xs" name="size" label="2XS" />
-<Radio size="xs" name="size" label="XS" />
-<Radio size="sm" name="size" label="SM" />
-<Radio size="md" name="size" label="MD" />
-<Radio size="lg" name="size" label="LG" />`,
-          tags: ['sizes', 'variants'],
-        },
-        {
-          title: 'Radio Group',
-          description: 'Radio buttons grouped together with the same name attribute. Only one option can be selected at a time.',
-          code: `<Radio name="payment" value="credit" label="Credit Card" />
-<Radio name="payment" value="debit" label="Debit Card" />
-<Radio name="payment" value="paypal" label="PayPal" />`,
-          tags: ['group', 'selection'],
-        },
-        {
-          title: 'Error States',
-          description: 'Radio buttons with error state showing red border. Can be combined with checked or unchecked states to indicate validation errors.',
-          code: `<Radio name="error" label="Invalid option" error />
-<Radio name="error" label="Invalid checked option" checked error />`,
-          tags: ['error', 'validation', 'states'],
-        },
-        {
-          title: 'With Helper Text',
-          description: 'Radio buttons with helper text providing additional context or guidance. Helper text appears below the label.',
-          code: `<Radio 
-  name="notifications" 
-  label="Email notifications" 
-  helperText="Receive updates via email"
-/>
-<Radio 
-  name="notifications" 
-  label="Push notifications" 
-  helperText="Receive updates via push notifications"
-  checked
-/>`,
-          tags: ['helper-text', 'guidance'],
-        },
-      ]}
+      examples={[]}
     />
   );
 };

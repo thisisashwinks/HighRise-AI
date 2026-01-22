@@ -1,0 +1,138 @@
+# Cursor AI Rules for HighRise AI Project
+
+## Vercel Deployment Compatibility (CRITICAL)
+
+This project deploys to Vercel via the `staging` branch. **ALL code changes MUST pass `npm run build` before completion.**
+
+### Mandatory Workflow (STRICT):
+1. **AUTOMATIC CACHE CLEANING**: Cache is now automatically cleaned before `npm run dev` and `npm run build` via npm pre-hooks. No manual cache cleaning needed!
+2. **After making ANY code changes**: Just run `npm run dev` or `npm run build` - cache cleaning happens automatically
+3. **Before marking task complete**: Ensure build passes with exit code 0
+4. **Event handlers**: Always extract values from events (`e.target.checked`, `e.target.value`)
+5. **Type definitions**: Must match actual component usage - update types when adding properties
+6. **Multiple threads**: If generating code in multiple threads, the ensure-clean script will handle process cleanup automatically
+7. **Manual override**: If you need to manually clean cache, run `bash scripts/ensure-clean.sh`
+
+### Common Errors to Prevent:
+- ❌ Missing properties in type definitions
+- ❌ Passing event objects instead of extracted values
+- ❌ Type mismatches in onChange handlers
+- ❌ Stale `.next` cache causing "Cannot find module" errors
+- ❌ Not cleaning cache after file deletions or major refactoring
+
+### Build Verification (MANDATORY):
+```bash
+# Cache cleaning is AUTOMATIC via npm pre-hooks - just run:
+npm run build
+
+# Or for dev server:
+npm run dev
+
+# The prebuild/predev hooks automatically clean cache and kill stale processes
+# No manual cache cleaning needed anymore!
+```
+
+### Cache Management (AUTOMATIC):
+- ✅ Cache cleaning is now AUTOMATIC - npm hooks handle it
+- ✅ No need to manually clean cache before builds or dev server
+- ✅ Multiple threads are handled automatically - stale processes are killed
+- ✅ If you see "Cannot find module" errors, just restart: `npm run dev` or `npm run build`
+
+See `.vercel-deployment-guide.md` for detailed guidelines.
+
+## Example Documentation Guidelines (CRITICAL)
+
+**NEVER add `highLevelApplication` property to example cards unless the user explicitly requests it.**
+
+### Example Structure:
+- ✅ Include: `title`, `description`, `media`, `tags`, `critique`
+- ❌ Do NOT include: `highLevelApplication` (unless user specifically asks for it)
+
+### Components with `highLevelApplication` removed:
+- Input Slider
+- Accordion  
+- Progress Indicator
+- ToDos Accordion
+
+**Rule**: When adding examples to any component, only include `highLevelApplication` if the user explicitly mentions it in their request.
+
+## Localhost Dev Server Reliability (CRITICAL)
+
+**NEVER leave localhost broken or non-functional.** Always ensure the dev server runs successfully after code changes.
+
+### Mandatory Dev Server Workflow:
+1. **Before starting dev server**: Check for and kill any existing Next.js processes on port 3000
+   ```bash
+   lsof -ti:3000 | xargs kill -9 2>/dev/null || true
+   ```
+2. **If localhost fails to load**: Clear Next.js cache and restart
+   ```bash
+   rm -rf .next && npm run dev
+   ```
+3. **After code generation**: Verify dev server is running and accessible
+   ```bash
+   curl -s http://localhost:3000 > /dev/null && echo "Server OK" || echo "Server failed"
+   ```
+4. **Client Components**: ALWAYS add `'use client'` directive at the top of files that use:
+   - React hooks (`useState`, `useEffect`, `useCallback`, etc.)
+   - Event handlers (`onClick`, `onChange`, `onSubmit`, etc.)
+   - Browser APIs (`window`, `document`, `localStorage`, etc.)
+   - Any interactive features
+
+### Common Localhost Issues to Prevent:
+- ❌ Multiple dev servers running simultaneously (port conflicts)
+- ❌ Missing `'use client'` directive in components using hooks/events
+- ❌ Stale `.next` cache causing runtime errors
+- ❌ Server-side components importing client-only code
+- ❌ Not verifying server starts successfully after changes
+
+### Dev Server Checklist:
+- ✅ Kill old processes before starting new dev server
+- ✅ Clear `.next` cache if experiencing strange errors
+- ✅ Verify `'use client'` is present in all interactive components
+- ✅ Test that localhost loads successfully after code changes
+- ✅ Never leave localhost in a broken state
+
+### Quick Fixes:
+```bash
+# Kill all Next.js processes
+pkill -f "next dev" || true
+lsof -ti:3000 | xargs kill -9 2>/dev/null || true
+
+# Clear cache and restart (ALWAYS do this if you see module resolution errors)
+rm -rf .next && npm run dev
+
+# For production build issues, clean cache and rebuild
+rm -rf .next && npm run build
+
+# Verify server is running
+curl -s http://localhost:3000 > /dev/null && echo "✓ Server OK" || echo "✗ Server failed"
+```
+
+### Build Cache Management (CRITICAL):
+**ALWAYS clean `.next` cache when:**
+- You see "Cannot find module" errors
+- You've deleted or renamed files
+- You've restructured component examples
+- Build fails with module resolution issues
+- Dev server shows stale errors
+
+**SIMPLIFIED workflow after ANY file changes (cache cleaning is AUTOMATIC):**
+```bash
+# STEP 1: Just run dev or build - cache cleaning happens automatically!
+npm run dev
+# OR
+npm run build
+
+# STEP 2: Verify server is running (if using dev)
+sleep 8 && curl -s -o /dev/null -w "%{http_code}" http://localhost:3000
+# Should return 200
+
+# That's it! The npm pre-hooks handle all cache cleaning and process cleanup automatically.
+```
+
+**CRITICAL RULES**: 
+- ✅ Cache cleaning is AUTOMATIC - no manual steps needed
+- ✅ Just use `npm run dev` or `npm run build` - hooks handle everything
+- ✅ Multiple threads are safe - ensure-clean script handles conflicts
+- ✅ Always verify the server responds with HTTP 200 before marking task complete

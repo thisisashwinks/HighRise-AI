@@ -3,6 +3,7 @@ export interface ComponentMetadata {
   category: string;
   description: string;
   href: string;
+  parentGroup?: string; // For sub-components that belong to a parent group
 }
 
 export interface ComingSoonComponentMetadata {
@@ -70,13 +71,15 @@ export const componentRegistry: ComponentMetadata[] = [
     name: 'Checkbox Card',
     category: 'Form',
     description: 'Card-based checkbox component for selecting options with visual distinction, icons, descriptions, and custom content slots',
-    href: '/components/checkbox-card',
+    href: '/components/checkbox/checkbox-card',
+    parentGroup: 'Checkbox',
   },
   {
     name: 'Checkbox Group',
     category: 'Form',
     description: 'Group component for displaying multiple checkboxes together with consistent styling, horizontal/vertical layouts, and comprehensive state management',
-    href: '/components/checkbox-group',
+    href: '/components/checkbox/checkbox-group',
+    parentGroup: 'Checkbox',
   },
   {
     name: 'Radio',
@@ -88,13 +91,15 @@ export const componentRegistry: ComponentMetadata[] = [
     name: 'Radio Card',
     category: 'Form',
     description: 'Card-based radio button component for selecting a single option with visual distinction, icons, descriptions, and custom content slots',
-    href: '/components/radio-card',
+    href: '/components/radio/radio-card',
+    parentGroup: 'Radio',
   },
   {
     name: 'Radio Group',
     category: 'Form',
     description: 'Group component for displaying multiple radio buttons together with consistent styling, horizontal/vertical layouts, and comprehensive state management',
-    href: '/components/radio-group',
+    href: '/components/radio/radio-group',
+    parentGroup: 'Radio',
   },
   {
     name: 'Toggle',
@@ -106,13 +111,15 @@ export const componentRegistry: ComponentMetadata[] = [
     name: 'Toggle Switch Group',
     category: 'Form',
     description: 'Group component for displaying multiple toggle switches together with consistent styling, horizontal/vertical layouts, and comprehensive state management',
-    href: '/components/toggle-switch-group',
+    href: '/components/toggle/toggle-switch-group',
+    parentGroup: 'Toggle',
   },
   {
     name: 'Toggle Card Group',
     category: 'Form',
     description: 'Group component for displaying multiple toggle card components together with consistent styling, horizontal/vertical layouts, icons, descriptions, and comprehensive state management',
-    href: '/components/toggle-card-group',
+    href: '/components/toggle/toggle-card-group',
+    parentGroup: 'Toggle',
   },
   {
     name: 'Input Slider',
@@ -132,7 +139,18 @@ export const componentRegistry: ComponentMetadata[] = [
     description: 'Specialized accordion component for organizing and managing todo items in collapsible sections with checkboxes, due dates, priorities, and completion tracking',
     href: '/components/todos-accordion',
   },
+  {
+    name: 'Progress Indicator',
+    category: 'Feedback',
+    description: 'Progress bar and loading indicators to show task completion status and progress. Supports linear bars, circular indicators, stepper progress, and loading animations',
+    href: '/components/progress-indicator',
+  },
 ];
+
+// Helper function to get sub-components for a parent group
+export const getSubComponents = (parentGroupName: string): ComponentMetadata[] => {
+  return componentRegistry.filter((component) => component.parentGroup === parentGroupName);
+};
 
 export const comingSoonComponents: ComingSoonComponentMetadata[] = [
   {
@@ -144,11 +162,6 @@ export const comingSoonComponents: ComingSoonComponentMetadata[] = [
     name: 'Loading & Thinking Icons/States',
     category: 'Feedback',
     description: 'Visual indicators and animations for loading states and AI thinking processes',
-  },
-  {
-    name: 'Progress Indicator',
-    category: 'Feedback',
-    description: 'Progress bar and loading indicators to show task completion status and progress',
   },
   {
     name: 'Date Picker',

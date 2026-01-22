@@ -220,7 +220,41 @@ export const AccordionDocumentation: React.FC = () => {
         figmaUrl: 'https://www.figma.com/design/cxyeQWrtdlVeckwmorSVU1/HighRise-AI-1.1--%3E-Handoff--WIP-?node-id=68-46906',
         figmaNodeId: '68:46906',
       }}
-      examples={[]}
+      examples={[
+        {
+          title: 'Accordion - Collapsed State',
+          description: 'Accordion component in its default collapsed state, showing multiple sections with clear headers and chevron indicators. This state conserves vertical space while keeping all section titles visible, allowing users to quickly scan available content and choose which sections to expand. The collapsed state is ideal for content-heavy pages where users may only need specific information.',
+          media: {
+            type: 'image',
+            url: '/examples/accordion/Accordion - Collapsed.png',
+            alt: 'Accordion component showing collapsed state with multiple sections',
+          },
+          tags: ['collapsed', 'default-state', 'space-efficient'],
+          critique: 'The collapsed accordion effectively organizes content into scannable sections. The clear headers and consistent chevron indicators provide visual hierarchy and communicate the collapsible nature of each section. The spacing between items helps distinguish individual sections, and the neutral styling ensures the component doesn\'t compete with other page elements for attention.',
+        },
+        {
+          title: 'Accordion - Expanded with Slot & Footer',
+          description: 'Accordion component in expanded state, demonstrating the use of content slots and footer sections within accordion panels. This example shows how accordions can accommodate rich content layouts with custom footer actions or additional information. The expanded panel reveals the full content while maintaining clear visual separation from other accordion items.',
+          media: {
+            type: 'image',
+            url: '/examples/accordion/Accordion - Expanded with Slot & Footer.png',
+            alt: 'Accordion component expanded showing content with slot and footer sections',
+          },
+          tags: ['expanded', 'slots', 'footer', 'rich-content'],
+          critique: 'The expanded accordion with slots and footer demonstrates flexibility in content organization. The footer section provides a clear area for actions or additional context without cluttering the main content. The visual separation between content and footer helps users distinguish between informational content and actionable elements. The smooth expansion animation and clear borders maintain visual hierarchy.',
+        },
+        {
+          title: 'ToDos Accordion - Completed State',
+          description: 'Specialized accordion implementation for managing todo items, showing completed tasks with visual indicators. This example demonstrates how accordions can be enhanced with additional functionality like checkboxes, completion tracking, and status indicators. The accordion organizes todos into logical groups while providing clear visual feedback on completion status.',
+          media: {
+            type: 'image',
+            url: '/examples/accordion/ToDos Accordion - Completed.png',
+            alt: 'ToDos accordion showing completed tasks with checkboxes and status indicators',
+          },
+          tags: ['todos', 'completed', 'task-management', 'checkboxes'],
+          critique: 'The todos accordion effectively combines the space-saving benefits of accordions with task management functionality. The completion indicators provide immediate visual feedback, and the checkbox pattern is familiar and intuitive. The grouping of todos into accordion sections helps users organize tasks by category or project. The completed state styling (strikethrough, reduced opacity) clearly communicates task status without removing the items from view.',
+        },
+      ]}
     />
   );
 };

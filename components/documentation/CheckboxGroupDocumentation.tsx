@@ -1,6 +1,5 @@
 import React from 'react';
 import { ComponentDocTemplate } from '../ComponentDocTemplate';
-import { CheckboxGroup } from '../CheckboxGroup';
 
 export const CheckboxGroupDocumentation: React.FC = () => {
   return (
@@ -112,7 +111,6 @@ export const CheckboxGroupDocumentation: React.FC = () => {
         {
           name: 'value',
           type: 'string[]',
-          default: '[]',
           description: 'Array of selected checkbox values. Controls which checkboxes are checked.'
         },
         {
@@ -197,121 +195,7 @@ export const CheckboxGroupDocumentation: React.FC = () => {
         figmaUrl: 'https://www.figma.com/design/cxyeQWrtdlVeckwmorSVU1/HighRise-AI-1.1--%3E-Handoff--WIP-?node-id=5328-24903',
         figmaNodeId: '5328:24903',
       }}
-      examples={[
-        {
-          title: 'Basic Checkbox Group',
-          description: 'Simple checkbox group with multiple options in horizontal layout. Shows default unchecked state.',
-          code: `<CheckboxGroup
-  options={[
-    { value: '1', label: 'Option 1' },
-    { value: '2', label: 'Option 2' },
-    { value: '3', label: 'Option 3' }
-  ]}
-/>`,
-          tags: ['basic', 'horizontal'],
-        },
-        {
-          title: 'Vertical Layout',
-          description: 'Checkbox group arranged vertically. Best for longer labels and mobile interfaces.',
-          code: `<CheckboxGroup
-  direction="vertical"
-  options={[
-    { value: '1', label: 'Option 1' },
-    { value: '2', label: 'Option 2' },
-    { value: '3', label: 'Option 3' }
-  ]}
-/>`,
-          tags: ['vertical', 'layout'],
-        },
-        {
-          title: 'With Label and Hint Text',
-          description: 'Checkbox group with group label and hint text providing context and guidance.',
-          code: `<CheckboxGroup
-  label="Select your preferences"
-  hintText="You can select multiple options"
-  options={[
-    { value: '1', label: 'Email notifications' },
-    { value: '2', label: 'SMS notifications' },
-    { value: '3', label: 'Push notifications' }
-  ]}
-/>`,
-          tags: ['label', 'hint-text', 'guidance'],
-        },
-        {
-          title: 'With Selected Values',
-          description: 'Checkbox group with pre-selected values. Demonstrates controlled component usage.',
-          code: `<CheckboxGroup
-  value={['1', '3']}
-  options={[
-    { value: '1', label: 'Option 1' },
-    { value: '2', label: 'Option 2' },
-    { value: '3', label: 'Option 3' }
-  ]}
-  onChange={(values) => console.log('Selected:', values)}
-/>`,
-          tags: ['controlled', 'selected'],
-        },
-        {
-          title: 'Error State',
-          description: 'Checkbox group with error state. Used for validation feedback.',
-          code: `<CheckboxGroup
-  label="Select at least one option"
-  hintText="Please select at least one option"
-  error
-  options={[
-    { value: '1', label: 'Option 1' },
-    { value: '2', label: 'Option 2' }
-  ]}
-/>`,
-          tags: ['error', 'validation'],
-        },
-        {
-          title: 'Disabled State',
-          description: 'Checkbox group with disabled state. Individual options can also be disabled.',
-          code: `<CheckboxGroup
-  disabled
-  options={[
-    { value: '1', label: 'Option 1' },
-    { value: '2', label: 'Option 2' },
-    { value: '3', label: 'Option 3', disabled: true }
-  ]}
-/>`,
-          tags: ['disabled', 'states'],
-        },
-        {
-          title: 'Different Sizes',
-          description: 'Checkbox groups with different sizes. All checkboxes in a group use the same size.',
-          code: `<CheckboxGroup size="3xs" options={[...]} />
-<CheckboxGroup size="2xs" options={[...]} />
-<CheckboxGroup size="xs" options={[...]} />
-<CheckboxGroup size="sm" options={[...]} />`,
-          tags: ['sizes', 'variants'],
-        },
-        {
-          title: 'With Helper Text',
-          description: 'Checkbox group where individual options have helper text for additional context.',
-          code: `<CheckboxGroup
-  options={[
-    { 
-      value: '1', 
-      label: 'Basic Plan',
-      helperText: 'Perfect for individuals'
-    },
-    { 
-      value: '2', 
-      label: 'Pro Plan',
-      helperText: 'Best for small teams'
-    },
-    { 
-      value: '3', 
-      label: 'Enterprise Plan',
-      helperText: 'For large organizations'
-    }
-  ]}
-/>`,
-          tags: ['helper-text', 'options'],
-        },
-      ]}
+      examples={[]}
     />
   );
 };

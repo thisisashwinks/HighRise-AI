@@ -1,6 +1,5 @@
 import React from 'react';
 import { ComponentDocTemplate } from '../ComponentDocTemplate';
-import { Toggle } from '../Toggle';
 
 export const ToggleDocumentation: React.FC = () => {
   return (
@@ -192,63 +191,7 @@ export const ToggleDocumentation: React.FC = () => {
         figmaUrl: 'https://www.figma.com/design/cxyeQWrtdlVeckwmorSVU1/HighRise-AI-1.1--%3E-Handoff--WIP-?node-id=5335-35520',
         figmaNodeId: '5335:35520',
       }}
-      examples={[
-        {
-          title: 'Basic Toggle States',
-          description: 'Demonstrates all toggle states: default unchecked, checked, and disabled. Shows how the toggle appearance changes based on state.',
-          code: `<Toggle label="Enable notifications" />
-<Toggle label="Enable notifications" checked />
-<Toggle label="Enable notifications" disabled />`,
-          tags: ['basic', 'states', 'interactive'],
-        },
-        {
-          title: 'Toggle Sizes',
-          description: 'All available toggle sizes from 3XS (16px) to LG (24px). Shows how toggle dimensions scale while maintaining consistent styling.',
-          code: `<Toggle size="3xs" label="3XS" />
-<Toggle size="2xs" label="2XS" />
-<Toggle size="xs" label="XS" />
-<Toggle size="sm" label="SM" />
-<Toggle size="md" label="MD" />
-<Toggle size="lg" label="LG" />`,
-          tags: ['sizes', 'variants'],
-        },
-        {
-          title: 'Error States',
-          description: 'Toggles with error state showing red border. Can be combined with checked or unchecked states to indicate validation errors.',
-          code: `<Toggle label="Invalid setting" error />
-<Toggle label="Invalid checked setting" checked error />`,
-          tags: ['error', 'validation', 'states'],
-        },
-        {
-          title: 'Without Label',
-          description: 'Toggles without labels. Used when context is clear from surrounding content or when space is limited.',
-          code: `<Toggle />
-<Toggle checked />`,
-          tags: ['label', 'compact'],
-        },
-        {
-          title: 'Controlled Toggle',
-          description: 'Toggle with controlled state management. Demonstrates how to manage toggle state in parent components.',
-          code: `const [enabled, setEnabled] = useState(false);
-
-<Toggle 
-  checked={enabled}
-  onChange={setEnabled}
-  label="Enable feature"
-/>`,
-          tags: ['controlled', 'state-management'],
-        },
-        {
-          title: 'Settings Panel',
-          description: 'Multiple toggles grouped together in a settings panel. Shows how to organize related toggles.',
-          code: `<div className="space-y-4">
-  <Toggle label="Email notifications" checked />
-  <Toggle label="SMS notifications" />
-  <Toggle label="Push notifications" checked />
-</div>`,
-          tags: ['grouping', 'settings'],
-        },
-      ]}
+      examples={[]}
     />
   );
 };

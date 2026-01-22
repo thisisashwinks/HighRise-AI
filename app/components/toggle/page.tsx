@@ -1,5 +1,5 @@
-import { ToggleDocumentation } from '@/components/documentation/ToggleDocumentation';
+import { ToggleOverviewDocumentation } from '@/components/documentation/ToggleOverviewDocumentation';
 
 export default function TogglePage() {
-  return <ToggleDocumentation />;
+  return <ToggleOverviewDocumentation />;
 }

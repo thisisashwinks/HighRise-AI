@@ -3,7 +3,8 @@ import { componentRegistry, comingSoonComponents } from '@/data/components';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 
 export default function ComponentsPage() {
-  const components = componentRegistry;
+  // Filter out sub-components (those with parentGroup) from the main listing
+  const components = componentRegistry.filter((component) => !component.parentGroup);
   const comingSoon = comingSoonComponents;
 
   return (

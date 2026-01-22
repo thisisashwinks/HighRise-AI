@@ -1,6 +1,5 @@
 import React from 'react';
 import { ComponentDocTemplate } from '../ComponentDocTemplate';
-import { Checkbox } from '../Checkbox';
 
 export const CheckboxDocumentation: React.FC = () => {
   return (
@@ -218,56 +217,7 @@ export const CheckboxDocumentation: React.FC = () => {
         figmaUrl: 'https://www.figma.com/design/cxyeQWrtdlVeckwmorSVU1/HighRise-AI-1.1--%3E-Handoff--WIP-?node-id=5313-4402',
         figmaNodeId: '5313:4402',
       }}
-      examples={[
-        {
-          title: 'Basic Checkbox States',
-          description: 'Demonstrates all checkbox states: default unchecked, checked, indeterminate, and disabled. Shows how the checkbox appearance changes based on state.',
-          code: `<Checkbox label="Option 1" />
-<Checkbox label="Option 2" checked />
-<Checkbox label="Option 3" indeterminate />
-<Checkbox label="Option 4" disabled />`,
-          tags: ['basic', 'states', 'interactive'],
-        },
-        {
-          title: 'Checkbox Sizes',
-          description: 'All available checkbox sizes from 3XS (10px) to LG (20px). Shows how checkbox dimensions scale while maintaining consistent styling.',
-          code: `<Checkbox size="3xs" label="3XS" />
-<Checkbox size="2xs" label="2XS" />
-<Checkbox size="xs" label="XS" />
-<Checkbox size="sm" label="SM" />
-<Checkbox size="md" label="MD" />
-<Checkbox size="lg" label="LG" />`,
-          tags: ['sizes', 'variants'],
-        },
-        {
-          title: 'Error States',
-          description: 'Checkboxes with error state showing red border. Can be combined with checked or unchecked states to indicate validation errors.',
-          code: `<Checkbox label="Invalid option" error />
-<Checkbox label="Invalid checked option" checked error />`,
-          tags: ['error', 'validation', 'states'],
-        },
-        {
-          title: 'Label Positions',
-          description: 'Checkboxes with labels positioned to the left or right. Right positioning is the default and most common.',
-          code: `<Checkbox label="Label on right" labelPosition="right" />
-<Checkbox label="Label on left" labelPosition="left" />`,
-          tags: ['layout', 'label'],
-        },
-        {
-          title: 'With Helper Text',
-          description: 'Checkboxes with helper text providing additional context or guidance. Helper text appears below the label.',
-          code: `<Checkbox 
-  label="Enable notifications" 
-  helperText="Receive updates about your account activity"
-/>
-<Checkbox 
-  label="Share data" 
-  helperText="Allow us to use your data for analytics"
-  checked
-/>`,
-          tags: ['helper-text', 'guidance'],
-        },
-      ]}
+      examples={[]}
     />
   );
 };

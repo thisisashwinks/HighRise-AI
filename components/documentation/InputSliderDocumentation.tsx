@@ -277,139 +277,37 @@ export const InputSliderDocumentation: React.FC = () => {
       }}
       examples={[
         {
-          title: 'Basic Slider',
-          description: 'Standard slider component with default settings. Shows the basic track, fill, and thumb elements.',
-          code: `<InputSlider 
-  label="Volume"
-  min={0}
-  max={100}
-  defaultValue={50}
-/>`,
-          tags: ['basic', 'default'],
+          title: 'Input Slider - Standard Implementation',
+          description: 'A standard input slider component demonstrating the basic track, fill, and thumb elements. This example shows the slider in its default state with clear visual feedback and smooth interaction capabilities.',
+          media: {
+            type: 'image',
+            url: '/examples/input slider/Input Slider.png',
+            alt: 'Standard input slider component',
+          },
+          tags: ['basic', 'default', 'standard'],
+          critique: 'The standard slider provides clear visual feedback with the filled track indicating the current value position. The thumb is easily draggable and the track provides good affordance for interaction. The design maintains good contrast and accessibility.',
         },
         {
-          title: 'Slider with Value Display',
-          description: 'Slider with current value displayed next to the label. Useful when users need to see exact numeric values.',
-          code: `<InputSlider 
-  label="Brightness"
-  min={0}
-  max={100}
-  defaultValue={75}
-  showValue
-/>`,
-          tags: ['value', 'display'],
+          title: 'Input Slider - Dual Side Configuration',
+          description: 'An input slider with dual-side value display, showing values or labels on both ends of the slider track. This configuration helps users understand the range and context of the values they are selecting.',
+          media: {
+            type: 'image',
+            url: '/examples/input slider/Input Slider - Dual Side.png',
+            alt: 'Input slider with dual side value display',
+          },
+          tags: ['dual-side', 'range', 'labels'],
+          critique: 'The dual-side configuration provides excellent context by showing the range boundaries directly on the slider. This helps users understand the full spectrum of available values without needing to reference external labels. The visual design maintains clarity even with additional information.',
         },
         {
-          title: 'Slider with Prefix/Suffix',
-          description: 'Slider with value display including prefix or suffix text to provide context for the value.',
-          code: `<InputSlider 
-  label="Price"
-  min={0}
-  max={1000}
-  defaultValue={500}
-  showValue
-  valuePrefix="$"
-/>
-
-<InputSlider 
-  label="Opacity"
-  min={0}
-  max={100}
-  defaultValue={50}
-  showValue
-  valueSuffix="%"
-/>`,
-          tags: ['value', 'formatting', 'prefix', 'suffix'],
-        },
-        {
-          title: 'Slider Sizes',
-          description: 'All available slider sizes from XS to LG. Shows how track height and thumb size scale while maintaining consistent styling.',
-          code: `<InputSlider size="xs" label="XS" defaultValue={50} />
-<InputSlider size="sm" label="SM" defaultValue={50} />
-<InputSlider size="md" label="MD" defaultValue={50} />
-<InputSlider size="lg" label="LG" defaultValue={50} />`,
-          tags: ['sizes', 'variants'],
-        },
-        {
-          title: 'Slider States',
-          description: 'Slider in different states: default, disabled, and error. Shows how appearance changes based on state.',
-          code: `<InputSlider label="Default" defaultValue={50} />
-<InputSlider label="Disabled" defaultValue={50} disabled />
-<InputSlider 
-  label="Error" 
-  defaultValue={50} 
-  error 
-  errorMessage="Value must be between 0 and 100"
-/>`,
-          tags: ['states', 'disabled', 'error'],
-        },
-        {
-          title: 'Slider with Step',
-          description: 'Slider with custom step value. Value snaps to multiples of the step amount.',
-          code: `<InputSlider 
-  label="Rating"
-  min={0}
-  max={5}
-  step={0.5}
-  defaultValue={2.5}
-  showValue
-/>`,
-          tags: ['step', 'precision'],
-        },
-        {
-          title: 'Controlled Slider',
-          description: 'Slider with controlled state management. Demonstrates how to manage slider value in parent components.',
-          code: `const [value, setValue] = useState(50);
-
-<InputSlider 
-  label="Volume"
-  min={0}
-  max={100}
-  value={value}
-  onChange={setValue}
-  showValue
-/>`,
-          tags: ['controlled', 'state-management'],
-        },
-        {
-          title: 'Slider with onChangeEnd',
-          description: 'Slider using onChangeEnd callback for expensive operations that should only run when user finishes adjusting.',
-          code: `<InputSlider 
-  label="Filter Range"
-  min={0}
-  max={1000}
-  defaultValue={500}
-  onChangeEnd={(value) => {
-    // Only called when user finishes dragging
-    performExpensiveOperation(value);
-  }}
-/>`,
-          tags: ['callbacks', 'performance'],
-        },
-        {
-          title: 'Settings Panel',
-          description: 'Multiple sliders grouped together in a settings panel. Shows how to organize related sliders.',
-          code: `<div className="space-y-6">
-  <InputSlider 
-    label="Volume" 
-    defaultValue={75} 
-    showValue 
-    valueSuffix="%" 
-  />
-  <InputSlider 
-    label="Brightness" 
-    defaultValue={80} 
-    showValue 
-    valueSuffix="%" 
-  />
-  <InputSlider 
-    label="Contrast" 
-    defaultValue={60} 
-    showValue 
-    valueSuffix="%" 
-  />
-</div>`,
-          tags: ['grouping', 'settings'],
+          title: 'Input Slider - AI Applied Context',
+          description: 'An input slider integrated within an AI-powered interface, demonstrating how sliders can be used to control AI parameters, model settings, or AI-generated content adjustments. This example shows the slider in a context where AI functionality is being configured or fine-tuned.',
+          media: {
+            type: 'image',
+            url: '/examples/input slider/Input Slider - AI Applied.png',
+            alt: 'Input slider used in AI application context',
+          },
+          tags: ['ai', 'configuration', 'parameters'],
+          critique: 'The slider in an AI context provides intuitive control over AI parameters. The visual feedback helps users understand how their adjustments affect AI behavior. The integration feels natural and doesn\'t overwhelm the interface with technical complexity.',
         },
       ]}
     />

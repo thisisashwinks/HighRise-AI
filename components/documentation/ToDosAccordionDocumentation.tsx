@@ -273,163 +273,37 @@ export const ToDosAccordionDocumentation: React.FC = () => {
       }}
       examples={[
         {
-          title: 'Basic Todos Accordion',
-          description: 'Standard todos accordion with checkboxes and section headers. Simple task management interface.',
-          code: `<ToDosAccordion
-  sections={[
-    {
-      id: 'work',
-      title: 'Work Tasks',
-      todos: [
-        { id: '1', label: 'Review project proposal', completed: false },
-        { id: '2', label: 'Update documentation', completed: true },
-        { id: '3', label: 'Team meeting prep', completed: false },
-      ],
-    },
-    {
-      id: 'personal',
-      title: 'Personal',
-      todos: [
-        { id: '4', label: 'Buy groceries', completed: false },
-        { id: '5', label: 'Call dentist', completed: false },
-      ],
-    },
-  ]}
-/>`,
-          tags: ['basic', 'default'],
+          title: 'ToDos Accordion - Collapsed State',
+          description: 'A todos accordion component in its collapsed state, showing section headers with completion counts. This example demonstrates how the accordion conserves vertical space while providing quick visibility into task progress through completion badges. The collapsed state allows users to see an overview of all todo sections without overwhelming the interface.',
+          media: {
+            type: 'image',
+            url: '/examples/todos/ToDos Accordion - Collapsed.png',
+            alt: 'ToDos accordion in collapsed state showing section headers with completion counts',
+          },
+          tags: ['collapsed', 'overview', 'space-saving'],
+          critique: 'The collapsed state effectively provides a high-level overview of all todo sections while conserving screen space. The completion count badges on each section header give users immediate insight into progress without needing to expand sections. The visual hierarchy is clear, with section titles and counts easily scannable. This pattern is particularly effective when users have multiple project categories or task groups.',
         },
         {
-          title: 'With Completion Counts',
-          description: 'Todos accordion showing completion counts on section headers. Helps users track progress at a glance.',
-          code: `<ToDosAccordion
-  showCounts={true}
-  sections={[
-    {
-      id: 'project-a',
-      title: 'Project A',
-      todos: [
-        { id: '1', label: 'Task 1', completed: true },
-        { id: '2', label: 'Task 2', completed: true },
-        { id: '3', label: 'Task 3', completed: false },
-      ],
-    },
-  ]}
-/>`,
-          tags: ['counts', 'progress'],
+          title: 'ToDos Accordion - Completed State',
+          description: 'A todos accordion showing completed tasks with visual completion indicators. This example demonstrates how the accordion handles completed todos with strikethrough styling and reduced opacity, while maintaining the completed items in view for reference. The completion count badges update to reflect the current state, and completed sections may show different styling.',
+          media: {
+            type: 'image',
+            url: '/examples/todos/ToDos Accordion - Completed.png',
+            alt: 'ToDos accordion showing completed tasks with visual indicators',
+          },
+          tags: ['completed', 'progress', 'visual-feedback'],
+          critique: 'The completed state provides excellent visual feedback with strikethrough text and reduced opacity, clearly communicating task completion without removing items from view. This allows users to maintain context and see their progress. The completion count badges accurately reflect the current state, and the visual treatment strikes a good balance between showing completion and maintaining readability. Users can still reference completed tasks without them dominating the interface.',
         },
         {
-          title: 'With Due Dates',
-          description: 'Todos accordion with due date badges. Formats dates intelligently and highlights overdue items.',
-          code: `<ToDosAccordion
-  showDueDates={true}
-  sections={[
-    {
-      id: 'urgent',
-      title: 'Urgent Tasks',
-      todos: [
-        { id: '1', label: 'Submit report', dueDate: new Date(), completed: false },
-        { id: '2', label: 'Review code', dueDate: new Date(Date.now() + 86400000), completed: false },
-        { id: '3', label: 'Old task', dueDate: new Date(Date.now() - 86400000), completed: false },
-      ],
-    },
-  ]}
-/>`,
-          tags: ['dates', 'overdue'],
-        },
-        {
-          title: 'With Priorities',
-          description: 'Todos accordion with priority badges. Color-coded badges help users identify urgent tasks.',
-          code: `<ToDosAccordion
-  showPriorities={true}
-  sections={[
-    {
-      id: 'tasks',
-      title: 'Tasks',
-      todos: [
-        { id: '1', label: 'Critical bug fix', priority: 'high', completed: false },
-        { id: '2', label: 'Feature enhancement', priority: 'medium', completed: false },
-        { id: '3', label: 'Code cleanup', priority: 'low', completed: false },
-      ],
-    },
-  ]}
-/>`,
-          tags: ['priorities', 'urgency'],
-        },
-        {
-          title: 'With Descriptions',
-          description: 'Todos accordion with description text for additional context. Useful for complex tasks.',
-          code: `<ToDosAccordion
-  sections={[
-    {
-      id: 'complex',
-      title: 'Complex Tasks',
-      todos: [
-        {
-          id: '1',
-          label: 'Implement authentication',
-          description: 'Add OAuth2 support with Google and GitHub providers. Include refresh token rotation.',
-          completed: false,
-        },
-      ],
-    },
-  ]}
-/>`,
-          tags: ['descriptions', 'context'],
-        },
-        {
-          title: 'Full Featured',
-          description: 'Complete todos accordion with all features: counts, due dates, priorities, and descriptions.',
-          code: `<ToDosAccordion
-  showCounts={true}
-  showDueDates={true}
-  showPriorities={true}
-  sections={[
-    {
-      id: 'sprint',
-      title: 'Sprint Tasks',
-      todos: [
-        {
-          id: '1',
-          label: 'Deploy to production',
-          description: 'Deploy latest release to production environment',
-          dueDate: new Date(),
-          priority: 'high',
-          completed: false,
-        },
-        {
-          id: '2',
-          label: 'Write tests',
-          priority: 'medium',
-          completed: true,
-        },
-      ],
-    },
-  ]}
-  onTodoToggle={(sectionId, todoId, completed) => {
-    console.log('Todo toggled:', sectionId, todoId, completed);
-  }}
-/>`,
-          tags: ['full-featured', 'complete'],
-        },
-        {
-          title: 'Controlled State',
-          description: 'Todos accordion with controlled expansion state. Demonstrates managing expanded sections in parent component.',
-          code: `const [expanded, setExpanded] = useState(['work']);
-
-<ToDosAccordion
-  defaultExpanded={expanded}
-  onExpandedChange={setExpanded}
-  sections={sections}
-/>`,
-          tags: ['controlled', 'state-management'],
-        },
-        {
-          title: 'Different Sizes',
-          description: 'Todos accordion in different sizes. Shows how component scales while maintaining consistent styling.',
-          code: `<ToDosAccordion size="sm" sections={sections} />
-<ToDosAccordion size="md" sections={sections} />
-<ToDosAccordion size="lg" sections={sections} />`,
-          tags: ['sizes', 'variants'],
+          title: 'ToDos Accordion - Task Detail View',
+          description: 'A detailed view of a specific task within the todos accordion, showing expanded task information, metadata, and interactive elements. This example demonstrates how individual tasks can display rich information including descriptions, due dates, priorities, and action options when expanded or selected.',
+          media: {
+            type: 'image',
+            url: '/examples/todos/ToDos Accordion - Task 1/6.png',
+            alt: 'ToDos accordion showing detailed task view with expanded information',
+          },
+          tags: ['detail-view', 'expanded', 'task-management'],
+          critique: 'The task detail view provides comprehensive information about individual todos without leaving the accordion context. This allows users to see full task details, metadata, and available actions while maintaining the organizational structure of the accordion. The expanded view balances information density with clarity, showing relevant details without overwhelming the user. This pattern is effective for tasks that require additional context or actions beyond simple completion.',
         },
       ]}
     />

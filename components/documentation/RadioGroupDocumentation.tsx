@@ -1,25 +1,24 @@
 import React from 'react';
 import { ComponentDocTemplate } from '../ComponentDocTemplate';
-import { RadioGroup } from '../RadioGroup';
 
 export const RadioGroupDocumentation: React.FC = () => {
   return (
     <ComponentDocTemplate
       name="Radio Group"
       category="Form"
-      description="A group component for displaying multiple radio buttons together with consistent styling and behavior. Supports horizontal and vertical layouts, optional labels and hint text, and comprehensive state management including disabled and error states. Ensures only one option can be selected at a time."
+      description="A group component for displaying multiple radio buttons together with consistent styling and behavior. Supports horizontal and vertical layouts, optional labels and hint text, and comprehensive state management including disabled and error states. Only one radio button in a group can be selected at a time."
       whenToUse={[
-        'Displaying multiple related radio options together',
+        'Displaying multiple related radio button options together',
         'Forms requiring single selection from a set of options',
-        'Settings panels with mutually exclusive options',
-        'Filter interfaces with single-select criteria',
+        'Settings panels with mutually exclusive choices',
+        'Filter interfaces with single-selectable criteria',
         'Preference selection where only one option can be chosen',
         'When you need consistent spacing and alignment across multiple radio buttons',
-        'Grouping related radio options with a shared label or context'
+        'Grouping related radio button options with a shared label or context'
       ]}
       whenNotToUse={[
         'For single radio button selection (use Radio component directly)',
-        'For multi-select scenarios (use Checkbox group instead)',
+        'For multiple-selection scenarios (use Checkbox group instead)',
         'When radio buttons are unrelated and don\'t need grouping',
         'For complex nested radio hierarchies (use RadioCard or custom layout)',
         'When each radio button needs completely independent styling or behavior'
@@ -32,8 +31,8 @@ export const RadioGroupDocumentation: React.FC = () => {
         },
         {
           number: 2,
-          name: 'Radio Options',
-          description: 'Individual radio button components arranged in horizontal or vertical layout. Each radio can have its own label and helper text. All radios share the same name attribute for mutual exclusivity.'
+          name: 'Radio Button Options',
+          description: 'Individual radio button components arranged in horizontal or vertical layout. Each radio can have its own label and helper text.'
         },
         {
           number: 3,
@@ -58,7 +57,7 @@ export const RadioGroupDocumentation: React.FC = () => {
         },
         {
           name: 'Selected',
-          description: 'One radio button is selected. Only one radio in the group can be selected at a time. Selecting a new radio automatically deselects the previously selected one.'
+          description: 'One radio button in the group is selected. Selecting a new option automatically deselects the previously selected one.'
         },
         {
           name: 'Disabled',
@@ -73,13 +72,13 @@ export const RadioGroupDocumentation: React.FC = () => {
         {
           name: 'options',
           type: 'Array<RadioOption>',
-          description: 'Array of radio options to display. Each option includes value, label, optional helperText, and disabled properties.'
+          description: 'Array of radio button options to display. Each option includes value, label, optional helperText, and disabled properties.'
         },
         {
           name: 'size',
-          type: '"3xs" | "2xs" | "xs" | "sm" | "md" | "lg"',
+          type: '"3xs" | "2xs" | "xs" | "sm"',
           default: '"sm"',
-          description: 'Size variant affecting all radio buttons in the group. 3XS (10px), 2XS (12px), XS (14px), SM (16px), MD (18px), LG (20px).'
+          description: 'Size variant affecting all radio buttons in the group. 3XS (10px), 2XS (12px), XS (14px), SM (16px).'
         },
         {
           name: 'direction',
@@ -112,12 +111,12 @@ export const RadioGroupDocumentation: React.FC = () => {
         {
           name: 'value',
           type: 'string',
-          description: 'The value of the currently selected radio button. Controls which radio is checked. Only one value can be selected at a time.'
+          description: 'Selected radio button value. Controls which radio button is checked. Only one value can be selected at a time.'
         },
         {
           name: 'onChange',
           type: '(value: string) => void',
-          description: 'Callback function invoked when any radio button selection changes. Receives the value of the newly selected radio.'
+          description: 'Callback function invoked when any radio button state changes. Receives the newly selected value.'
         },
         {
           name: 'className',
@@ -127,12 +126,11 @@ export const RadioGroupDocumentation: React.FC = () => {
         {
           name: 'name',
           type: 'string',
-          description: 'Required HTML name attribute for form submission and radio group behavior. All radio buttons in the group share this name to ensure mutual exclusivity.'
+          description: 'Required HTML name attribute for form submission. All radio buttons in the group share this name to ensure mutual exclusivity.'
         }
       ]}
       usageGuidelines={{
         do: [
-          'Always provide a name attribute to group radio buttons together',
           'Use horizontal layout for compact spaces and when labels are short',
           'Use vertical layout for longer labels, mobile interfaces, and better accessibility',
           'Provide clear, descriptive labels for the group and individual options',
@@ -141,21 +139,20 @@ export const RadioGroupDocumentation: React.FC = () => {
           'Ensure consistent spacing between radio buttons',
           'Use appropriate size based on context and available space',
           'Group related options logically together',
-          'Use disabled state for entire groups when appropriate',
-          'Allow individual option disabling when some options are conditionally unavailable',
-          'Ensure only one option can be selected at a time'
+          'Always provide a name attribute for proper form behavior',
+          'Use disabled state for entire groups when appropriate'
         ],
         dont: [
-          'Don\'t use radio groups for multi-select scenarios (use Checkbox group)',
-          'Don\'t use radio groups without providing a name attribute',
+          'Don\'t use radio groups for multiple-selection scenarios (use Checkbox group)',
           'Don\'t mix unrelated radio buttons in the same group',
           'Don\'t use error state without providing clear error messaging',
-          'Don\'t use multiple radio groups with the same name on the same page',
-          'Don\'t allow multiple selections within a single radio group',
-          'Don\'t use inconsistent spacing or sizing within a group',
-          'Don\'t disable groups without explaining why they\'re unavailable',
-          'Don\'t use radio groups when a single radio button would suffice',
-          'Don\'t create groups with too many options - consider using Select or Dropdown instead'
+          'Don\'t use horizontal layout when labels are too long or space is limited',
+          'Don\'t use multiple radio sizes within the same group',
+          'Don\'t use radio groups without a name attribute',
+          'Don\'t hide the group label when it provides important context',
+          'Don\'t use radio groups for navigation (use Tabs or Links instead)',
+          'Don\'t use radio groups without proper form labels for accessibility',
+          'Don\'t override default spacing unnecessarily'
         ]
       }}
       accessibility={{
@@ -164,124 +161,42 @@ export const RadioGroupDocumentation: React.FC = () => {
           'Arrow keys (Up/Down or Left/Right) navigate between radio buttons in the group',
           'Space key selects the focused radio button',
           'Focus ring is visible for keyboard navigation',
-          'Disabled groups cannot receive focus',
-          'Radio buttons are keyboard accessible and properly grouped'
+          'Disabled radio buttons cannot receive focus',
+          'Group maintains logical tab order'
         ],
         screenReader: [
           'Group label is announced when group receives focus',
-          'Radio label and state are announced when individual radio receives focus',
+          'Individual radio button labels are announced when each radio receives focus',
+          'Radio state (checked/unchecked) is announced',
           'Radio group name and position (e.g., "Option 1 of 3") is announced',
-          'Error state is announced when present',
-          'Disabled state is announced when group or individual option is disabled',
-          'Selected state is clearly announced'
+          'Error state is announced when error prop is true',
+          'Disabled state is announced for disabled radio buttons',
+          'Hint text is associated with the group via aria-describedby'
         ],
         ariaHints: [
-          'role="radiogroup" on the container',
-          'aria-labelledby links group to label',
-          'aria-describedby links group to hint text',
-          'aria-invalid indicates error state',
-          'aria-disabled indicates disabled state',
-          'name attribute groups radio buttons for mutual exclusivity',
-          'fieldset and legend elements can be used for semantic grouping'
+          'role="group" or fieldset for the radio group container',
+          'aria-labelledby linking group to label',
+          'aria-describedby linking group to hint text',
+          'aria-invalid="true" for groups with error state',
+          'aria-disabled="true" for disabled groups',
+          'Proper name attributes for form submission and mutual exclusivity'
         ]
       }}
       relatedComponents={[
         'Radio',
-        'Radio Card',
-        'Checkbox Group',
+        'RadioCard',
+        'Checkbox',
         'Select',
-        'Dropdown'
+        'Input',
+        'Form'
       ]}
       figmaDocumentation={{
         title: 'Radio Group Component Documentation',
-        description: 'Complete visual reference showing all radio group variants, states, and configurations from the design system. Includes examples with horizontal/vertical layouts, labels, hint text, and error states.',
-        figmaUrl: 'https://www.figma.com/design/cxyeQWrtdlVeckwmorSVU1/HighRise-AI-1.1--%3E-Handoff--WIP-?node-id=5332-32052',
-        figmaNodeId: '5332:32052',
+        description: 'Complete visual reference showing all radio group sizes, directions, states, and configurations from the design system. Includes examples of horizontal and vertical layouts, label and hint text variations, and error states.',
+        figmaUrl: 'https://www.figma.com/design/cxyeQWrtdlVeckwmorSVU1/HighRise-AI-1.1--%3E-Handoff--WIP-?node-id=5328-27167',
+        figmaNodeId: '5328:27167',
       }}
-      examples={[
-        {
-          title: 'Basic Radio Group',
-          description: 'Simple radio group with three options. Only one option can be selected at a time.',
-          code: `<RadioGroup
-  name="payment"
-  options={[
-    { value: 'credit', label: 'Credit Card' },
-    { value: 'debit', label: 'Debit Card' },
-    { value: 'paypal', label: 'PayPal' }
-  ]}
-  value={selectedPayment}
-  onChange={setSelectedPayment}
-/>`,
-          tags: ['basic', 'selection'],
-        },
-        {
-          title: 'With Label and Hint Text',
-          description: 'Radio group with a group label and hint text providing context for the selection.',
-          code: `<RadioGroup
-  name="notification"
-  label="Notification Preference"
-  hintText="Choose how you want to receive notifications"
-  options={[
-    { value: 'email', label: 'Email' },
-    { value: 'sms', label: 'SMS' },
-    { value: 'push', label: 'Push Notifications' }
-  ]}
-  value={selectedNotification}
-  onChange={setSelectedNotification}
-/>`,
-          tags: ['label', 'hint-text', 'guidance'],
-        },
-        {
-          title: 'Vertical Layout',
-          description: 'Radio group arranged vertically, ideal for longer labels or mobile interfaces.',
-          code: `<RadioGroup
-  name="plan"
-  direction="vertical"
-  options={[
-    { value: 'basic', label: 'Basic Plan', helperText: 'Perfect for individuals' },
-    { value: 'pro', label: 'Pro Plan', helperText: 'Best for small teams' },
-    { value: 'enterprise', label: 'Enterprise Plan', helperText: 'For large organizations' }
-  ]}
-  value={selectedPlan}
-  onChange={setSelectedPlan}
-/>`,
-          tags: ['layout', 'vertical'],
-        },
-        {
-          title: 'Error State',
-          description: 'Radio group with error state indicating validation failure.',
-          code: `<RadioGroup
-  name="gender"
-  label="Gender"
-  error={true}
-  hintText="Please select a gender"
-  options={[
-    { value: 'male', label: 'Male' },
-    { value: 'female', label: 'Female' },
-    { value: 'other', label: 'Other' }
-  ]}
-  value={selectedGender}
-  onChange={setSelectedGender}
-/>`,
-          tags: ['error', 'validation'],
-        },
-        {
-          title: 'Disabled State',
-          description: 'Radio group with some options disabled. Entire group can also be disabled.',
-          code: `<RadioGroup
-  name="subscription"
-  options={[
-    { value: 'free', label: 'Free' },
-    { value: 'premium', label: 'Premium', disabled: true },
-    { value: 'enterprise', label: 'Enterprise' }
-  ]}
-  disabled={isLoading}
-  value={selectedSubscription}
-  onChange={setSelectedSubscription}
-/>`,
-          tags: ['disabled', 'states'],
-        },
-      ]}
+      examples={[]}
     />
   );
 };

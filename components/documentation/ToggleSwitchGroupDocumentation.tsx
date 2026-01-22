@@ -1,6 +1,5 @@
 import React from 'react';
 import { ComponentDocTemplate } from '../ComponentDocTemplate';
-import { ToggleSwitchGroup } from '../ToggleSwitchGroup';
 
 export const ToggleSwitchGroupDocumentation: React.FC = () => {
   return (
@@ -197,113 +196,7 @@ export const ToggleSwitchGroupDocumentation: React.FC = () => {
         figmaUrl: 'https://www.figma.com/design/cxyeQWrtdlVeckwmorSVU1/HighRise-AI-1.1--%3E-Handoff--WIP-?node-id=5335-36758',
         figmaNodeId: '5335:36758',
       }}
-      examples={[
-        {
-          title: 'Basic Toggle Switch Group',
-          description: 'Simple toggle switch group with multiple options in horizontal layout. Shows default unchecked state.',
-          code: `<ToggleSwitchGroup
-  options={[
-    { value: '1', label: 'Email notifications' },
-    { value: '2', label: 'SMS notifications' },
-    { value: '3', label: 'Push notifications' }
-  ]}
-/>`,
-          tags: ['basic', 'horizontal'],
-        },
-        {
-          title: 'Vertical Layout',
-          description: 'Toggle switch group arranged vertically. Best for longer labels and mobile interfaces.',
-          code: `<ToggleSwitchGroup
-  direction="vertical"
-  options={[
-    { value: '1', label: 'Email notifications' },
-    { value: '2', label: 'SMS notifications' },
-    { value: '3', label: 'Push notifications' }
-  ]}
-/>`,
-          tags: ['vertical', 'layout'],
-        },
-        {
-          title: 'With Label and Hint Text',
-          description: 'Toggle switch group with group label and hint text providing context and guidance.',
-          code: `<ToggleSwitchGroup
-  label="Notification Preferences"
-  hintText="Select which notifications you want to receive"
-  options={[
-    { value: '1', label: 'Email notifications' },
-    { value: '2', label: 'SMS notifications' },
-    { value: '3', label: 'Push notifications' }
-  ]}
-/>`,
-          tags: ['label', 'hint-text', 'guidance'],
-        },
-        {
-          title: 'With Selected Values',
-          description: 'Toggle switch group with pre-selected values. Demonstrates controlled component usage.',
-          code: `<ToggleSwitchGroup
-  value={['1', '3']}
-  options={[
-    { value: '1', label: 'Email notifications' },
-    { value: '2', label: 'SMS notifications' },
-    { value: '3', label: 'Push notifications' }
-  ]}
-  onChange={(values) => console.log('Selected:', values)}
-/>`,
-          tags: ['controlled', 'selected'],
-        },
-        {
-          title: 'Error State',
-          description: 'Toggle switch group with error state. Used for validation feedback.',
-          code: `<ToggleSwitchGroup
-  label="Select at least one notification method"
-  hintText="Please select at least one notification method"
-  error
-  options={[
-    { value: '1', label: 'Email notifications' },
-    { value: '2', label: 'SMS notifications' }
-  ]}
-/>`,
-          tags: ['error', 'validation'],
-        },
-        {
-          title: 'Disabled State',
-          description: 'Toggle switch group with disabled state. Individual options can also be disabled.',
-          code: `<ToggleSwitchGroup
-  disabled
-  options={[
-    { value: '1', label: 'Email notifications' },
-    { value: '2', label: 'SMS notifications' },
-    { value: '3', label: 'Push notifications', disabled: true }
-  ]}
-/>`,
-          tags: ['disabled', 'states'],
-        },
-        {
-          title: 'Different Sizes',
-          description: 'Toggle switch groups with different sizes. All toggle switches in a group use the same size.',
-          code: `<ToggleSwitchGroup size="3xs" options={[...]} />
-<ToggleSwitchGroup size="2xs" options={[...]} />
-<ToggleSwitchGroup size="xs" options={[...]} />
-<ToggleSwitchGroup size="sm" options={[...]} />
-<ToggleSwitchGroup size="md" options={[...]} />
-<ToggleSwitchGroup size="lg" options={[...]} />`,
-          tags: ['sizes', 'variants'],
-        },
-        {
-          title: 'Settings Panel',
-          description: 'Multiple toggle switches grouped together in a settings panel. Shows how to organize related toggles.',
-          code: `<ToggleSwitchGroup
-  label="Account Settings"
-  options={[
-    { value: '1', label: 'Two-factor authentication', checked: true },
-    { value: '2', label: 'Email notifications', checked: true },
-    { value: '3', label: 'Marketing emails' },
-    { value: '4', label: 'Weekly digest' }
-  ]}
-/>`,
-          tags: ['settings', 'grouping'],
-        },
-      ]}
+      examples={[]}
     />
   );
 };
