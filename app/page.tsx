@@ -5,7 +5,8 @@ import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { GeneralPatternsSection } from '@/components/GeneralPatternsSection';
 
 export default function Home() {
-  const components = componentRegistry;
+  // Filter out sub-components (those with parentGroup) from the main listing
+  const components = componentRegistry.filter((component) => !component.parentGroup);
   const comingSoon = comingSoonComponents;
 
   return (

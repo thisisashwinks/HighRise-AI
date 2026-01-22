@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "predev": "bash scripts/ensure-clean.sh",
     "dev": "next dev",
+    "prebuild": "bash scripts/ensure-clean.sh",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
