@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import './globals.css';
 import { FeedbackButton } from './components/FeedbackButton';
+import { SearchProvider } from '@/components/SearchProvider';
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const metadata: Metadata = {
   title: 'HighLevel – HighRise AI Component Documentation',
@@ -35,7 +38,8 @@ export default function RootLayout({
                   </div>
                 </Link>
               </div>
-              <div className="flex gap-4">
+              <div className="flex items-center gap-4">
+                <SearchProvider />
                 <a href="/" className="text-sm text-neutral-700 hover:text-neutral-900">
                   Home
                 </a>
@@ -83,6 +87,8 @@ export default function RootLayout({
             </p>
           </div>
         </footer>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
