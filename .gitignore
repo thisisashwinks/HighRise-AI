@@ -36,3 +36,6 @@ next-env.d.ts
 
 # cache
 node_modules/.cache
+
+# local uploads when Redis not configured
+/data/

@@ -5,7 +5,7 @@ import { calculateKarmaPoints } from '@/lib/karma/points';
 import { getUserProfile } from '@/lib/upload/metadata';
 import { trackUpstashCommand } from '@/lib/monitoring/usage';
 import { getStaticSeedUploads } from '@/lib/upload/seed-data';
-import { getMemoryUploads } from '@/lib/upload/memory-store';
+import { getFileUploads, addFileUpload } from '@/lib/upload/file-store';
 import { UploadMetadata, MediaType } from '@/types/upload';
 
 export const dynamic = 'force-dynamic';
@@ -31,9 +31,9 @@ export async function GET(request: NextRequest) {
         total = uploads.length;
       }
     } else {
-      const memory = getMemoryUploads();
+      const fileUploads = await getFileUploads();
       const staticSeed = getStaticSeedUploads();
-      uploads = [...memory, ...staticSeed].sort((a, b) => b.timestamp - a.timestamp);
+      uploads = [...fileUploads, ...staticSeed].sort((a, b) => b.timestamp - a.timestamp);
       total = uploads.length;
       uploads = uploads.slice(offset, offset + limit);
     }
@@ -183,8 +183,7 @@ export async function POST(request: NextRequest) {
       await saveUpload(fullMetadata);
       await trackUpstashCommand();
     } else {
-      const { addMemoryUpload } = await import('@/lib/upload/memory-store');
-      addMemoryUpload(fullMetadata);
+      await addFileUpload(fullMetadata);
     }
 
     return NextResponse.json({
