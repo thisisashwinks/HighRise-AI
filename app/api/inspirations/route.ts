@@ -3,9 +3,9 @@ import { uploadFile, getVideoThumbnailUrl, isCloudinaryConfigured } from '@/lib/
 import { saveUpload, getAllUploads, checkUploadLimit, generateUploadId, isRedisConfigured } from '@/lib/upload/metadata';
 import { calculateKarmaPoints } from '@/lib/karma/points';
 import { getUserProfile } from '@/lib/upload/metadata';
-import { isFeatureEnabled } from '@/lib/feature-flags';
 import { trackUpstashCommand } from '@/lib/monitoring/usage';
 import { getStaticSeedUploads } from '@/lib/upload/seed-data';
+import { getMemoryUploads } from '@/lib/upload/memory-store';
 import { UploadMetadata, MediaType } from '@/types/upload';
 
 export const dynamic = 'force-dynamic';
@@ -16,14 +16,26 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '100');
     const offset = parseInt(searchParams.get('offset') || '0');
 
-    let uploads = await getAllUploads(limit, offset);
-    let total = uploads.length;
-    if (uploads.length === 0) {
-      const staticSeed = getStaticSeedUploads();
-      total = staticSeed.length;
-      uploads = staticSeed.slice(offset, offset + limit);
+    let uploads: UploadMetadata[];
+    let total: number;
+    if (isRedisConfigured()) {
+      uploads = await getAllUploads(limit, offset);
+      if (uploads.length > 0) {
+        await trackUpstashCommand();
+      }
+      if (uploads.length === 0) {
+        const staticSeed = getStaticSeedUploads();
+        total = staticSeed.length;
+        uploads = staticSeed.slice(offset, offset + limit);
+      } else {
+        total = uploads.length;
+      }
     } else {
-      await trackUpstashCommand();
+      const memory = getMemoryUploads();
+      const staticSeed = getStaticSeedUploads();
+      uploads = [...memory, ...staticSeed].sort((a, b) => b.timestamp - a.timestamp);
+      total = uploads.length;
+      uploads = uploads.slice(offset, offset + limit);
     }
 
     return NextResponse.json({
@@ -42,15 +54,6 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    // Check if uploads are enabled
-    const uploadsEnabled = await isFeatureEnabled('uploads');
-    if (!uploadsEnabled) {
-      return NextResponse.json(
-        { error: 'Uploads are currently disabled due to storage limits' },
-        { status: 503 }
-      );
-    }
-
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
     const linkUrl = formData.get('linkUrl') as string | null;
@@ -77,13 +80,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check upload limit
-    const limitCheck = await checkUploadLimit(email, 30);
-    if (!limitCheck.allowed) {
-      return NextResponse.json(
-        { error: `Upload limit reached. You've uploaded ${limitCheck.count} times today. Maximum 30 uploads per day.` },
-        { status: 429 }
-      );
+    // Check upload limit only when Redis is configured (otherwise no persistent count)
+    if (isRedisConfigured()) {
+      const limitCheck = await checkUploadLimit(email, 30);
+      if (!limitCheck.allowed) {
+        return NextResponse.json(
+          { error: `Upload limit reached. You've uploaded ${limitCheck.count} times today. Maximum 30 uploads per day.` },
+          { status: 429 }
+        );
+      }
     }
 
     // Determine media type and URL
@@ -136,9 +141,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if this is user's first upload
-    const userProfile = await getUserProfile(email);
-    const isFirstUpload = !userProfile || userProfile.uploadCount === 0;
+    // First-upload bonus only when Redis is configured (we have history)
+    let isFirstUpload = true;
+    if (isRedisConfigured()) {
+      const userProfile = await getUserProfile(email);
+      isFirstUpload = !userProfile || userProfile.uploadCount === 0;
+    }
 
     // Create upload metadata
     const uploadId = generateUploadId();
@@ -171,18 +179,13 @@ export async function POST(request: NextRequest) {
       karmaPoints,
     };
 
-    if (!isRedisConfigured()) {
-      return NextResponse.json(
-        {
-          error: 'Saving is not available right now. Please ask your admin to set up storage (Upstash Redis) for this app.',
-        },
-        { status: 503 }
-      );
+    if (isRedisConfigured()) {
+      await saveUpload(fullMetadata);
+      await trackUpstashCommand();
+    } else {
+      const { addMemoryUpload } = await import('@/lib/upload/memory-store');
+      addMemoryUpload(fullMetadata);
     }
-
-    // Save to Redis
-    await saveUpload(fullMetadata);
-    await trackUpstashCommand();
 
     return NextResponse.json({
       success: true,
