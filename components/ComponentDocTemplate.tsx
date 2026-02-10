@@ -1,6 +1,10 @@
+'use client';
+
+import { useState } from 'react';
 import React from 'react';
 import { ComponentDocProps } from '@/types/documentation';
 import { Breadcrumbs } from './Breadcrumbs';
+import { MediaModalDialog, MediaType } from './MediaModalDialog';
 
 interface ComponentDocTemplateProps extends ComponentDocProps {}
 
@@ -21,6 +25,40 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
   figmaDocumentation,
   examples,
 }) => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedMediaType, setSelectedMediaType] = useState<MediaType>('image');
+  const [selectedMediaUrl, setSelectedMediaUrl] = useState<string>('');
+  const [selectedMediaAlt, setSelectedMediaAlt] = useState<string>('');
+  const [selectedTitle, setSelectedTitle] = useState<string>('');
+  const [selectedDescription, setSelectedDescription] = useState<string>('');
+  const [selectedThumbnailUrl, setSelectedThumbnailUrl] = useState<string | undefined>(undefined);
+
+  const handleMediaClick = (
+    type: MediaType,
+    url: string,
+    alt: string,
+    title: string,
+    description: string,
+    thumbnailUrl?: string
+  ) => {
+    setSelectedMediaType(type);
+    setSelectedMediaUrl(url);
+    setSelectedMediaAlt(alt);
+    setSelectedTitle(title);
+    setSelectedDescription(description);
+    setSelectedThumbnailUrl(thumbnailUrl);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setSelectedMediaUrl('');
+    setSelectedMediaAlt('');
+    setSelectedTitle('');
+    setSelectedDescription('');
+    setSelectedThumbnailUrl(undefined);
+  };
+
   return (
     <div className="max-w-6xl mx-auto px-6 py-12">
       {/* Breadcrumbs */}
@@ -93,19 +131,47 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
                 {example.media && (
                   <div className="relative bg-neutral-50 border-b border-neutral-200">
                     {example.media.type === 'video' ? (
-                      <div className="relative w-full" style={{ paddingBottom: '56.25%', height: 0 }}>
+                      <div 
+                        className="relative w-full cursor-pointer" 
+                        style={{ paddingBottom: '56.25%', height: 0 }}
+                        onClick={() => handleMediaClick(
+                          'video',
+                          example.media!.url,
+                          example.media!.alt || example.title,
+                          example.title,
+                          example.description,
+                          example.media!.thumbnailUrl
+                        )}
+                      >
                         <video
                           src={example.media.url}
                           poster={example.media.thumbnailUrl}
-                          controls
-                          className="absolute top-0 left-0 w-full h-full object-cover"
+                          controls={false}
+                          className="absolute top-0 left-0 w-full h-full object-cover pointer-events-none"
                           preload="metadata"
                         >
                           Your browser does not support the video tag.
                         </video>
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/30 transition-colors">
+                          <div className="bg-white/90 rounded-full p-3">
+                            <svg className="w-8 h-8 text-neutral-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                          </div>
+                        </div>
                       </div>
                     ) : example.media.type === 'gif' ? (
-                      <div className="relative w-full bg-neutral-900">
+                      <div 
+                        className="relative w-full bg-neutral-900 cursor-pointer"
+                        onClick={() => handleMediaClick(
+                          'gif',
+                          example.media!.url,
+                          example.media!.alt || example.title,
+                          example.title,
+                          example.description
+                        )}
+                      >
                         <img
                           src={example.media.url}
                           alt={example.media.alt || example.title}
@@ -114,17 +180,49 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
                         />
                       </div>
                     ) : example.media.type === 'html' ? (
-                      <div className="relative w-full" style={{ paddingBottom: '75%', height: 0, minHeight: '400px' }}>
+                      <div 
+                        className="relative w-full" 
+                        style={{ paddingBottom: '75%', height: 0, minHeight: '400px' }}
+                      >
                         <iframe
                           src={example.media.url}
                           className="absolute top-0 left-0 w-full h-full border-0"
                           title={example.media.alt || example.title}
                           loading="lazy"
-                          sandbox="allow-scripts allow-same-origin"
+                          sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
                         />
+                        {/* Expand button to open in modal */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleMediaClick(
+                              'html',
+                              example.media!.url,
+                              example.media!.alt || example.title,
+                              example.title,
+                              example.description
+                            );
+                          }}
+                          className="absolute top-2 right-2 bg-white/90 hover:bg-white rounded-lg p-2 shadow-lg border border-neutral-200 transition-all z-10"
+                          aria-label="Expand to fullscreen"
+                          title="Expand to fullscreen"
+                        >
+                          <svg className="w-5 h-5 text-neutral-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                          </svg>
+                        </button>
                       </div>
                     ) : (
-                      <div className="relative w-full bg-neutral-50">
+                      <div 
+                        className="relative w-full bg-neutral-50 cursor-pointer"
+                        onClick={() => handleMediaClick(
+                          'image',
+                          example.media!.url,
+                          example.media!.alt || example.title,
+                          example.title,
+                          example.description
+                        )}
+                      >
                         <img
                           src={example.media.url}
                           alt={example.media.alt || example.title}
@@ -446,6 +544,18 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
           </div>
         </div>
       </section>
+
+      {/* Media Modal */}
+      <MediaModalDialog
+        mediaType={selectedMediaType}
+        mediaUrl={selectedMediaUrl}
+        mediaAlt={selectedMediaAlt}
+        title={selectedTitle}
+        description={selectedDescription}
+        isOpen={modalOpen}
+        onClose={handleCloseModal}
+        thumbnailUrl={selectedThumbnailUrl}
+      />
     </div>
   );
 };

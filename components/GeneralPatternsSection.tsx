@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { ImageModal } from './ImageModal';
+import { MediaModalDialog } from './MediaModalDialog';
 
 interface GeneralPattern {
   title: string;
@@ -23,10 +23,14 @@ export const GeneralPatternsSection: React.FC<GeneralPatternsSectionProps> = ({
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedImageSrc, setSelectedImageSrc] = useState<string>('');
   const [selectedImageAlt, setSelectedImageAlt] = useState<string>('');
+  const [selectedTitle, setSelectedTitle] = useState<string>('');
+  const [selectedDescription, setSelectedDescription] = useState<string>('');
 
-  const handleImageClick = (src: string, alt: string) => {
+  const handleImageClick = (src: string, alt: string, title: string, description: string) => {
     setSelectedImageSrc(src);
     setSelectedImageAlt(alt);
+    setSelectedTitle(title);
+    setSelectedDescription(description);
     setModalOpen(true);
   };
 
@@ -34,6 +38,8 @@ export const GeneralPatternsSection: React.FC<GeneralPatternsSectionProps> = ({
     setModalOpen(false);
     setSelectedImageSrc('');
     setSelectedImageAlt('');
+    setSelectedTitle('');
+    setSelectedDescription('');
   };
 
   return (
@@ -62,7 +68,11 @@ export const GeneralPatternsSection: React.FC<GeneralPatternsSectionProps> = ({
                 </p>
               </div>
               <div className="relative w-full bg-neutral-50 border-t border-neutral-200">
-                <div className="relative w-full" style={{ minHeight: '400px' }}>
+                <div 
+                  className="relative w-full cursor-pointer" 
+                  style={{ minHeight: '400px' }}
+                  onClick={() => handleImageClick(pattern.image.src, pattern.image.alt, pattern.title, pattern.description)}
+                >
                   <Image
                     src={pattern.image.src}
                     alt={pattern.image.alt}
@@ -72,6 +82,7 @@ export const GeneralPatternsSection: React.FC<GeneralPatternsSectionProps> = ({
                     sizes="(max-width: 1280px) 100vw, 1280px"
                     draggable={false}
                     priority={index === 0}
+                    placeholder="empty"
                   />
                 </div>
               </div>
@@ -80,9 +91,12 @@ export const GeneralPatternsSection: React.FC<GeneralPatternsSectionProps> = ({
         </div>
       </section>
 
-      <ImageModal
-        imageSrc={selectedImageSrc}
-        imageAlt={selectedImageAlt}
+      <MediaModalDialog
+        mediaType="image"
+        mediaUrl={selectedImageSrc}
+        mediaAlt={selectedImageAlt}
+        title={selectedTitle}
+        description={selectedDescription}
         isOpen={modalOpen}
         onClose={handleCloseModal}
       />

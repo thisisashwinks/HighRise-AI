@@ -56,6 +56,12 @@ export const componentRegistry: ComponentMetadata[] = [
     href: '/components/input-form',
   },
   {
+    name: 'Prompt Stencil (User Input Form)',
+    category: 'Form',
+    description: 'Focused user input form for prompt-style input: single text area with optional label, primary action button, and footer. Ideal for AI prompts and single-field submission flows',
+    href: '/components/prompt-stencil',
+  },
+  {
     name: 'Text Area',
     category: 'Form',
     description: 'Multi-line text input component for longer text entries, messages, and prompts with auto-resize and validation support',
@@ -145,6 +151,54 @@ export const componentRegistry: ComponentMetadata[] = [
     description: 'Progress bar and loading indicators to show task completion status and progress. Supports linear bars, circular indicators, stepper progress, and loading animations',
     href: '/components/progress-indicator',
   },
+  {
+    name: 'Inline Input',
+    category: 'Form',
+    description: 'Compact, inline-editable input component that allows users to edit text directly in place without switching to a separate edit mode',
+    href: '/components/inline-input',
+  },
+  {
+    name: 'Inline Text Area',
+    category: 'Form',
+    description: 'Compact, inline-editable textarea component that allows users to edit multi-line text directly in place with auto-resize and formatting support',
+    href: '/components/inline-textarea',
+  },
+  {
+    name: 'Date Picker',
+    category: 'Form',
+    description: 'Date selection component with calendar interface for choosing dates and date ranges',
+    href: '/components/date-picker',
+  },
+  {
+    name: 'Inline Date Picker',
+    category: 'Form',
+    description: 'Compact, inline-editable date picker component that allows users to select dates directly in place without switching to a separate edit mode',
+    href: '/components/inline-date-picker',
+  },
+  {
+    name: 'Audio Player (Read Aloud)',
+    category: 'Media',
+    description: 'Audio playback component with comprehensive controls for playing, pausing, and managing audio content. Designed specifically for read-aloud functionality with support for playback speed, volume control, and progress tracking',
+    href: '/components/audio-player',
+  },
+  {
+    name: 'Voice Input (Dictation)',
+    category: 'Form',
+    description: 'Voice input component for capturing audio input and converting speech to text with recording controls and transcription support. Enables users to input text through voice dictation, providing an accessible and efficient alternative to typing',
+    href: '/components/voice-input',
+  },
+  {
+    name: 'Copilot Panel',
+    category: 'Content',
+    description: 'AI copilot panel component providing contextual assistance, suggestions, and interactive guidance within the application interface. Features expandable sidebar with recent queries, tabbed navigation, and flexible content display',
+    href: '/components/copilot-panel',
+  },
+  {
+    name: 'Edit Via Prompt (Inspect Prompt)',
+    category: 'Form',
+    description: 'Component that allows users to view prompts in read-only mode and edit them when needed. Also known as Inline AI Editor. Features inspect mode for viewing prompts and edit mode with textarea input, keyboard shortcuts, and validation support',
+    href: '/components/edit-via-prompt',
+  },
 ];
 
 // Helper function to get sub-components for a parent group
@@ -154,54 +208,14 @@ export const getSubComponents = (parentGroupName: string): ComponentMetadata[] =
 
 export const comingSoonComponents: ComingSoonComponentMetadata[] = [
   {
-    name: 'Audio Player',
-    category: 'Media',
-    description: 'Audio playback component with controls for playing, pausing, and managing audio content',
-  },
-  {
     name: 'Loading & Thinking Icons/States',
     category: 'Feedback',
     description: 'Visual indicators and animations for loading states and AI thinking processes',
   },
   {
-    name: 'Date Picker',
-    category: 'Form',
-    description: 'Date selection component with calendar interface for choosing dates and date ranges',
-  },
-  {
-    name: 'Voice Input',
-    category: 'Form',
-    description: 'Voice input component for capturing audio input and converting speech to text with recording controls and transcription support',
-  },
-  {
-    name: 'Inline Input Editor',
-    category: 'Form',
-    description: 'Inline editable input component that allows users to edit text directly in place without switching to an edit mode',
-  },
-  {
-    name: 'Inline Text Area Editor',
-    category: 'Form',
-    description: 'Inline editable textarea component that allows users to edit multi-line text directly in place with auto-resize and formatting support',
-  },
-  {
-    name: 'Inline AI Chat (Editor)',
-    category: 'Content',
-    description: 'Inline AI chat editor component for conversational interfaces with message history, streaming responses, and rich text editing capabilities',
-  },
-  {
-    name: 'Copilot Panel',
-    category: 'Content',
-    description: 'AI copilot panel component providing contextual assistance, suggestions, and interactive guidance within the application interface',
-  },
-  {
-    name: 'Questions & Answers',
-    category: 'Form',
-    description: 'Interactive Q&A form component for gathering context through various input types including single select, multi-select, text inputs, and dropdowns',
-  },
-  {
     name: 'Modal (Prompt Library/Knowledge Base)',
     category: 'Content',
-    description: 'Modal component for displaying prompt libraries and knowledge base content with search, filtering, and content management capabilities',
+    description: 'Modal component for displaying prompt libraries and knowledge base content with search, filtering, content management capabilities, and Prompt Library Type Ahead functionality',
   },
   {
     name: 'Audio Chimes/Feedback',
@@ -217,5 +231,60 @@ export const comingSoonComponents: ComingSoonComponentMetadata[] = [
     name: 'Stream of Thought',
     category: 'Content',
     description: 'Stream of thought component for displaying AI reasoning processes, step-by-step thinking, and progressive content revelation in real-time',
+  },
+  {
+    name: 'Chat History',
+    category: 'Content',
+    description: 'Component for displaying and managing chat conversation history with search, filtering, and navigation capabilities',
+  },
+  {
+    name: 'Improve Writing & Restructure in Prompt Input',
+    category: 'Form',
+    description: 'Prompt input enhancement that provides AI-powered writing improvement and content restructuring suggestions directly within the input field',
+  },
+  {
+    name: 'Auto Fill in Prompt Input',
+    category: 'Form',
+    description: 'Intelligent auto-fill functionality for prompt inputs that suggests completions based on context, history, and AI predictions',
+  },
+  {
+    name: 'Chained Action (In Builders)',
+    category: 'Content',
+    description: 'Component for creating and managing chained actions in builder interfaces, allowing sequential or parallel execution of multiple actions',
+  },
+  {
+    name: 'AI Summary Cards',
+    category: 'Content',
+    description: 'Card-based component for displaying AI-generated summaries with key insights, highlights, and actionable information in a visually organized format',
+  },
+  {
+    name: 'Prompt Tuners in Prompt Input',
+    category: 'Form',
+    description: 'Interactive controls within prompt inputs for fine-tuning AI behavior, adjusting parameters, and optimizing prompt performance',
+  },
+  {
+    name: 'Plan Mode in Prompt Input',
+    category: 'Form',
+    description: 'Specialized mode in prompt inputs that helps users create structured plans, outlines, and step-by-step workflows before execution',
+  },
+  {
+    name: 'Branch Workflow',
+    category: 'Content',
+    description: 'Component for creating and managing branching workflows with conditional logic, decision points, and multiple execution paths',
+  },
+  {
+    name: 'Citations',
+    category: 'Content',
+    description: 'Component for displaying and managing citations, references, and source attributions for AI-generated content',
+  },
+  {
+    name: 'Manage Memory',
+    category: 'Content',
+    description: 'Component for managing AI memory, context, and persistent information across conversations and sessions',
+  },
+  {
+    name: 'Trust Builders',
+    category: 'Content',
+    description: 'Component for building and managing trust indicators, verification badges, and credibility markers for AI-generated content',
   },
 ];

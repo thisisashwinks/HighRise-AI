@@ -1,7 +1,11 @@
+'use client';
+
+import { useState } from 'react';
 import React from 'react';
 import Link from 'next/link';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { getSubComponents } from '@/data/components';
+import { MediaModalDialog } from '@/components/MediaModalDialog';
 
 interface Example {
   title: string;
@@ -16,6 +20,27 @@ interface Example {
 }
 
 export const CheckboxOverviewDocumentation: React.FC = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedImageSrc, setSelectedImageSrc] = useState<string>('');
+  const [selectedImageAlt, setSelectedImageAlt] = useState<string>('');
+  const [selectedTitle, setSelectedTitle] = useState<string>('');
+  const [selectedDescription, setSelectedDescription] = useState<string>('');
+
+  const handleImageClick = (src: string, alt: string, title: string, description: string) => {
+    setSelectedImageSrc(src);
+    setSelectedImageAlt(alt);
+    setSelectedTitle(title);
+    setSelectedDescription(description);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setSelectedImageSrc('');
+    setSelectedImageAlt('');
+    setSelectedTitle('');
+    setSelectedDescription('');
+  };
   const subComponents = getSubComponents('Checkbox');
   const mainComponent = {
     name: 'Checkbox',
@@ -133,7 +158,10 @@ export const CheckboxOverviewDocumentation: React.FC = () => {
               {/* Media Section */}
               {example.media && (
                 <div className="relative bg-neutral-50 border-b border-neutral-200">
-                  <div className="relative w-full bg-neutral-50">
+                  <div 
+                    className="relative w-full bg-neutral-50 cursor-pointer"
+                    onClick={() => handleImageClick(example.media!.url, example.media!.alt || example.title, example.title, example.description)}
+                  >
                     <img
                       src={example.media.url}
                       alt={example.media.alt || example.title}
@@ -174,6 +202,17 @@ export const CheckboxOverviewDocumentation: React.FC = () => {
           ))}
         </div>
       </section>
+
+      {/* Media Modal */}
+      <MediaModalDialog
+        mediaType="image"
+        mediaUrl={selectedImageSrc}
+        mediaAlt={selectedImageAlt}
+        title={selectedTitle}
+        description={selectedDescription}
+        isOpen={modalOpen}
+        onClose={handleCloseModal}
+      />
     </div>
   );
 };

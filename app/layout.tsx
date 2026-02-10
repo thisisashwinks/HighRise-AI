@@ -3,6 +3,7 @@ import Link from 'next/link';
 import './globals.css';
 import { FeedbackButton } from './components/FeedbackButton';
 import { SearchProvider } from '@/components/SearchProvider';
+import { NavLinks } from '@/components/NavLinks';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
@@ -38,14 +39,9 @@ export default function RootLayout({
                   </div>
                 </Link>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-6">
                 <SearchProvider />
-                <a href="/" className="text-sm text-neutral-700 hover:text-neutral-900">
-                  Home
-                </a>
-                <a href="/components" className="text-sm text-neutral-700 hover:text-neutral-900">
-                  Components
-                </a>
+                <NavLinks />
               </div>
             </div>
           </div>
@@ -63,6 +59,9 @@ export default function RootLayout({
                 </Link>
                 <Link href="/components" className="text-sm text-neutral-700 hover:text-neutral-900 transition-colors">
                   Components
+                </Link>
+                <Link href="/inspirations" className="text-sm text-neutral-700 hover:text-neutral-900 transition-colors">
+                  Inspirations
                 </Link>
                 <a 
                   href="https://www.figma.com/design/cxyeQWrtdlVeckwmorSVU1/HighRise-AI-1.1--%3E-Handoff--WIP-?node-id=4-291896&p=f&t=AFyJUY9svQYTZNi0-11" 

@@ -1,10 +1,35 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { componentRegistry, comingSoonComponents } from '@/data/components';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { GeneralPatternsSection } from '@/components/GeneralPatternsSection';
+import { MediaModalDialog } from '@/components/MediaModalDialog';
 
 export default function Home() {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedImageSrc, setSelectedImageSrc] = useState<string>('');
+  const [selectedImageAlt, setSelectedImageAlt] = useState<string>('');
+  const [selectedTitle, setSelectedTitle] = useState<string>('');
+  const [selectedDescription, setSelectedDescription] = useState<string>('');
+
+  const handleImageClick = (src: string, alt: string, title: string, description: string) => {
+    setSelectedImageSrc(src);
+    setSelectedImageAlt(alt);
+    setSelectedTitle(title);
+    setSelectedDescription(description);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setSelectedImageSrc('');
+    setSelectedImageAlt('');
+    setSelectedTitle('');
+    setSelectedDescription('');
+  };
   // Filter out sub-components (those with parentGroup) from the main listing
   const components = componentRegistry.filter((component) => !component.parentGroup);
   const comingSoon = comingSoonComponents;
@@ -321,12 +346,21 @@ export default function Home() {
             </p>
             <div className="grid md:grid-cols-1 gap-6">
               <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
-                <div className="relative w-full aspect-video bg-neutral-50">
+                <div 
+                  className="relative w-full aspect-video bg-neutral-50 cursor-pointer"
+                  onClick={() => handleImageClick(
+                    "/examples/ai-usage-modes/Focused 1.png", 
+                    "Focused Mode - AI as the main context",
+                    "AI as Primary Interface",
+                    "The AI system serves as the main interface where users interact directly with AI capabilities to accomplish their primary goals."
+                  )}
+                >
                   <Image
                     src="/examples/ai-usage-modes/Focused 1.png"
                     alt="Focused Mode - AI as the main context"
                     fill
                     style={{ objectFit: 'contain' }}
+                    placeholder="empty"
                   />
                 </div>
                 <div className="p-5">
@@ -353,12 +387,21 @@ export default function Home() {
             </p>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
-                <div className="relative w-full aspect-video bg-neutral-50">
+                <div 
+                  className="relative w-full aspect-video bg-neutral-50 cursor-pointer"
+                  onClick={() => handleImageClick(
+                    "/examples/ai-usage-modes/Supportive 1.png", 
+                    "Supportive Mode - AI complements the main context",
+                    "AI Companion Interface",
+                    "AI provides assistance alongside the main interface, offering helpful suggestions and support without disrupting the primary workflow."
+                  )}
+                >
                   <Image
                     src="/examples/ai-usage-modes/Supportive 1.png"
                     alt="Supportive Mode - AI complements the main context"
                     fill
                     style={{ objectFit: 'contain' }}
+                    placeholder="empty"
                   />
                 </div>
                 <div className="p-5">
@@ -367,12 +410,21 @@ export default function Home() {
                 </div>
               </div>
               <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
-                <div className="relative w-full aspect-video bg-neutral-50">
+                <div 
+                  className="relative w-full aspect-video bg-neutral-50 cursor-pointer"
+                  onClick={() => handleImageClick(
+                    "/examples/ai-usage-modes/Supportive 2.png", 
+                    "Supportive Mode - AI assists without taking center stage",
+                    "Contextual AI Assistance",
+                    "AI appears as a supportive element that enhances the user experience by providing contextual help and guidance when needed."
+                  )}
+                >
                   <Image
                     src="/examples/ai-usage-modes/Supportive 2.png"
                     alt="Supportive Mode - AI assists without taking center stage"
                     fill
                     style={{ objectFit: 'contain' }}
+                    placeholder="empty"
                   />
                 </div>
                 <div className="p-5">
@@ -399,12 +451,16 @@ export default function Home() {
             </p>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
-                <div className="relative w-full aspect-video bg-neutral-50">
+                <div 
+                  className="relative w-full aspect-video bg-neutral-50 cursor-pointer"
+                  onClick={() => handleImageClick("/examples/ai-usage-modes/Integrated 1.png", "Integrated Mode - AI appears contextually when needed", "Contextual AI Suggestions", "AI appears at the right moment to provide relevant suggestions and assistance within the user's workflow.")}
+                >
                   <Image
                     src="/examples/ai-usage-modes/Integrated 1.png"
                     alt="Integrated Mode - AI appears contextually when needed"
                     fill
                     style={{ objectFit: 'contain' }}
+                    placeholder="empty"
                   />
                 </div>
                 <div className="p-5">
@@ -413,12 +469,16 @@ export default function Home() {
                 </div>
               </div>
               <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
-                <div className="relative w-full aspect-video bg-neutral-50">
+                <div 
+                  className="relative w-full aspect-video bg-neutral-50 cursor-pointer"
+                  onClick={() => handleImageClick("/examples/ai-usage-modes/Integrated 2.png", "Integrated Mode - AI blended into user flow", "Seamless Workflow Integration", "AI capabilities are naturally woven into the user interface, enhancing tasks without disrupting the flow.")}
+                >
                   <Image
                     src="/examples/ai-usage-modes/Integrated 2.png"
                     alt="Integrated Mode - AI blended into user flow"
                     fill
                     style={{ objectFit: 'contain' }}
+                    placeholder="empty"
                   />
                 </div>
                 <div className="p-5">
@@ -427,12 +487,16 @@ export default function Home() {
                 </div>
               </div>
               <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
-                <div className="relative w-full aspect-video bg-neutral-50">
+                <div 
+                  className="relative w-full aspect-video bg-neutral-50 cursor-pointer"
+                  onClick={() => handleImageClick("/examples/ai-usage-modes/Integrated 3.png", "Integrated Mode - Contextual AI assistance", "Smart Task Assistance", "AI provides intelligent assistance for specific tasks, appearing when users need help completing discrete actions.")}
+                >
                   <Image
                     src="/examples/ai-usage-modes/Integrated 3.png"
                     alt="Integrated Mode - Contextual AI assistance"
                     fill
                     style={{ objectFit: 'contain' }}
+                    placeholder="empty"
                   />
                 </div>
                 <div className="p-5">
@@ -441,12 +505,16 @@ export default function Home() {
                 </div>
               </div>
               <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
-                <div className="relative w-full aspect-video bg-neutral-50">
+                <div 
+                  className="relative w-full aspect-video bg-neutral-50 cursor-pointer"
+                  onClick={() => handleImageClick("/examples/ai-usage-modes/Integrated 4.png", "Integrated Mode - Discrete task completion", "Focused Task Completion", "AI helps users complete specific, well-defined tasks efficiently within their current context.")}
+                >
                   <Image
                     src="/examples/ai-usage-modes/Integrated 4.png"
                     alt="Integrated Mode - Discrete task completion"
                     fill
                     style={{ objectFit: 'contain' }}
+                    placeholder="empty"
                   />
                 </div>
                 <div className="p-5">
@@ -455,12 +523,16 @@ export default function Home() {
                 </div>
               </div>
               <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
-                <div className="relative w-full aspect-video bg-neutral-50">
+                <div 
+                  className="relative w-full aspect-video bg-neutral-50 cursor-pointer"
+                  onClick={() => handleImageClick("/examples/ai-usage-modes/Integrated 5.png", "Integrated Mode - Seamless AI integration", "Natural Interface Integration", "AI features are integrated so naturally that they feel like a native part of the interface experience.")}
+                >
                   <Image
                     src="/examples/ai-usage-modes/Integrated 5.png"
                     alt="Integrated Mode - Seamless AI integration"
                     fill
                     style={{ objectFit: 'contain' }}
+                    placeholder="empty"
                   />
                 </div>
                 <div className="p-5">
@@ -469,12 +541,16 @@ export default function Home() {
                 </div>
               </div>
               <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
-                <div className="relative w-full aspect-video bg-neutral-50">
+                <div 
+                  className="relative w-full aspect-video bg-neutral-50 cursor-pointer"
+                  onClick={() => handleImageClick("/examples/ai-usage-modes/Integrated 6.png", "Integrated Mode - Contextual moments", "Context-Aware Interactions", "AI understands the current context and provides relevant help at the right moments in the user journey.")}
+                >
                   <Image
                     src="/examples/ai-usage-modes/Integrated 6.png"
                     alt="Integrated Mode - Contextual moments"
                     fill
                     style={{ objectFit: 'contain' }}
+                    placeholder="empty"
                   />
                 </div>
                 <div className="p-5">
@@ -483,12 +559,16 @@ export default function Home() {
                 </div>
               </div>
               <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
-                <div className="relative w-full aspect-video bg-neutral-50">
+                <div 
+                  className="relative w-full aspect-video bg-neutral-50 cursor-pointer"
+                  onClick={() => handleImageClick("/examples/ai-usage-modes/Integrated 7.png", "Integrated Mode - User flow integration", "Flow-Embedded AI", "AI capabilities are embedded directly into the user flow, making assistance feel intuitive and unobtrusive.")}
+                >
                   <Image
                     src="/examples/ai-usage-modes/Integrated 7.png"
                     alt="Integrated Mode - User flow integration"
                     fill
                     style={{ objectFit: 'contain' }}
+                    placeholder="empty"
                   />
                 </div>
                 <div className="p-5">
@@ -497,12 +577,16 @@ export default function Home() {
                 </div>
               </div>
               <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
-                <div className="relative w-full aspect-video bg-neutral-50">
+                <div 
+                  className="relative w-full aspect-video bg-neutral-50 cursor-pointer"
+                  onClick={() => handleImageClick("/examples/ai-usage-modes/Integrated 8.png", "Integrated Mode - Contextual AI", "Just-in-Time AI Help", "AI appears exactly when needed, providing timely assistance that enhances productivity without distraction.")}
+                >
                   <Image
                     src="/examples/ai-usage-modes/Integrated 8.png"
                     alt="Integrated Mode - Contextual AI"
                     fill
                     style={{ objectFit: 'contain' }}
+                    placeholder="empty"
                   />
                 </div>
                 <div className="p-5">
@@ -511,12 +595,16 @@ export default function Home() {
                 </div>
               </div>
               <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
-                <div className="relative w-full aspect-video bg-neutral-50">
+                <div 
+                  className="relative w-full aspect-video bg-neutral-50 cursor-pointer"
+                  onClick={() => handleImageClick("/examples/ai-usage-modes/Integrated 9.png", "Integrated Mode - Seamless assistance", "Invisible AI Enhancement", "AI works behind the scenes to enhance user actions, making interactions smoother and more efficient.")}
+                >
                   <Image
                     src="/examples/ai-usage-modes/Integrated 9.png"
                     alt="Integrated Mode - Seamless assistance"
                     fill
                     style={{ objectFit: 'contain' }}
+                    placeholder="empty"
                   />
                 </div>
                 <div className="p-5">
@@ -543,12 +631,16 @@ export default function Home() {
             </p>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
-                <div className="relative w-full aspect-video bg-neutral-50">
+                <div 
+                  className="relative w-full aspect-video bg-neutral-50 cursor-pointer"
+                  onClick={() => handleImageClick("/examples/ai-usage-modes/One AI 1.png", "One AI Experience - Unified AI journey", "Unified AI Journey", "A cohesive experience where different AI modes work together seamlessly to create a unified user journey.")}
+                >
                   <Image
                     src="/examples/ai-usage-modes/One AI 1.png"
                     alt="One AI Experience - Unified AI journey"
                     fill
                     style={{ objectFit: 'contain' }}
+                    placeholder="empty"
                   />
                 </div>
                 <div className="p-5">
@@ -557,12 +649,16 @@ export default function Home() {
                 </div>
               </div>
               <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
-                <div className="relative w-full aspect-video bg-neutral-50">
+                <div 
+                  className="relative w-full aspect-video bg-neutral-50 cursor-pointer"
+                  onClick={() => handleImageClick("/examples/ai-usage-modes/One AI 2.png", "One AI Experience - Cohesive user experience", "Cohesive User Experience", "Multiple AI interaction modes combine to create a seamless and intuitive experience across the entire application.")}
+                >
                   <Image
                     src="/examples/ai-usage-modes/One AI 2.png"
                     alt="One AI Experience - Cohesive user experience"
                     fill
                     style={{ objectFit: 'contain' }}
+                    placeholder="empty"
                   />
                 </div>
                 <div className="p-5">
@@ -571,12 +667,16 @@ export default function Home() {
                 </div>
               </div>
               <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
-                <div className="relative w-full aspect-video bg-neutral-50">
+                <div 
+                  className="relative w-full aspect-video bg-neutral-50 cursor-pointer"
+                  onClick={() => handleImageClick("/examples/ai-usage-modes/One AI 3.png", "One AI Experience - Seamless mode combination", "Seamless Mode Combination", "Different AI modes transition smoothly, creating a natural flow that adapts to user needs throughout their journey.")}
+                >
                   <Image
                     src="/examples/ai-usage-modes/One AI 3.png"
                     alt="One AI Experience - Seamless mode combination"
                     fill
                     style={{ objectFit: 'contain' }}
+                    placeholder="empty"
                   />
                 </div>
                 <div className="p-5">
@@ -645,6 +745,17 @@ export default function Home() {
           </p>
         </div> */}
       </section>
+
+      {/* Media Modal */}
+      <MediaModalDialog
+        mediaType="image"
+        mediaUrl={selectedImageSrc}
+        mediaAlt={selectedImageAlt}
+        title={selectedTitle}
+        description={selectedDescription}
+        isOpen={modalOpen}
+        onClose={handleCloseModal}
+      />
 
       <section className="bg-blue-50 rounded-lg p-6 border border-blue-100">
         <h2 className="text-xl font-semibold text-neutral-900 mb-3">About This Documentation</h2>

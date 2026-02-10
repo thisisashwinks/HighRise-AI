@@ -60,18 +60,31 @@ See `.vercel-deployment-guide.md` for detailed guidelines.
 
 **NEVER leave localhost broken or non-functional.** Always ensure the dev server runs successfully after code changes.
 
+### MANDATORY: Always Start Dev Server After Code Changes
+**CRITICAL RULE**: After making ANY code changes (small or large), you MUST:
+1. **ALWAYS start the dev server** by running `npm run dev` in the background
+2. **NEVER kill the dev server** unless the user explicitly tells you to do so
+3. **Verify the server is running** and accessible before marking tasks complete
+
+**This applies to:**
+- ✅ Component creation or modification
+- ✅ Documentation updates
+- ✅ Configuration changes
+- ✅ Any file changes that affect the application
+- ✅ Small changes AND large changes
+
+**Exception**: Only kill/restart the dev server if:
+- User explicitly asks you to kill/restart it
+- There's a port conflict that prevents starting (then kill old process first)
+- Build fails and requires cache clearing (then restart after clearing)
+
 ### Mandatory Dev Server Workflow:
-1. **Before starting dev server**: Check for and kill any existing Next.js processes on port 3000
-   ```bash
-   lsof -ti:3000 | xargs kill -9 2>/dev/null || true
-   ```
-2. **If localhost fails to load**: Clear Next.js cache and restart
-   ```bash
-   rm -rf .next && npm run dev
-   ```
+1. **After making code changes**: ALWAYS run `npm run dev` in the background
+2. **If port 3000 is already in use**: The npm pre-hook will handle cleanup automatically
 3. **After code generation**: Verify dev server is running and accessible
    ```bash
-   curl -s http://localhost:3000 > /dev/null && echo "Server OK" || echo "Server failed"
+   sleep 8 && curl -s -o /dev/null -w "%{http_code}" http://localhost:3000
+   # Should return 200
    ```
 4. **Client Components**: ALWAYS add `'use client'` directive at the top of files that use:
    - React hooks (`useState`, `useEffect`, `useCallback`, etc.)
@@ -87,11 +100,13 @@ See `.vercel-deployment-guide.md` for detailed guidelines.
 - ❌ Not verifying server starts successfully after changes
 
 ### Dev Server Checklist:
-- ✅ Kill old processes before starting new dev server
+- ✅ **ALWAYS start dev server after code changes** (MANDATORY)
+- ✅ **NEVER kill dev server** unless user explicitly requests it
 - ✅ Clear `.next` cache if experiencing strange errors
 - ✅ Verify `'use client'` is present in all interactive components
 - ✅ Test that localhost loads successfully after code changes
-- ✅ Never leave localhost in a broken state
+- ✅ Never leave localhost in a broken or non-running state
+- ✅ Verify server responds with HTTP 200 before marking tasks complete
 
 ### Quick Fixes:
 ```bash
