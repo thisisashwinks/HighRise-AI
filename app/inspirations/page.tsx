@@ -190,16 +190,7 @@ function InspirationsPageContent() {
             Component examples and design patterns shared by the team
           </p>
         </div>
-        {featureFlags?.uploads.enabled ? (
-          <Button
-            variant="primary"
-            theme="primary"
-            onClick={() => setIsUploadModalOpen(true)}
-            leadingIcon={<Upload className="w-5 h-5" />}
-          >
-            Upload
-          </Button>
-        ) : (
+        {featureFlags !== null && !featureFlags.uploads.enabled ? (
           <Button
             variant="secondary"
             theme="neutral"
@@ -207,6 +198,15 @@ function InspirationsPageContent() {
             leadingIcon={<Upload className="w-5 h-5" />}
           >
             Upload Disabled
+          </Button>
+        ) : (
+          <Button
+            variant="primary"
+            theme="primary"
+            onClick={() => setIsUploadModalOpen(true)}
+            leadingIcon={<Upload className="w-5 h-5" />}
+          >
+            Upload
           </Button>
         )}
       </div>
