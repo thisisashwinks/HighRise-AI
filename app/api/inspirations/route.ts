@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { uploadFile, getVideoThumbnailUrl } from '@/lib/upload/storage';
+import { uploadFile, getVideoThumbnailUrl, isCloudinaryConfigured } from '@/lib/upload/storage';
 import { saveUpload, getAllUploads, checkUploadLimit, generateUploadId } from '@/lib/upload/metadata';
 import { calculateKarmaPoints } from '@/lib/karma/points';
 import { getUserProfile } from '@/lib/upload/metadata';
@@ -93,18 +93,38 @@ export async function POST(request: NextRequest) {
     let publicId: string | undefined;
 
     if (file) {
-      // Upload file to Cloudinary
-      const uploadResult = await uploadFile(file);
-      mediaUrl = uploadResult.url;
-      publicId = uploadResult.publicId;
-      
-      if (file.type.startsWith('video/')) {
-        mediaType = 'video';
-        thumbnailUrl = getVideoThumbnailUrl(publicId);
-      } else if (file.type === 'image/gif') {
-        mediaType = 'gif';
+      if (isCloudinaryConfigured()) {
+        // Upload file to Cloudinary
+        const uploadResult = await uploadFile(file);
+        mediaUrl = uploadResult.url;
+        publicId = uploadResult.publicId;
+
+        if (file.type.startsWith('video/')) {
+          mediaType = 'video';
+          thumbnailUrl = getVideoThumbnailUrl(publicId);
+        } else if (file.type === 'image/gif') {
+          mediaType = 'gif';
+        } else {
+          mediaType = 'image';
+        }
       } else {
-        mediaType = 'image';
+        // Fallback when Cloudinary is not configured: store small images as data URL
+        const MAX_DATA_URL_SIZE = 500 * 1024; // 500KB
+        const isImage = file.type.startsWith('image/');
+        if (!isImage || file.size > MAX_DATA_URL_SIZE) {
+          return NextResponse.json(
+            {
+              error: isImage
+                ? 'File upload is not configured. Use an image under 500KB, or add an image link in the URL field instead.'
+                : 'File upload is not configured. Video uploads need Cloudinary. You can add a video link in the URL field instead.',
+            },
+            { status: 503 }
+          );
+        }
+        const arrayBuffer = await file.arrayBuffer();
+        const base64 = Buffer.from(arrayBuffer).toString('base64');
+        mediaUrl = `data:${file.type};base64,${base64}`;
+        mediaType = file.type === 'image/gif' ? 'gif' : 'image';
       }
     } else if (linkUrl) {
       mediaUrl = linkUrl;
