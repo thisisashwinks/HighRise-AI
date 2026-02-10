@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { uploadFile, getVideoThumbnailUrl, isCloudinaryConfigured } from '@/lib/upload/storage';
-import { saveUpload, getAllUploads, checkUploadLimit, generateUploadId } from '@/lib/upload/metadata';
+import { saveUpload, getAllUploads, checkUploadLimit, generateUploadId, isRedisConfigured } from '@/lib/upload/metadata';
 import { calculateKarmaPoints } from '@/lib/karma/points';
 import { getUserProfile } from '@/lib/upload/metadata';
 import { isFeatureEnabled } from '@/lib/feature-flags';
@@ -170,6 +170,15 @@ export async function POST(request: NextRequest) {
       ...uploadMetadata,
       karmaPoints,
     };
+
+    if (!isRedisConfigured()) {
+      return NextResponse.json(
+        {
+          error: 'Saving is not available right now. Please ask your admin to set up storage (Upstash Redis) for this app.',
+        },
+        { status: 503 }
+      );
+    }
 
     // Save to Redis
     await saveUpload(fullMetadata);
