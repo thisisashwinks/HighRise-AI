@@ -23,6 +23,42 @@ const PRODUCT_OPTIONS = [
   { label: 'Others', value: 'Others' },
 ];
 
+const PROFILES_KEY = 'uploadFormProfiles';
+const CREATE_NEW_VALUE = '__create_new__';
+
+export interface SavedProfile {
+  name: string;
+  email: string;
+}
+
+function loadProfiles(): SavedProfile[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const stored = localStorage.getItem(PROFILES_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored) as SavedProfile[];
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+    const defaultProfiles: SavedProfile[] = [
+      { name: 'Ashwin K S', email: 'ashwin.ks@gohighlevel.com' },
+    ];
+    localStorage.setItem(PROFILES_KEY, JSON.stringify(defaultProfiles));
+    return defaultProfiles;
+  } catch {
+    return [{ name: 'Ashwin K S', email: 'ashwin.ks@gohighlevel.com' }];
+  }
+}
+
+function saveProfile(name: string, email: string): void {
+  if (typeof window === 'undefined') return;
+  const profiles = loadProfiles();
+  const exists = profiles.some(p => p.email === email || p.name === name);
+  if (!exists) {
+    profiles.push({ name, email });
+    localStorage.setItem(PROFILES_KEY, JSON.stringify(profiles));
+  }
+}
+
 // Load sub-products from localStorage
 const loadSubProducts = (productType: 'High Level' | 'Others'): string[] => {
   if (typeof window === 'undefined') return [];
@@ -80,6 +116,12 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [subProductOptions, setSubProductOptions] = useState<Array<{ label: string; value: string }>>([]);
+  const [profiles, setProfiles] = useState<SavedProfile[]>([]);
+
+  // Load profiles from localStorage on mount
+  useEffect(() => {
+    setProfiles(loadProfiles());
+  }, []);
 
   // Load sub-product options based on selected product
   useEffect(() => {
@@ -90,13 +132,21 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     setSubProductOptions(options);
   }, [formData.product]);
 
-  // Load from localStorage on mount
+  // Load from localStorage on mount and ensure saved name/email are in profiles
   useEffect(() => {
     const saved = localStorage.getItem('uploadFormData');
     if (saved && !initialData) {
       try {
         const parsed = JSON.parse(saved);
         setFormData(prev => ({ ...prev, ...parsed }));
+        if (parsed.name && parsed.email) {
+          const list = loadProfiles();
+          if (!list.some(p => p.email === parsed.email || p.name === parsed.name)) {
+            list.push({ name: parsed.name, email: parsed.email });
+            localStorage.setItem(PROFILES_KEY, JSON.stringify(list));
+            setProfiles(list);
+          }
+        }
       } catch (e) {
         // Ignore parse errors
       }
@@ -115,6 +165,39 @@ export const UploadForm: React.FC<UploadFormProps> = ({
       }));
     }
   }, [formData.name, formData.email, formData.product, formData.subProduct, formData.role]);
+
+  const nameOptions = [
+    ...profiles.map(p => ({ label: p.name, value: p.name })),
+    { label: 'Create new', value: CREATE_NEW_VALUE },
+  ];
+  const emailOptions = [
+    ...profiles.map(p => ({ label: p.email, value: p.email })),
+    { label: 'Create new', value: CREATE_NEW_VALUE },
+  ];
+  const nameSelectValue = profiles.some(p => p.name === formData.name) ? formData.name : CREATE_NEW_VALUE;
+  const emailSelectValue = profiles.some(p => p.email === formData.email) ? formData.email : CREATE_NEW_VALUE;
+
+  const handleNameSelect = (value: string) => {
+    if (value === CREATE_NEW_VALUE) {
+      setFormData(prev => ({ ...prev, name: '', email: prev.email }));
+      return;
+    }
+    const profile = profiles.find(p => p.name === value);
+    if (profile) {
+      setFormData(prev => ({ ...prev, name: profile.name, email: profile.email }));
+    }
+  };
+
+  const handleEmailSelect = (value: string) => {
+    if (value === CREATE_NEW_VALUE) {
+      setFormData(prev => ({ ...prev, email: '', name: prev.name }));
+      return;
+    }
+    const profile = profiles.find(p => p.email === value);
+    if (profile) {
+      setFormData(prev => ({ ...prev, email: profile.email, name: profile.name }));
+    }
+  };
 
   const handleAddSubProduct = (newSubProduct: string) => {
     saveSubProduct(formData.product, newSubProduct);
@@ -275,6 +358,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({
       });
 
       if (result.success) {
+        saveProfile(formData.name, formData.email);
+        setProfiles(loadProfiles());
         // Clear form
         setFile(null);
         setLinkUrl('');
@@ -502,27 +587,51 @@ export const UploadForm: React.FC<UploadFormProps> = ({
         <h3 className="text-lg font-semibold text-neutral-900">Your Information</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Input
-            label="Your name"
-            value={formData.name}
-            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-            error={!!errors.name}
-            errorMessage={errors.name}
-            required
-            fullWidth
-          />
-          
-          <Input
-            label="Your email"
-            type="email"
-            value={formData.email}
-            onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-            error={!!errors.email}
-            errorMessage={errors.email}
-            helperText="Only collected for trust and verification purposes"
-            required
-            fullWidth
-          />
+          <div>
+            <label className="block text-sm font-medium text-neutral-900 mb-2">Your name</label>
+            <Select
+              options={nameOptions}
+              value={nameSelectValue}
+              onChange={handleNameSelect}
+              placeholder="Select or create new"
+              error={!!errors.name}
+              errorMessage={errors.name}
+              fullWidth
+            />
+            {nameSelectValue === CREATE_NEW_VALUE && (
+              <Input
+                value={formData.name}
+                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                placeholder="Enter your name"
+                className="mt-2"
+                fullWidth
+              />
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-neutral-900 mb-2">Your email</label>
+            <Select
+              options={emailOptions}
+              value={emailSelectValue}
+              onChange={handleEmailSelect}
+              placeholder="Select or create new"
+              error={!!errors.email}
+              errorMessage={errors.email}
+              helperText="Only collected for trust and verification purposes"
+              fullWidth
+            />
+            {emailSelectValue === CREATE_NEW_VALUE && (
+              <Input
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                placeholder="Enter your email"
+                className="mt-2"
+                fullWidth
+              />
+            )}
+          </div>
         </div>
 
         <Select

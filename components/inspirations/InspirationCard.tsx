@@ -52,6 +52,12 @@ export const InspirationCard: React.FC<InspirationCardProps> = ({
               </div>
             </div>
           </>
+        ) : inspiration.mediaUrl.startsWith('data:') ? (
+          <img
+            src={inspiration.mediaUrl}
+            alt={inspiration.title}
+            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
         ) : (
           <Image
             src={inspiration.mediaUrl}

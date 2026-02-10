@@ -39,3 +39,27 @@ export function getMemoryLeaderboard(limit: number): LeaderboardEntry[] {
     .map((e, i) => ({ ...e, rank: i + 1 }));
   return entries;
 }
+
+/** Merge static seed leaderboard with memory leaderboard by email (sum karma). */
+export function getMergedLeaderboard(
+  staticEntries: LeaderboardEntry[],
+  limit: number
+): LeaderboardEntry[] {
+  const memoryEntries = getMemoryLeaderboard(limit * 2);
+  const byEmail = new Map<string, LeaderboardEntry>();
+  for (const e of staticEntries) {
+    byEmail.set(e.email, { ...e });
+  }
+  for (const e of memoryEntries) {
+    const existing = byEmail.get(e.email);
+    if (existing) {
+      existing.karmaPoints += e.karmaPoints;
+    } else {
+      byEmail.set(e.email, { ...e });
+    }
+  }
+  return Array.from(byEmail.values())
+    .sort((a, b) => b.karmaPoints - a.karmaPoints)
+    .slice(0, limit)
+    .map((e, i) => ({ ...e, rank: i + 1 }));
+}

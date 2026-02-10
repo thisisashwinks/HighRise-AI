@@ -83,6 +83,12 @@ export const InspirationModal: React.FC<InspirationModalProps> = ({
                 controls
                 className="w-full h-full object-contain"
               />
+            ) : inspiration.mediaUrl.startsWith('data:') ? (
+              <img
+                src={inspiration.mediaUrl}
+                alt={inspiration.title}
+                className="w-full h-full object-contain"
+              />
             ) : (
               <Image
                 src={inspiration.mediaUrl}

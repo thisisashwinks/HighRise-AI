@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getLeaderboard, isRedisConfigured } from '@/lib/upload/metadata';
 import { trackUpstashCommand } from '@/lib/monitoring/usage';
 import { getStaticSeedLeaderboard } from '@/lib/upload/seed-data';
-import { getMemoryUploads, getMemoryLeaderboard } from '@/lib/upload/memory-store';
+import { getMemoryUploads, getMergedLeaderboard } from '@/lib/upload/memory-store';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,15 +11,15 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const limit = parseInt(searchParams.get('limit') || '50');
 
-    let entries;
+    let entries: { rank: number; email: string; name: string; product: string; karmaPoints: number }[];
     if (isRedisConfigured()) {
       entries = await getLeaderboard(limit);
       if (entries.length > 0) {
         await trackUpstashCommand();
       }
     } else {
-      const memoryUploads = getMemoryUploads();
-      entries = memoryUploads.length > 0 ? getMemoryLeaderboard(limit) : getStaticSeedLeaderboard();
+      const staticEntries = getStaticSeedLeaderboard();
+      entries = getMergedLeaderboard(staticEntries, limit);
     }
 
     if (entries.length === 0) {
