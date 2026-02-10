@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Upload, X, Sparkles, Link as LinkIcon, Loader2 } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Upload, X, Link as LinkIcon, Loader2 } from 'lucide-react';
 import { Input } from '@/components/Input';
 import { TextArea } from '@/components/TextArea';
 import { Select } from '@/components/Select';
@@ -75,12 +75,10 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   
   const [isUploading, setIsUploading] = useState(false);
-  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [dragActive, setDragActive] = useState(false);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [aiAvailable, setAiAvailable] = useState(false);
   const [subProductOptions, setSubProductOptions] = useState<Array<{ label: string; value: string }>>([]);
 
   // Load sub-product options based on selected product
@@ -91,18 +89,6 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     }));
     setSubProductOptions(options);
   }, [formData.product]);
-
-  // Check if AI is available
-  useEffect(() => {
-    fetch('/api/features/status')
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          setAiAvailable(data.flags.aiGeneration.enabled);
-        }
-      })
-      .catch(() => setAiAvailable(false));
-  }, []);
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -164,7 +150,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     return { valid: true };
   };
 
-  const handleFileSelect = (selectedFile: File) => {
+  const handleFileSelect = useCallback((selectedFile: File) => {
     const validation = validateFileClient(selectedFile);
     if (!validation.valid) {
       setErrors({ file: validation.error || 'Invalid file' });
@@ -179,7 +165,29 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     // Create preview
     const url = URL.createObjectURL(selectedFile);
     setPreviewUrl(url);
-  };
+  }, []);
+
+  // Paste image from clipboard (when no file/link selected)
+  useEffect(() => {
+    const onPaste = (e: ClipboardEvent) => {
+      if (file || linkUrl) return;
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (const item of items) {
+        if (item.type.startsWith('image/')) {
+          const blob = item.getAsFile();
+          if (!blob) continue;
+          const ext = blob.type === 'image/png' ? 'png' : blob.type === 'image/gif' ? 'gif' : blob.type === 'image/webp' ? 'webp' : 'jpg';
+          const pastedFile = new File([blob], `pasted-image.${ext}`, { type: blob.type });
+          handleFileSelect(pastedFile);
+          e.preventDefault();
+          break;
+        }
+      }
+    };
+    document.addEventListener('paste', onPaste);
+    return () => document.removeEventListener('paste', onPaste);
+  }, [file, linkUrl, handleFileSelect]);
 
   const handleLinkChange = (url: string) => {
     setLinkUrl(url);
@@ -206,46 +214,6 @@ export const UploadForm: React.FC<UploadFormProps> = ({
 
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       handleFileSelect(e.dataTransfer.files[0]);
-    }
-  };
-
-  const handleGenerateAI = async () => {
-    if (!aiAvailable) return;
-    
-    setIsGeneratingAI(true);
-    setErrors({});
-
-    try {
-      const formData = new FormData();
-      if (file) {
-        formData.append('file', file);
-      }
-      if (linkUrl) {
-        formData.append('linkUrl', linkUrl);
-      }
-      formData.append('type', 'both');
-
-      const response = await fetch('/api/ai/generate', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        if (data.title) {
-          setFormData(prev => ({ ...prev, title: data.title }));
-        }
-        if (data.description) {
-          setFormData(prev => ({ ...prev, description: data.description }));
-        }
-      } else {
-        setErrors({ ai: data.error || 'AI generation failed. Please try again.' });
-      }
-    } catch (error: any) {
-      setErrors({ ai: error.message || 'AI generation failed. Please try again.' });
-    } finally {
-      setIsGeneratingAI(false);
     }
   };
 
@@ -360,10 +328,10 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             >
               <Upload className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
               <p className="text-neutral-700 mb-2">
-                Drag & drop screenshots, videos, or GIFs here
+                Drag & drop, paste from clipboard, or browse
               </p>
               <p className="text-sm text-neutral-500 mb-4">
-                or click to choose files
+                Drop screenshots here, paste (Ctrl+V / ⌘V), or click to choose files
               </p>
               <p className="text-xs text-neutral-400">
                 Supported: JPEG, PNG, GIF, WebP, MP4, WebM (max 10MB)
@@ -460,23 +428,9 @@ export const UploadForm: React.FC<UploadFormProps> = ({
           <div className="space-y-4">
             {/* Title */}
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="block text-sm font-medium text-neutral-900">
-                  Title <span className="text-red-500">*</span>
-                </label>
-                {aiAvailable && (file || linkUrl) && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleGenerateAI}
-                    disabled={isGeneratingAI || !file && !linkUrl}
-                    leadingIcon={isGeneratingAI ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-                  >
-                    {isGeneratingAI ? 'Generating...' : 'Generate with AI'}
-                  </Button>
-                )}
-              </div>
+              <label className="block text-sm font-medium text-neutral-900 mb-2">
+                Title <span className="text-red-500">*</span>
+              </label>
               <Input
                 value={formData.title}
                 onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
@@ -486,55 +440,13 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                 required
                 fullWidth
               />
-              {errors.ai && (
-                <p className="text-sm text-red-500 mt-1">{errors.ai}</p>
-              )}
             </div>
 
             {/* Description */}
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="block text-sm font-medium text-neutral-900">
-                  Description
-                </label>
-                {aiAvailable && file && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={async () => {
-                      if (!file) return;
-                      setIsGeneratingAI(true);
-                      try {
-                        const formData = new FormData();
-                        formData.append('file', file);
-                        formData.append('type', 'description');
-
-                        const response = await fetch('/api/ai/generate', {
-                          method: 'POST',
-                          body: formData,
-                        });
-
-                        const data = await response.json();
-
-                        if (data.success && data.description) {
-                          setFormData(prev => ({ ...prev, description: data.description }));
-                        } else {
-                          setErrors({ ai: data.error || 'AI generation failed' });
-                        }
-                      } catch (error: any) {
-                        setErrors({ ai: error.message || 'AI generation failed' });
-                      } finally {
-                        setIsGeneratingAI(false);
-                      }
-                    }}
-                    disabled={isGeneratingAI || !file}
-                    leadingIcon={isGeneratingAI ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-                  >
-                    {isGeneratingAI ? 'Generating...' : 'Generate with AI'}
-                  </Button>
-                )}
-              </div>
+              <label className="block text-sm font-medium text-neutral-900 mb-2">
+                Description
+              </label>
               <TextArea
                 value={formData.description}
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
