@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Upload, Loader2 } from 'lucide-react';
 import { Button } from '@/components/Button';
@@ -13,6 +13,55 @@ import { UploadDisabled } from '@/components/inspirations/UploadDisabled';
 import { UploadMetadata, UploadFormData, FeatureFlags, UsageStats } from '@/types/upload';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import Confetti from 'react-confetti';
+
+const SESSION_UPLOADS_KEY = 'inspirations_session_uploads';
+
+function getSessionUploads(): UploadMetadata[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = sessionStorage.getItem(SESSION_UPLOADS_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as UploadMetadata[];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function addSessionUpload(upload: UploadMetadata): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const list = getSessionUploads();
+    if (list.some(u => u.id === upload.id)) return;
+    list.push(upload);
+    sessionStorage.setItem(SESSION_UPLOADS_KEY, JSON.stringify(list));
+  } catch {
+    // ignore
+  }
+}
+
+function pruneSessionUploads(serverIds: Set<string>): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const list = getSessionUploads().filter(u => !serverIds.has(u.id));
+    sessionStorage.setItem(SESSION_UPLOADS_KEY, JSON.stringify(list));
+  } catch {
+    // ignore
+  }
+}
+
+/** Merge server list with uploads stored in session (so they always show after tab switch/refetch). */
+function mergeWithSessionUploads(serverList: UploadMetadata[]): UploadMetadata[] {
+  const session = getSessionUploads();
+  const byId = new Map<string, UploadMetadata>();
+  for (const u of serverList) byId.set(u.id, u);
+  for (const u of session) {
+    if (!byId.has(u.id)) byId.set(u.id, u);
+  }
+  const merged = Array.from(byId.values()).sort((a, b) => b.timestamp - a.timestamp);
+  pruneSessionUploads(new Set(serverList.map(u => u.id)));
+  return merged;
+}
 
 function InspirationsPageContent() {
   const router = useRouter();
@@ -41,52 +90,34 @@ function InspirationsPageContent() {
     }
   }, [searchParams, inspirations]);
 
-  // Fetch inspirations
-  useEffect(() => {
-    fetchInspirations();
-    fetchLeaderboard();
-    fetchFeatureStatus();
-  }, []);
-
-  const fetchInspirations = async (opts?: { cache?: RequestCache; ensureInList?: UploadMetadata }) => {
+  const fetchInspirations = useCallback(async () => {
     try {
-      const response = await fetch('/api/inspirations?limit=100', {
-        cache: opts?.cache ?? 'no-store',
-      });
+      const response = await fetch('/api/inspirations?limit=100', { cache: 'no-store' });
       const data = await response.json();
       if (data.success) {
-        const list = data.uploads as UploadMetadata[];
-        const ensure = opts?.ensureInList;
-        if (ensure && !list.some(u => u.id === ensure.id)) {
-          setInspirations([ensure, ...list].sort((a, b) => b.timestamp - a.timestamp));
-        } else {
-          setInspirations(list);
-        }
+        const serverList = (data.uploads || []) as UploadMetadata[];
+        setInspirations(mergeWithSessionUploads(serverList));
       }
     } catch (error) {
       console.error('Failed to fetch inspirations:', error);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const fetchLeaderboard = async () => {
+  const fetchLeaderboard = useCallback(async () => {
     try {
-      const response = await fetch('/api/leaderboard?limit=10', {
-        cache: 'no-store',
-      });
+      const response = await fetch('/api/leaderboard?limit=10', { cache: 'no-store' });
       const data = await response.json();
-      if (data.success) {
-        setLeaderboard(data.entries);
-      }
+      if (data.success) setLeaderboard(data.entries);
     } catch (error) {
       console.error('Failed to fetch leaderboard:', error);
     } finally {
       setLeaderboardLoading(false);
     }
-  };
+  }, []);
 
-  const fetchFeatureStatus = async () => {
+  const fetchFeatureStatus = useCallback(async () => {
     try {
       const response = await fetch('/api/features/status');
       const data = await response.json();
@@ -97,7 +128,22 @@ function InspirationsPageContent() {
     } catch (error) {
       console.error('Failed to fetch feature status:', error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchInspirations();
+    fetchLeaderboard();
+    fetchFeatureStatus();
+  }, [fetchInspirations, fetchLeaderboard, fetchFeatureStatus]);
+
+  useEffect(() => {
+    const onFocus = () => {
+      fetchInspirations();
+      fetchLeaderboard();
+    };
+    window.addEventListener('focus', onFocus);
+    return () => window.removeEventListener('focus', onFocus);
+  }, [fetchInspirations, fetchLeaderboard]);
 
   const handleUploadSubmit = async (formData: UploadFormData): Promise<{ success: boolean; uploadId?: string; error?: string }> => {
     try {
@@ -123,20 +169,17 @@ function InspirationsPageContent() {
       const data = await response.json();
 
       if (data.success) {
-        // Show confetti
         setShowConfetti(true);
         setTimeout(() => setShowConfetti(false), 5000);
-
-        // Close upload modal
         setIsUploadModalOpen(false);
 
         const newUpload = data.upload as UploadMetadata | undefined;
         if (newUpload) {
+          addSessionUpload(newUpload);
           setInspirations(prev => (prev.some(u => u.id === newUpload.id) ? prev : [newUpload, ...prev]));
         }
 
-        // Refresh from server; ensure new upload stays in list if server didn't return it (e.g. different instance)
-        await fetchInspirations({ ensureInList: newUpload });
+        await fetchInspirations();
         await fetchLeaderboard();
 
         if (data.uploadId && newUpload) {
