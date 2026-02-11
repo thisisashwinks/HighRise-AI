@@ -1,22 +1,35 @@
 import { readFile, writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
+import os from 'os';
 import { UploadMetadata, LeaderboardEntry } from '@/types/upload';
+import { addMemoryUpload, getMemoryUploads } from '@/lib/upload/memory-store';
 
-const DATA_DIR = path.join(process.cwd(), 'data');
-const UPLOADS_FILE = path.join(DATA_DIR, 'inspirations-uploads.json');
+// On Vercel, process.cwd() is read-only (/var/task). Use /tmp which is writable.
+function getDataDir(): string {
+  if (process.env.VERCEL === '1') {
+    return os.tmpdir();
+  }
+  return path.join(process.cwd(), 'data');
+}
+
+function getUploadsFilePath(): string {
+  return path.join(getDataDir(), 'inspirations-uploads.json');
+}
 
 async function ensureDataDir(): Promise<void> {
-  if (!existsSync(DATA_DIR)) {
-    await mkdir(DATA_DIR, { recursive: true });
+  const dir = getDataDir();
+  if (process.env.VERCEL === '1') return; // /tmp exists, skip mkdir
+  if (!existsSync(dir)) {
+    await mkdir(dir, { recursive: true });
   }
 }
 
 async function readUploadsFromFile(): Promise<UploadMetadata[]> {
-  await ensureDataDir();
-  if (!existsSync(UPLOADS_FILE)) return [];
+  const filePath = getUploadsFilePath();
+  if (!existsSync(filePath)) return [];
   try {
-    const raw = await readFile(UPLOADS_FILE, 'utf-8');
+    const raw = await readFile(filePath, 'utf-8');
     const parsed = JSON.parse(raw) as UploadMetadata[];
     return Array.isArray(parsed) ? parsed : [];
   } catch {
@@ -26,23 +39,35 @@ async function readUploadsFromFile(): Promise<UploadMetadata[]> {
 
 async function writeUploadsToFile(uploads: UploadMetadata[]): Promise<void> {
   await ensureDataDir();
-  await writeFile(UPLOADS_FILE, JSON.stringify(uploads, null, 0), 'utf-8');
+  await writeFile(getUploadsFilePath(), JSON.stringify(uploads, null, 0), 'utf-8');
 }
 
-/** Persisted uploads when Redis is not configured. Survives server restart and hard refresh. */
+/** Persisted uploads when Redis is not configured. Merges file + in-memory (fallback when file write fails). */
 export async function getFileUploads(): Promise<UploadMetadata[]> {
-  const uploads = await readUploadsFromFile();
-  return uploads.sort((a, b) => b.timestamp - a.timestamp);
+  try {
+    const fromFile = await readUploadsFromFile();
+    const fromMemory = getMemoryUploads();
+    const byId = new Map<string, UploadMetadata>();
+    for (const u of fromFile) byId.set(u.id, u);
+    for (const u of fromMemory) byId.set(u.id, u);
+    return Array.from(byId.values()).sort((a, b) => b.timestamp - a.timestamp);
+  } catch {
+    return getMemoryUploads();
+  }
 }
 
 export async function addFileUpload(metadata: UploadMetadata): Promise<void> {
-  const uploads = await readUploadsFromFile();
-  uploads.push(metadata);
-  await writeUploadsToFile(uploads);
+  try {
+    const uploads = await readUploadsFromFile();
+    uploads.push(metadata);
+    await writeUploadsToFile(uploads);
+  } catch {
+    addMemoryUpload(metadata);
+  }
 }
 
 export async function getFileLeaderboard(limit: number): Promise<LeaderboardEntry[]> {
-  const uploads = await readUploadsFromFile();
+  const uploads = await getFileUploads();
   const byEmail = new Map<string, { name: string; product: string; karma: number }>();
   for (const u of uploads) {
     const existing = byEmail.get(u.uploaderEmail);
