@@ -94,12 +94,11 @@ function InspirationsPageContent() {
     try {
       const response = await fetch('/api/inspirations?limit=100', { cache: 'no-store' });
       const data = await response.json();
-      if (data.success) {
-        const serverList = (data.uploads || []) as UploadMetadata[];
-        setInspirations(mergeWithSessionUploads(serverList));
-      }
+      const serverList = (data.success ? (data.uploads || []) : []) as UploadMetadata[];
+      setInspirations(mergeWithSessionUploads(serverList));
     } catch (error) {
       console.error('Failed to fetch inspirations:', error);
+      setInspirations(prev => (prev.length > 0 ? prev : mergeWithSessionUploads([])));
     } finally {
       setLoading(false);
     }
@@ -137,12 +136,20 @@ function InspirationsPageContent() {
   }, [fetchInspirations, fetchLeaderboard, fetchFeatureStatus]);
 
   useEffect(() => {
-    const onFocus = () => {
+    const refetch = () => {
       fetchInspirations();
       fetchLeaderboard();
     };
+    const onFocus = refetch;
+    const onVisibilityChange = () => {
+      if (typeof document !== 'undefined' && document.visibilityState === 'visible') refetch();
+    };
     window.addEventListener('focus', onFocus);
-    return () => window.removeEventListener('focus', onFocus);
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    return () => {
+      window.removeEventListener('focus', onFocus);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+    };
   }, [fetchInspirations, fetchLeaderboard]);
 
   const handleUploadSubmit = async (formData: UploadFormData): Promise<{ success: boolean; uploadId?: string; error?: string }> => {
