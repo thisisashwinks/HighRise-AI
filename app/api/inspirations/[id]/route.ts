@@ -1,14 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getUploadById, deleteUpload } from '@/lib/upload/metadata';
+import { getUploadById, deleteUpload, isRedisConfigured } from '@/lib/upload/metadata';
 import { trackUpstashCommand } from '@/lib/monitoring/usage';
+import { getFileUploadById } from '@/lib/upload/file-store';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const upload = await getUploadById(params.id);
-    await trackUpstashCommand();
+    const id = params.id;
+    let upload = null;
+    if (isRedisConfigured()) {
+      upload = await getUploadById(id);
+      if (upload) await trackUpstashCommand();
+    } else {
+      upload = await getFileUploadById(id);
+    }
 
     if (!upload) {
       return NextResponse.json(

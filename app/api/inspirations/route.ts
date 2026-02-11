@@ -190,6 +190,7 @@ export async function POST(request: NextRequest) {
       success: true,
       uploadId,
       karmaPoints,
+      upload: fullMetadata,
     });
   } catch (error: any) {
     console.error('Create inspiration error:', error);

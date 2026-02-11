@@ -48,12 +48,20 @@ function InspirationsPageContent() {
     fetchFeatureStatus();
   }, []);
 
-  const fetchInspirations = async () => {
+  const fetchInspirations = async (opts?: { cache?: RequestCache; ensureInList?: UploadMetadata }) => {
     try {
-      const response = await fetch('/api/inspirations?limit=100');
+      const response = await fetch('/api/inspirations?limit=100', {
+        cache: opts?.cache ?? 'no-store',
+      });
       const data = await response.json();
       if (data.success) {
-        setInspirations(data.uploads);
+        const list = data.uploads as UploadMetadata[];
+        const ensure = opts?.ensureInList;
+        if (ensure && !list.some(u => u.id === ensure.id)) {
+          setInspirations([ensure, ...list].sort((a, b) => b.timestamp - a.timestamp));
+        } else {
+          setInspirations(list);
+        }
       }
     } catch (error) {
       console.error('Failed to fetch inspirations:', error);
@@ -64,7 +72,9 @@ function InspirationsPageContent() {
 
   const fetchLeaderboard = async () => {
     try {
-      const response = await fetch('/api/leaderboard?limit=10');
+      const response = await fetch('/api/leaderboard?limit=10', {
+        cache: 'no-store',
+      });
       const data = await response.json();
       if (data.success) {
         setLeaderboard(data.entries);
@@ -120,28 +130,19 @@ function InspirationsPageContent() {
         // Close upload modal
         setIsUploadModalOpen(false);
 
-        // Refresh inspirations
-        await fetchInspirations();
+        const newUpload = data.upload as UploadMetadata | undefined;
+        if (newUpload) {
+          setInspirations(prev => (prev.some(u => u.id === newUpload.id) ? prev : [newUpload, ...prev]));
+        }
+
+        // Refresh from server; ensure new upload stays in list if server didn't return it (e.g. different instance)
+        await fetchInspirations({ ensureInList: newUpload });
         await fetchLeaderboard();
 
-        // Open the uploaded inspiration in modal
-        if (data.uploadId) {
-          setUploadSuccessId(data.uploadId);
-          // Wait a bit for the inspiration to be available, then fetch it directly
-          setTimeout(async () => {
-            try {
-              const response = await fetch(`/api/inspirations/${data.uploadId}`);
-              const result = await response.json();
-              if (result.success && result.upload) {
-                setSelectedInspiration(result.upload);
-                setIsInspirationModalOpen(true);
-                // Update URL
-                router.push(`/inspirations?id=${data.uploadId}`, { scroll: false });
-              }
-            } catch (error) {
-              console.error('Failed to fetch uploaded inspiration:', error);
-            }
-          }, 1000);
+        if (data.uploadId && newUpload) {
+          setSelectedInspiration(newUpload);
+          setIsInspirationModalOpen(true);
+          router.push(`/inspirations?id=${data.uploadId}`, { scroll: false });
         }
 
         return { success: true, uploadId: data.uploadId };

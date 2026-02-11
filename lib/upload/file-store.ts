@@ -66,6 +66,12 @@ export async function addFileUpload(metadata: UploadMetadata): Promise<void> {
   }
 }
 
+/** Get a single upload by id from file + memory (when Redis not configured). */
+export async function getFileUploadById(id: string): Promise<UploadMetadata | null> {
+  const uploads = await getFileUploads();
+  return uploads.find(u => u.id === id) ?? null;
+}
+
 export async function getFileLeaderboard(limit: number): Promise<LeaderboardEntry[]> {
   const uploads = await getFileUploads();
   const byEmail = new Map<string, { name: string; product: string; karma: number }>();
