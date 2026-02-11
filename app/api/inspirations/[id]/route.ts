@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getUploadById, deleteUpload, isRedisConfigured } from '@/lib/upload/metadata';
 import { trackUpstashCommand } from '@/lib/monitoring/usage';
 import { getFileUploadById } from '@/lib/upload/file-store';
+import { getAllInspirationsFromCloudinary, isCloudinaryConfigured } from '@/lib/upload/storage';
 
 export async function GET(
   request: NextRequest,
@@ -13,6 +14,9 @@ export async function GET(
     if (isRedisConfigured()) {
       upload = await getUploadById(id);
       if (upload) await trackUpstashCommand();
+    } else if (isCloudinaryConfigured()) {
+      const all = await getAllInspirationsFromCloudinary();
+      upload = all.find(u => u.id === id) ?? null;
     } else {
       upload = await getFileUploadById(id);
     }

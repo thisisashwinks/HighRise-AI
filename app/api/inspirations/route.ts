@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { uploadFile, getVideoThumbnailUrl, isCloudinaryConfigured } from '@/lib/upload/storage';
+import { uploadFile, getVideoThumbnailUrl, isCloudinaryConfigured, getAllInspirationsFromCloudinary } from '@/lib/upload/storage';
 import { saveUpload, getAllUploads, checkUploadLimit, generateUploadId, isRedisConfigured } from '@/lib/upload/metadata';
 import { calculateKarmaPoints } from '@/lib/karma/points';
 import { getUserProfile } from '@/lib/upload/metadata';
@@ -20,16 +20,22 @@ export async function GET(request: NextRequest) {
     let total: number;
     if (isRedisConfigured()) {
       uploads = await getAllUploads(limit, offset);
-      if (uploads.length > 0) {
-        await trackUpstashCommand();
-      }
+      if (uploads.length > 0) await trackUpstashCommand();
       if (uploads.length === 0) {
         const staticSeed = getStaticSeedUploads();
         total = staticSeed.length;
         uploads = staticSeed.slice(offset, offset + limit);
       } else {
         total = uploads.length;
+        uploads = uploads.slice(offset, offset + limit);
       }
+    } else if (isCloudinaryConfigured()) {
+      // Single source of truth: Cloudinary. Persists across tab switch, reload, and all instances.
+      const cloudUploads = await getAllInspirationsFromCloudinary();
+      const staticSeed = getStaticSeedUploads();
+      uploads = [...cloudUploads, ...staticSeed].sort((a, b) => b.timestamp - a.timestamp);
+      total = uploads.length;
+      uploads = uploads.slice(offset, offset + limit);
     } else {
       const fileUploads = await getFileUploads();
       const staticSeed = getStaticSeedUploads();
@@ -91,16 +97,33 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Determine media type and URL
     let mediaUrl = '';
     let mediaType: MediaType = 'image';
     let thumbnailUrl: string | undefined;
     let publicId: string | undefined;
+    let uploadId: string | null = null;
+    let timestamp: number | null = null;
 
     if (file) {
       if (isCloudinaryConfigured()) {
-        // Upload file to Cloudinary
-        const uploadResult = await uploadFile(file);
+        timestamp = Date.now();
+        uploadId = generateUploadId();
+        const karmaPoints = calculateKarmaPoints(
+          { mediaType: 'image', mediaUrl: '', uploaderName: name, uploaderEmail: email, product, role: role as any, title, description },
+          true
+        );
+        const context = {
+          title,
+          description: description || '',
+          uploader_name: name,
+          uploader_email: email,
+          product,
+          role,
+          inspiration_id: uploadId,
+          timestamp: String(timestamp),
+          karma_points: String(karmaPoints),
+        };
+        const uploadResult = await uploadFile(file, context);
         mediaUrl = uploadResult.url;
         publicId = uploadResult.publicId;
 
@@ -148,12 +171,11 @@ export async function POST(request: NextRequest) {
       isFirstUpload = !userProfile || userProfile.uploadCount === 0;
     }
 
-    // Create upload metadata
-    const uploadId = generateUploadId();
-    const timestamp = Date.now();
+    if (!uploadId) uploadId = generateUploadId();
+    if (timestamp == null) timestamp = Date.now();
 
     const uploadMetadata: Omit<UploadMetadata, 'karmaPoints'> = {
-      id: uploadId,
+      id: uploadId!,
       mediaType,
       mediaUrl,
       thumbnailUrl,
@@ -164,7 +186,7 @@ export async function POST(request: NextRequest) {
       role: role as any,
       title,
       description,
-      timestamp,
+      timestamp: timestamp!,
       status: 'approved', // Auto-approve for MVP
       fileSize: file?.size,
       fileName: file?.name,
@@ -182,13 +204,14 @@ export async function POST(request: NextRequest) {
     if (isRedisConfigured()) {
       await saveUpload(fullMetadata);
       await trackUpstashCommand();
-    } else {
+    } else if (!isCloudinaryConfigured()) {
       await addFileUpload(fullMetadata);
     }
+    // When Cloudinary is configured (and Redis is not), metadata is stored on the asset; no extra DB write.
 
     return NextResponse.json({
       success: true,
-      uploadId,
+      uploadId: uploadId!,
       karmaPoints,
       upload: fullMetadata,
     });
