@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
           timestamp: String(timestamp),
           karma_points: String(karmaPoints),
         };
-        const uploadResult = await uploadFile(file, context);
+        const uploadResult = await uploadFile(file, context, uploadId);
         mediaUrl = uploadResult.url;
         publicId = uploadResult.publicId;
 

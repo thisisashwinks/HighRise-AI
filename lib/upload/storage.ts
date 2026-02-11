@@ -47,8 +47,9 @@ export function isCloudinaryConfigured(): boolean {
 
 /**
  * Upload a file to Cloudinary with optional context (for inspirations metadata when not using Redis).
+ * Pass uniquePublicId to guarantee a new asset every time (prevents second upload overwriting the first).
  */
-export async function uploadFile(file: File, context?: InspirationContext): Promise<UploadResult> {
+export async function uploadFile(file: File, context?: InspirationContext, uniquePublicId?: string): Promise<UploadResult> {
   if (!isCloudinaryConfigured()) {
     throw new Error('Cloudinary is not configured. Please set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET in your environment variables.');
   }
@@ -71,6 +72,9 @@ export async function uploadFile(file: File, context?: InspirationContext): Prom
     resource_type: isValidVideo ? 'video' : 'image',
     transformation: isValidImage ? [{ quality: 'auto' }, { fetch_format: 'auto' }] : undefined,
   };
+  if (uniquePublicId) {
+    options.public_id = uniquePublicId;
+  }
   if (context) {
     options.context = Object.fromEntries(
       Object.entries(context).map(([k, v]) => [k, String(v)])
@@ -103,106 +107,117 @@ export async function uploadFile(file: File, context?: InspirationContext): Prom
 
 const DEFAULT_KARMA = 20;
 
+function resourceToMetadata(r: any): UploadMetadata {
+  const custom = r.context?.custom ?? {};
+  const createdAt = r.created_at ? new Date(r.created_at).getTime() : Date.now();
+  const isVideo = (r.resource_type || 'image') === 'video';
+  return {
+    id: custom.inspiration_id || r.public_id,
+    mediaType: isVideo ? 'video' : (r.format === 'gif' ? 'gif' : 'image'),
+    mediaUrl: r.secure_url,
+    thumbnailUrl: isVideo ? getVideoThumbnailUrl(r.public_id) : undefined,
+    uploaderName: custom.uploader_name || 'Unknown',
+    uploaderEmail: custom.uploader_email || '',
+    product: custom.product || 'Others',
+    role: (custom.role as any) || 'Other',
+    title: custom.title || r.public_id?.split('/').pop() || 'Untitled',
+    description: custom.description || '',
+    timestamp: createdAt,
+    karmaPoints: parseInt(custom.karma_points, 10) || DEFAULT_KARMA,
+    status: 'approved' as const,
+  };
+}
+
 /**
  * List all inspiration assets from Cloudinary (folder highrise-ai/inspirations).
- * Uses stored context for metadata when present; otherwise uses public_id and defaults.
- * This is the single source of truth when Redis is not configured.
+ * Fetches all pages (next_cursor) so every upload is returned.
  */
 export async function listInspirationsFromCloudinary(): Promise<UploadMetadata[]> {
   if (!isCloudinaryConfigured()) return [];
 
-  return new Promise((resolve) => {
-    const options = {
-      type: 'upload',
-      prefix: INSPIRATIONS_FOLDER + '/',
-      max_results: 500,
-      resource_type: 'image',
-    };
-    cloudinary.api.resources(options, (err: Error | undefined, result: { resources?: any[] }) => {
-      if (err) {
-        console.error('Cloudinary list error:', err);
-        resolve([]);
-        return;
-      }
-      const resources = result?.resources ?? [];
-      const list: UploadMetadata[] = resources.map((r: any) => {
-        const custom = r.context?.custom ?? {};
-        const createdAt = r.created_at ? new Date(r.created_at).getTime() : Date.now();
-        const isVideo = (r.resource_type || 'image') === 'video';
-        return {
-          id: custom.inspiration_id || r.public_id,
-          mediaType: isVideo ? 'video' : (r.format === 'gif' ? 'gif' : 'image'),
-          mediaUrl: r.secure_url,
-          thumbnailUrl: isVideo ? getVideoThumbnailUrl(r.public_id) : undefined,
-          uploaderName: custom.uploader_name || 'Unknown',
-          uploaderEmail: custom.uploader_email || '',
-          product: custom.product || 'Others',
-          role: (custom.role as any) || 'Other',
-          title: custom.title || r.public_id?.split('/').pop() || 'Untitled',
-          description: custom.description || '',
-          timestamp: createdAt,
-          karmaPoints: parseInt(custom.karma_points, 10) || DEFAULT_KARMA,
-          status: 'approved' as const,
-        };
+  const all: UploadMetadata[] = [];
+  let cursor: string | undefined;
+  const baseOptions = {
+    type: 'upload' as const,
+    prefix: INSPIRATIONS_FOLDER + '/',
+    max_results: 500,
+    resource_type: 'image' as const,
+  };
+
+  try {
+    do {
+      const result = await new Promise<{ resources?: any[]; next_cursor?: string }>((resolve, reject) => {
+        const options = cursor ? { ...baseOptions, next_cursor: cursor } : baseOptions;
+        cloudinary.api.resources(options, (err: Error | undefined, res: any) => {
+          if (err) reject(err);
+          else resolve(res || {});
+        });
       });
-      list.sort((a, b) => b.timestamp - a.timestamp);
-      resolve(list);
-    });
-  });
+      const resources = result?.resources ?? [];
+      for (const r of resources) all.push(resourceToMetadata(r));
+      cursor = result?.next_cursor;
+    } while (cursor);
+  } catch (e) {
+    console.error('Cloudinary list images pagination error:', e);
+  }
+
+  all.sort((a, b) => b.timestamp - a.timestamp);
+  return all;
 }
 
 /**
- * List video inspirations from the same folder (Cloudinary API is per resource_type).
+ * List video inspirations from the same folder (Cloudinary API is per resource_type). Fetches all pages.
  */
 export async function listVideoInspirationsFromCloudinary(): Promise<UploadMetadata[]> {
   if (!isCloudinaryConfigured()) return [];
 
-  return new Promise((resolve) => {
-    const options = {
-      type: 'upload',
-      prefix: INSPIRATIONS_FOLDER + '/',
-      max_results: 500,
-      resource_type: 'video',
-    };
-    cloudinary.api.resources(options, (err: Error | undefined, result: { resources?: any[] }) => {
-      if (err) {
-        resolve([]);
-        return;
-      }
-      const resources = result?.resources ?? [];
-      const list: UploadMetadata[] = resources.map((r: any) => {
-        const custom = r.context?.custom ?? {};
-        const createdAt = r.created_at ? new Date(r.created_at).getTime() : Date.now();
-        return {
-          id: custom.inspiration_id || r.public_id,
-          mediaType: 'video',
-          mediaUrl: r.secure_url,
-          thumbnailUrl: getVideoThumbnailUrl(r.public_id),
-          uploaderName: custom.uploader_name || 'Unknown',
-          uploaderEmail: custom.uploader_email || '',
-          product: custom.product || 'Others',
-          role: (custom.role as any) || 'Other',
-          title: custom.title || r.public_id?.split('/').pop() || 'Untitled',
-          description: custom.description || '',
-          timestamp: createdAt,
-          karmaPoints: parseInt(custom.karma_points, 10) || DEFAULT_KARMA,
-          status: 'approved' as const,
-        };
+  const all: UploadMetadata[] = [];
+  let cursor: string | undefined;
+  const baseOptions = {
+    type: 'upload' as const,
+    prefix: INSPIRATIONS_FOLDER + '/',
+    max_results: 500,
+    resource_type: 'video' as const,
+  };
+
+  try {
+    do {
+      const result = await new Promise<{ resources?: any[]; next_cursor?: string }>((resolve, reject) => {
+        const options = cursor ? { ...baseOptions, next_cursor: cursor } : baseOptions;
+        cloudinary.api.resources(options, (err: Error | undefined, res: any) => {
+          if (err) reject(err);
+          else resolve(res || {});
+        });
       });
-      list.sort((a, b) => b.timestamp - a.timestamp);
-      resolve(list);
-    });
-  });
+      const resources = result?.resources ?? [];
+      for (const r of resources) all.push(resourceToMetadata(r));
+      cursor = result?.next_cursor;
+    } while (cursor);
+  } catch (e) {
+    console.error('Cloudinary list videos pagination error:', e);
+  }
+
+  all.sort((a, b) => b.timestamp - a.timestamp);
+  return all;
 }
 
 /**
  * Get all inspirations from Cloudinary (images + videos). Single source of truth without Redis.
+ * On API errors we return whatever we got (or []) so the app still shows static seed.
  */
 export async function getAllInspirationsFromCloudinary(): Promise<UploadMetadata[]> {
-  const [images, videos] = await Promise.all([
-    listInspirationsFromCloudinary(),
-    listVideoInspirationsFromCloudinary(),
-  ]);
+  let images: UploadMetadata[] = [];
+  let videos: UploadMetadata[] = [];
+  try {
+    images = await listInspirationsFromCloudinary();
+  } catch (e) {
+    console.error('Cloudinary list images error:', e);
+  }
+  try {
+    videos = await listVideoInspirationsFromCloudinary();
+  } catch (e) {
+    console.error('Cloudinary list videos error:', e);
+  }
   const combined = [...images, ...videos].sort((a, b) => b.timestamp - a.timestamp);
   return combined;
 }
