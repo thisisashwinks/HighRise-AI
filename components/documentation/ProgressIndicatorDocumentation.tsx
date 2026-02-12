@@ -7,6 +7,12 @@ export const ProgressIndicatorDocumentation: React.FC = () => {
       name="Progress Indicator"
       category="Feedback"
       description="Progress indicators provide visual feedback about the status of ongoing processes, task completion, or loading states. Supports multiple variants including linear progress bars, circular indicators, stepper progress, and loading animations."
+      figmaDocumentation={{
+        title: 'Progress Indicator - Figma Design',
+        description: 'Design specs and variants for the Progress Indicator component in Figma.',
+        figmaUrl: 'https://www.figma.com/design/cxyeQWrtdlVeckwmorSVU1/HighRise-AI-1.1--%3E-Handoff--WIP-?node-id=4-219888&t=hii7dnm01rBQLjMa-11',
+        figmaNodeId: '4-219888',
+      }}
       whenToUse={[
         'Showing progress of file uploads, downloads, or data processing',
         'Indicating loading states during asynchronous operations',
