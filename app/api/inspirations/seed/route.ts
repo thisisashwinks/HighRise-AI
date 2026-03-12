@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {
-  clearAllUploadsAndLeaderboard,
-  saveUpload,
+  isSupabaseStorageConfigured,
+  clearAllInspirationsSupabase,
+  saveInspirationToSupabase,
   generateUploadId,
-  isRedisConfigured,
-} from '@/lib/upload/metadata';
+} from '@/lib/upload/supabase-storage';
 import { calculateKarmaPoints } from '@/lib/karma/points';
 import { SEED_AUTHOR_NAME, SEED_AUTHOR_EMAIL, SEED_INSPIRATIONS, productFromTitle } from '@/lib/upload/seed-data';
 import { UploadMetadata } from '@/types/upload';
@@ -15,8 +15,8 @@ const SEED_ROLE = 'Design' as const;
 
 /**
  * POST /api/inspirations/seed
- * Clears existing inspirations and leaderboard, then seeds the 6 example
- * inspirations from public/examples/inspirations with author "Ashwin K S".
+ * When Supabase is configured: clears inspirations table and seeds the 6 example
+ * inspirations (metadata only; images stay in public/examples/inspirations).
  * Optional: protect with INSPIRATIONS_SEED_SECRET (Bearer token or ?secret=).
  */
 export async function POST(request: NextRequest) {
@@ -31,14 +31,14 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    if (!isRedisConfigured()) {
+    if (!isSupabaseStorageConfigured()) {
       return NextResponse.json(
-        { error: 'Redis is not configured. Set UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN.' },
+        { error: 'Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (see docs/SUPABASE_SETUP.md).' },
         { status: 503 }
       );
     }
 
-    await clearAllUploadsAndLeaderboard();
+    await clearAllInspirationsSupabase();
 
     const base = Math.floor(Date.now() / 1000) * 1000;
     for (let i = 0; i < SEED_INSPIRATIONS.length; i++) {
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
         ...metadataWithoutKarma,
         karmaPoints,
       };
-      await saveUpload(metadata);
+      await saveInspirationToSupabase(metadata);
     }
 
     return NextResponse.json({

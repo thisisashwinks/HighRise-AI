@@ -1,69 +1,51 @@
 import Link from 'next/link';
-import { componentRegistry, comingSoonComponents } from '@/data/components';
-import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { componentRegistry } from '@/data/components';
+import { Layout, ChevronRight } from 'lucide-react';
 
-export default function ComponentsPage() {
-  // Filter out sub-components (those with parentGroup) from the main listing
-  const components = componentRegistry.filter((component) => !component.parentGroup);
-  const comingSoon = comingSoonComponents;
+export default function ComponentsIndexPage() {
+  const topLevel = componentRegistry.filter((c) => !c.parentGroup);
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12">
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          { label: 'Components' },
-        ]}
-      />
-      <h1 className="text-3xl font-bold text-neutral-900 mb-8">All Components</h1>
-      
-      {/* Regular Components */}
-      {components.length > 0 && (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {components.map((component) => (
-            <Link
-              key={component.name}
-              href={component.href}
-              className="card hover:shadow-md transition-shadow"
-            >
-              <div className="mb-2">
-                <span className="badge badge-neutral">{component.category}</span>
-              </div>
-              <h2 className="text-xl font-semibold text-neutral-900 mb-2">
-                {component.name}
-              </h2>
-              <p className="text-sm text-neutral-700">{component.description}</p>
-            </Link>
-          ))}
-        </div>
-      )}
-
-      {/* Coming Soon Components */}
-      <section>
-        <h2 className="text-2xl font-semibold text-neutral-900 mb-6">Coming Soon</h2>
-        {comingSoon.length > 0 ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {comingSoon.map((component) => (
-              <div
-                key={component.name}
-                className="card card-coming-soon"
+    <div className="max-w-2xl">
+      <h1 className="text-2xl font-semibold tracking-tight mb-2" style={{ color: 'var(--color-text)' }}>
+        Components
+      </h1>
+      <p className="text-sm mb-8" style={{ color: 'var(--color-text-muted)' }}>
+        Select a component from the sidebar to view its documentation, or browse the list below.
+      </p>
+      <ul className="space-y-1">
+        {topLevel.map((component) => {
+          const subItems = componentRegistry.filter((c) => c.parentGroup === component.name);
+          return (
+            <li key={component.href}>
+              <Link
+                href={component.href}
+                className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors"
+                style={{ color: 'var(--color-text-muted)' }}
               >
-                <div className="mb-2 flex items-center gap-2">
-                  <span className="badge badge-neutral">{component.category}</span>
-                  <span className="badge badge-primary">Coming Soon</span>
-                </div>
-                <h2 className="text-xl font-semibold text-neutral-900 mb-2">
-                  {component.name}
-                </h2>
-                <p className="text-sm text-neutral-700">{component.description}</p>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-neutral-500 text-sm">No components coming soon at the moment.</p>
-        )}
-      </section>
+                <Layout className="h-4 w-4 shrink-0 opacity-60" />
+                <span className="flex-1">{component.name}</span>
+                <ChevronRight className="h-4 w-4 shrink-0 opacity-50" />
+              </Link>
+              {subItems.length > 0 && (
+                <ul className="ml-6 mt-0.5 space-y-0.5 mb-2">
+                  {subItems.map((sub) => (
+                    <li key={sub.href}>
+                      <Link
+                        href={sub.href}
+                        className="block rounded-md px-3 py-2 text-sm transition-colors"
+                        style={{ color: 'var(--color-text-subtle)' }}
+                      >
+                        {sub.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }
-

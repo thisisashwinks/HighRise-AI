@@ -8,6 +8,7 @@ import { Select } from '@/components/Select';
 import { CreatableSelect } from './CreatableSelect';
 import { Button } from '@/components/Button';
 import { UploadFormData, Role, MediaType } from '@/types/upload';
+import { isAllowedEmployeeEmail, ALLOWED_EMPLOYEE_EMAIL_SUFFIX } from '@/lib/constants';
 
 const ROLE_OPTIONS: Array<{ label: string; value: Role }> = [
   { label: 'Design', value: 'Design' },
@@ -88,12 +89,17 @@ interface UploadFormProps {
   onSubmit: (data: UploadFormData) => Promise<{ success: boolean; uploadId?: string; error?: string }>;
   onCancel?: () => void;
   initialData?: Partial<UploadFormData>;
+  /** When true, name/email come from auth profile; hide those fields and skip their validation */
+  useAuthProfile?: boolean;
+  authDisplayName?: string;
 }
 
 export const UploadForm: React.FC<UploadFormProps> = ({
   onSubmit,
   onCancel,
   initialData,
+  useAuthProfile = false,
+  authDisplayName = '',
 }) => {
   const [formData, setFormData] = useState<UploadFormData>({
     name: initialData?.name || '',
@@ -303,15 +309,15 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    // Email validation - must be @gohighlevel.com
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-    } else if (!formData.email.endsWith('@gohighlevel.com')) {
-      newErrors.email = 'Email must be a HighLevel email (@gohighlevel.com)';
-    }
-
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+    if (!useAuthProfile) {
+      if (!formData.email) {
+        newErrors.email = 'Email is required';
+      } else if (!isAllowedEmployeeEmail(formData.email)) {
+        newErrors.email = `Email must be a HighLevel employee email (${ALLOWED_EMPLOYEE_EMAIL_SUFFIX})`;
+      }
+      if (!formData.name.trim()) {
+        newErrors.name = 'Name is required';
+      }
     }
 
     if (!formData.subProduct.trim()) {
@@ -358,7 +364,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
       });
 
       if (result.success) {
-        saveProfile(formData.name, formData.email);
+        if (!useAuthProfile) saveProfile(formData.name, formData.email);
         setProfiles(loadProfiles());
         // Clear form
         setFile(null);
@@ -586,53 +592,59 @@ export const UploadForm: React.FC<UploadFormProps> = ({
       <div className="space-y-6">
         <h3 className="text-lg font-semibold text-neutral-900">Your Information</h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-neutral-900 mb-2">Your name</label>
-            <Select
-              options={nameOptions}
-              value={nameSelectValue}
-              onChange={handleNameSelect}
-              placeholder="Select or create new"
-              error={!!errors.name}
-              errorMessage={errors.name}
-              fullWidth
-            />
-            {nameSelectValue === CREATE_NEW_VALUE && (
-              <Input
-                value={formData.name}
-                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                placeholder="Enter your name"
-                className="mt-2"
+        {useAuthProfile ? (
+          <p className="text-sm text-neutral-600">
+            Uploading as <strong>{authDisplayName || 'Signed-in user'}</strong>
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-neutral-900 mb-2">Your name</label>
+              <Select
+                options={nameOptions}
+                value={nameSelectValue}
+                onChange={handleNameSelect}
+                placeholder="Select or create new"
+                error={!!errors.name}
+                errorMessage={errors.name}
                 fullWidth
               />
-            )}
-          </div>
+              {nameSelectValue === CREATE_NEW_VALUE && (
+                <Input
+                  value={formData.name}
+                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  placeholder="Enter your name"
+                  className="mt-2"
+                  fullWidth
+                />
+              )}
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-neutral-900 mb-2">Your email</label>
-            <Select
-              options={emailOptions}
-              value={emailSelectValue}
-              onChange={handleEmailSelect}
-              placeholder="Select or create new"
-              error={!!errors.email}
-              errorMessage={errors.email}
-              helperText="Only collected for trust and verification purposes"
-              fullWidth
-            />
-            {emailSelectValue === CREATE_NEW_VALUE && (
-              <Input
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                placeholder="Enter your email"
-                className="mt-2"
+            <div>
+              <label className="block text-sm font-medium text-neutral-900 mb-2">Your email</label>
+              <Select
+                options={emailOptions}
+                value={emailSelectValue}
+                onChange={handleEmailSelect}
+                placeholder="Select or create new"
+                error={!!errors.email}
+                errorMessage={errors.email}
+                helperText="Only collected for trust and verification purposes"
                 fullWidth
               />
-            )}
+              {emailSelectValue === CREATE_NEW_VALUE && (
+                <Input
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                  placeholder="Enter your email"
+                  className="mt-2"
+                  fullWidth
+                />
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         <Select
           label="Your role"

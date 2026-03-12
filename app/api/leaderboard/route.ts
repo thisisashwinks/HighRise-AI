@@ -1,11 +1,48 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getLeaderboard, isRedisConfigured } from '@/lib/upload/metadata';
-import { trackUpstashCommand } from '@/lib/monitoring/usage';
+import {
+  getAllInspirationsFromSupabase,
+  getLeaderboardFromAuthProfiles,
+  isSupabaseStorageConfigured,
+} from '@/lib/upload/supabase-storage';
 import { getStaticSeedLeaderboard } from '@/lib/upload/seed-data';
 import { getMergedLeaderboardFromFile } from '@/lib/upload/file-store';
-import { getAllInspirationsFromCloudinary, isCloudinaryConfigured } from '@/lib/upload/storage';
 
 export const dynamic = 'force-dynamic';
+
+/** Build leaderboard from the same inspirations list as the grid — single source of truth. */
+function buildLeaderboardFromInspirations(
+  inspirations: Array<{ uploaderEmail: string; uploaderName: string; product: string; karmaPoints: number }>,
+  limit: number
+): { rank: number; email: string; name: string; product: string; karmaPoints: number }[] {
+  const byKey = new Map<string, { email: string; name: string; product: string; karma: number }>();
+  for (const row of inspirations) {
+    const email = String(row.uploaderEmail ?? '').trim().toLowerCase();
+    const name = String(row.uploaderName ?? '').trim() || email || 'Unknown';
+    const key = email || `name:${name.toLowerCase()}`;
+    const karma = Number(row.karmaPoints) || 0;
+    const existing = byKey.get(key);
+    if (existing) {
+      existing.karma += karma;
+    } else {
+      byKey.set(key, {
+        email: email || '',
+        name,
+        product: row.product || 'Others',
+        karma,
+      });
+    }
+  }
+  return Array.from(byKey.values())
+    .sort((a, b) => b.karma - a.karma)
+    .slice(0, limit)
+    .map((e, i) => ({
+      rank: i + 1,
+      email: e.email,
+      name: e.name,
+      product: e.product,
+      karmaPoints: e.karma,
+    }));
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,26 +50,16 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '50');
 
     let entries: { rank: number; email: string; name: string; product: string; karmaPoints: number }[];
-    if (isRedisConfigured()) {
-      entries = await getLeaderboard(limit);
-      if (entries.length > 0) await trackUpstashCommand();
-    } else if (isCloudinaryConfigured()) {
-      const staticEntries = getStaticSeedLeaderboard();
-      const cloud = await getAllInspirationsFromCloudinary();
-      const byEmail = new Map<string, { name: string; product: string; karma: number }>();
-      for (const e of staticEntries) {
-        byEmail.set(e.email, { name: e.name, product: e.product, karma: e.karmaPoints });
+
+    if (isSupabaseStorageConfigured()) {
+      // Prefer auth_profiles (synced by DB triggers) when we have auth users; else use inspirations
+      const authEntries = await getLeaderboardFromAuthProfiles(limit);
+      if (authEntries.length > 0) {
+        entries = authEntries;
+      } else {
+        const all = await getAllInspirationsFromSupabase();
+        entries = buildLeaderboardFromInspirations(all, limit);
       }
-      for (const u of cloud) {
-        const existing = byEmail.get(u.uploaderEmail);
-        if (existing) existing.karma += u.karmaPoints;
-        else byEmail.set(u.uploaderEmail, { name: u.uploaderName, product: u.product, karma: u.karmaPoints });
-      }
-      entries = Array.from(byEmail.entries())
-        .map(([email, d]) => ({ rank: 0, email, name: d.name, product: d.product, karmaPoints: d.karma }))
-        .sort((a, b) => b.karmaPoints - a.karmaPoints)
-        .slice(0, limit)
-        .map((e, i) => ({ ...e, rank: i + 1 }));
     } else {
       const staticEntries = getStaticSeedLeaderboard();
       entries = await getMergedLeaderboardFromFile(staticEntries, limit);
@@ -42,14 +69,14 @@ export async function GET(request: NextRequest) {
       entries = getStaticSeedLeaderboard();
     }
 
-    return NextResponse.json({
-      success: true,
-      entries,
-    });
-  } catch (error: any) {
+    return NextResponse.json(
+      { success: true, entries },
+      { headers: { 'Cache-Control': 'no-store, max-age=0' } }
+    );
+  } catch (error: unknown) {
     console.error('Get leaderboard error:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch leaderboard' },
+      { error: error instanceof Error ? error.message : 'Failed to fetch leaderboard' },
       { status: 500 }
     );
   }

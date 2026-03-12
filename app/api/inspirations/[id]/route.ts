@@ -1,22 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getUploadById, deleteUpload, isRedisConfigured } from '@/lib/upload/metadata';
-import { trackUpstashCommand } from '@/lib/monitoring/usage';
+import {
+  isSupabaseStorageConfigured,
+  getInspirationById,
+  deleteInspirationSupabase,
+} from '@/lib/upload/supabase-storage';
 import { getFileUploadById } from '@/lib/upload/file-store';
-import { getAllInspirationsFromCloudinary, isCloudinaryConfigured } from '@/lib/upload/storage';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const id = params.id;
+    const { id } = params;
     let upload = null;
-    if (isRedisConfigured()) {
-      upload = await getUploadById(id);
-      if (upload) await trackUpstashCommand();
-    } else if (isCloudinaryConfigured()) {
-      const all = await getAllInspirationsFromCloudinary();
-      upload = all.find(u => u.id === id) ?? null;
+
+    if (isSupabaseStorageConfigured()) {
+      upload = await getInspirationById(id);
     } else {
       upload = await getFileUploadById(id);
     }
@@ -32,10 +31,10 @@ export async function GET(
       success: true,
       upload,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Get upload error:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch upload' },
+      { error: error instanceof Error ? error.message : 'Failed to fetch upload' },
       { status: 500 }
     );
   }
@@ -46,17 +45,24 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    // TODO: Add admin authentication check
-    await deleteUpload(params.id);
-    await trackUpstashCommand();
+    const { id } = params;
+
+    if (isSupabaseStorageConfigured()) {
+      await deleteInspirationSupabase(id);
+    } else {
+      return NextResponse.json(
+        { error: 'Delete is only supported when Supabase is configured' },
+        { status: 501 }
+      );
+    }
 
     return NextResponse.json({
       success: true,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Delete upload error:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to delete upload' },
+      { error: error instanceof Error ? error.message : 'Failed to delete upload' },
       { status: 500 }
     );
   }

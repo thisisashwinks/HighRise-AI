@@ -1,37 +1,36 @@
 import { FeatureFlags, UsageStats } from '@/types/upload';
 import { getUsageStats, getCachedUsageStats, saveUsageStats } from './monitoring/usage';
+import { isSupabaseStorageConfigured } from '@/lib/upload/supabase-storage';
 
 /**
- * Get feature flags based on usage stats
+ * Get feature flags. Uploads enabled when Supabase is configured.
  */
 export async function getFeatureFlags(): Promise<FeatureFlags> {
-  // Try to get cached stats first
-  let usage = await getCachedUsageStats();
-  
-  // If no cache, fetch fresh stats
+  let usage: UsageStats | null = await getCachedUsageStats();
   if (!usage) {
     usage = await getUsageStats();
     await saveUsageStats(usage);
   }
 
+  const uploadsEnabled = isSupabaseStorageConfigured();
+
   return {
     uploads: {
-      enabled: usage.cloudinary.storage < 100 && usage.upstash.storage < 100,
-      reason: usage.cloudinary.storage >= 100 
-        ? 'Cloudinary storage limit exceeded' 
-        : usage.upstash.storage >= 100 
-        ? 'Redis storage limit exceeded'
+      enabled: uploadsEnabled,
+      reason: !uploadsEnabled
+        ? 'Supabase not configured. Add NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (see docs/SUPABASE_SETUP.md).'
         : undefined,
-      message: usage.cloudinary.storage >= 100 || usage.upstash.storage >= 100
-        ? 'Uploads are temporarily paused due to storage limits. Our team is aware and working on a solution. Check back soon!'
+      message: !uploadsEnabled
+        ? 'Uploads are unavailable until Supabase is configured. See docs/SUPABASE_SETUP.md.'
         : undefined,
     },
     aiGeneration: {
       enabled: usage.gemini.requests < 100,
       reason: usage.gemini.requests >= 100 ? 'Gemini API daily limit reached' : undefined,
-      message: usage.gemini.requests >= 100
-        ? 'AI suggestions are temporarily unavailable due to API limits. You can still upload with manual titles and descriptions.'
-        : undefined,
+      message:
+        usage.gemini.requests >= 100
+          ? 'AI suggestions are temporarily unavailable due to API limits. You can still upload with manual titles and descriptions.'
+          : undefined,
     },
   };
 }

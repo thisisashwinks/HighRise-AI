@@ -21,13 +21,17 @@ export const InspirationGrid: React.FC<InspirationGridProps> = ({
         {[...Array(6)].map((_, i) => (
           <div
             key={i}
-            className="border border-neutral-200 rounded-lg overflow-hidden bg-white animate-pulse"
+            className="rounded-xl overflow-hidden animate-pulse"
+            style={{
+              border: '1px solid var(--color-border)',
+              backgroundColor: 'var(--color-surface-elevated)',
+            }}
           >
-            <div className="w-full aspect-video bg-neutral-200" />
+            <div className="w-full aspect-video" style={{ backgroundColor: 'var(--color-border)' }} />
             <div className="p-4 space-y-2">
-              <div className="h-4 bg-neutral-200 rounded w-3/4" />
-              <div className="h-3 bg-neutral-200 rounded w-full" />
-              <div className="h-3 bg-neutral-200 rounded w-2/3" />
+              <div className="h-4 rounded w-3/4" style={{ backgroundColor: 'var(--color-border)' }} />
+              <div className="h-3 rounded w-full" style={{ backgroundColor: 'var(--color-border)' }} />
+              <div className="h-3 rounded w-2/3" style={{ backgroundColor: 'var(--color-border)' }} />
             </div>
           </div>
         ))}
@@ -38,8 +42,8 @@ export const InspirationGrid: React.FC<InspirationGridProps> = ({
   if (inspirations.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-neutral-500 mb-2">No inspirations yet</p>
-        <p className="text-sm text-neutral-400">
+        <p className="mb-2" style={{ color: 'var(--color-text-muted)' }}>No inspirations yet</p>
+        <p className="text-sm" style={{ color: 'var(--color-text-subtle)' }}>
           Be the first to upload a component inspiration!
         </p>
       </div>

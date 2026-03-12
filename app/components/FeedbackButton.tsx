@@ -6,31 +6,10 @@ export function FeedbackButton() {
       href="https://docs.google.com/forms/d/e/1FAIpQLSepob_tzZ4ZvHZvpaHpgcblGnceppleWI_4Ja7aEh0v2kvqfA/viewform"
       target="_blank"
       rel="noopener noreferrer"
+      className="fixed bottom-6 right-6 z-[9999] flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium text-white no-underline shadow-lg transition-opacity hover:opacity-90"
       style={{
-        position: 'fixed',
-        bottom: '24px',
-        right: '24px',
-        zIndex: 9999,
-        backgroundColor: '#6938EF',
-        color: 'white',
-        padding: '12px 24px',
-        borderRadius: '9999px',
-        border: 'none',
-        cursor: 'pointer',
-        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        fontSize: '16px',
-        fontWeight: '500',
-        textDecoration: 'none',
-        transition: 'background-color 0.2s',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = '#5a2dd4';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.backgroundColor = '#6938EF';
+        backgroundColor: 'var(--color-accent)',
+        boxShadow: 'var(--shadow-lg)',
       }}
     >
       <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">

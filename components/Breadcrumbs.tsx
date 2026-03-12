@@ -13,15 +13,18 @@ interface BreadcrumbsProps {
 export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
   return (
     <nav className="mb-6" aria-label="Breadcrumb">
-      <ol className="flex items-center space-x-2 text-sm text-neutral-600">
+      <ol
+        className="flex items-center space-x-2 text-sm"
+        style={{ color: 'var(--color-text-muted)' }}
+      >
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
-          
           return (
             <li key={index} className="flex items-center">
               {index > 0 && (
                 <svg
-                  className="w-4 h-4 mx-2 text-neutral-400"
+                  className="w-4 h-4 mx-2"
+                  style={{ color: 'var(--color-text-subtle)' }}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -35,12 +38,9 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
                 </svg>
               )}
               {isLast ? (
-                <span className="text-neutral-900 font-medium">{item.label}</span>
+                <span className="font-medium" style={{ color: 'var(--color-text)' }}>{item.label}</span>
               ) : item.href ? (
-                <Link
-                  href={item.href}
-                  className="hover:text-neutral-900 transition-colors"
-                >
+                <Link href={item.href} className="transition-colors hover:underline" style={{ color: 'var(--color-accent)' }}>
                   {item.label}
                 </Link>
               ) : (

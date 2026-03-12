@@ -1,11 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { uploadFile, getVideoThumbnailUrl, isCloudinaryConfigured, getAllInspirationsFromCloudinary } from '@/lib/upload/storage';
-import { saveUpload, getAllUploads, checkUploadLimit, generateUploadId, isRedisConfigured } from '@/lib/upload/metadata';
-import { calculateKarmaPoints } from '@/lib/karma/points';
-import { getUserProfile } from '@/lib/upload/metadata';
-import { trackUpstashCommand } from '@/lib/monitoring/usage';
+import {
+  isSupabaseStorageConfigured,
+  getAllInspirationsFromSupabase,
+  seedInspirationsIfEmpty,
+  uploadFileToSupabase,
+  saveInspirationToSupabase,
+  generateUploadId,
+  checkUploadLimitSupabase,
+  checkUploadLimitByAuthProfileId,
+  getUserProfileFromSupabase,
+  getAuthProfileByUserId,
+} from '@/lib/upload/supabase-storage';
+import { getUserFromRequest, isAuthConfigured } from '@/lib/supabase/auth-server';
+import { isAllowedEmployeeEmail, ALLOWED_EMPLOYEE_EMAIL_SUFFIX } from '@/lib/constants';
 import { getStaticSeedUploads } from '@/lib/upload/seed-data';
 import { getFileUploads, addFileUpload } from '@/lib/upload/file-store';
+import { calculateKarmaPoints } from '@/lib/karma/points';
 import { UploadMetadata, MediaType } from '@/types/upload';
 
 export const dynamic = 'force-dynamic';
@@ -15,44 +25,40 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const limit = parseInt(searchParams.get('limit') || '100');
     const offset = parseInt(searchParams.get('offset') || '0');
+    const uploaderEmail = searchParams.get('uploader_email')?.trim() || null;
 
     let uploads: UploadMetadata[];
     let total: number;
-    if (isRedisConfigured()) {
-      uploads = await getAllUploads(limit, offset);
-      if (uploads.length > 0) await trackUpstashCommand();
-      if (uploads.length === 0) {
-        const staticSeed = getStaticSeedUploads();
-        total = staticSeed.length;
-        uploads = staticSeed.slice(offset, offset + limit);
-      } else {
-        total = uploads.length;
-        uploads = uploads.slice(offset, offset + limit);
+
+    if (isSupabaseStorageConfigured()) {
+      await seedInspirationsIfEmpty();
+      let supabaseUploads = await getAllInspirationsFromSupabase();
+      if (uploaderEmail) {
+        supabaseUploads = supabaseUploads.filter((u) => u.uploaderEmail === uploaderEmail);
       }
-    } else if (isCloudinaryConfigured()) {
-      // Single source of truth: Cloudinary. Persists across tab switch, reload, and all instances.
-      const cloudUploads = await getAllInspirationsFromCloudinary();
-      const staticSeed = getStaticSeedUploads();
-      uploads = [...cloudUploads, ...staticSeed].sort((a, b) => b.timestamp - a.timestamp);
+      uploads = supabaseUploads.sort((a, b) => b.timestamp - a.timestamp);
       total = uploads.length;
       uploads = uploads.slice(offset, offset + limit);
     } else {
       const fileUploads = await getFileUploads();
       const staticSeed = getStaticSeedUploads();
-      uploads = [...fileUploads, ...staticSeed].sort((a, b) => b.timestamp - a.timestamp);
+      let all = [...fileUploads, ...staticSeed];
+      if (uploaderEmail) {
+        all = all.filter((u) => u.uploaderEmail === uploaderEmail);
+      }
+      uploads = all.sort((a, b) => b.timestamp - a.timestamp);
       total = uploads.length;
       uploads = uploads.slice(offset, offset + limit);
     }
 
-    return NextResponse.json({
-      success: true,
-      uploads,
-      total,
-    });
-  } catch (error: any) {
+    return NextResponse.json(
+      { success: true, uploads, total },
+      { headers: { 'Cache-Control': 'no-store, max-age=0' } }
+    );
+  } catch (error: unknown) {
     console.error('Get inspirations error:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch inspirations' },
+      { error: error instanceof Error ? error.message : 'Failed to fetch inspirations' },
       { status: 500 }
     );
   }
@@ -63,88 +69,110 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
     const linkUrl = formData.get('linkUrl') as string | null;
-    const name = formData.get('name') as string;
-    const email = formData.get('email') as string;
     const product = formData.get('product') as string;
     const role = formData.get('role') as string;
     const title = formData.get('title') as string;
     const description = formData.get('description') as string;
 
-    // Validate required fields
-    if (!name || !email || !product || !title) {
-      return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
-      );
-    }
+    // When auth is enabled, require signed-in user; name/email come from auth profile
+    const authUser = isAuthConfigured() ? await getUserFromRequest(request) : null;
+    let name: string;
+    let email: string;
+    let authProfileId: string | null = null;
 
-    // Validate email domain
-    if (!email.endsWith('@gohighlevel.com')) {
-      return NextResponse.json(
-        { error: 'Email must be a HighLevel email (@gohighlevel.com)' },
-        { status: 400 }
-      );
-    }
-
-    // Check upload limit only when Redis is configured (otherwise no persistent count)
-    if (isRedisConfigured()) {
-      const limitCheck = await checkUploadLimit(email, 30);
-      if (!limitCheck.allowed) {
+    if (authUser) {
+      const profile = await getAuthProfileByUserId(authUser.id);
+      if (!profile) {
         return NextResponse.json(
-          { error: `Upload limit reached. You've uploaded ${limitCheck.count} times today. Maximum 30 uploads per day.` },
-          { status: 429 }
+          { error: 'Profile not found. Please complete sign-up and try again.' },
+          { status: 400 }
         );
       }
+      if (!isAllowedEmployeeEmail(profile.email)) {
+        return NextResponse.json(
+          { error: `Only HighLevel employee emails (${ALLOWED_EMPLOYEE_EMAIL_SUFFIX}) can upload.` },
+          { status: 403 }
+        );
+      }
+      name = profile.display_name || profile.username;
+      email = profile.email;
+      authProfileId = profile.id;
+
+      if (isSupabaseStorageConfigured()) {
+        const limitCheck = await checkUploadLimitByAuthProfileId(profile.id, 30);
+        if (!limitCheck.allowed) {
+          return NextResponse.json(
+            { error: `Upload limit reached. You've uploaded ${limitCheck.count} times today. Maximum 30 uploads per day.` },
+            { status: 429 }
+          );
+        }
+      }
+    } else {
+      if (isAuthConfigured()) {
+        return NextResponse.json(
+          { error: 'Sign in required to upload. Please sign in and try again.' },
+          { status: 401 }
+        );
+      }
+      name = formData.get('name') as string;
+      email = formData.get('email') as string;
+      if (!name || !email || !product || !title) {
+        return NextResponse.json(
+          { error: 'Missing required fields' },
+          { status: 400 }
+        );
+      }
+      if (!isAllowedEmployeeEmail(email)) {
+        return NextResponse.json(
+          { error: `Email must be a HighLevel employee email (${ALLOWED_EMPLOYEE_EMAIL_SUFFIX})` },
+          { status: 400 }
+        );
+      }
+      if (isSupabaseStorageConfigured()) {
+        const limitCheck = await checkUploadLimitSupabase(email, 30);
+        if (!limitCheck.allowed) {
+          return NextResponse.json(
+            { error: `Upload limit reached. You've uploaded ${limitCheck.count} times today. Maximum 30 uploads per day.` },
+            { status: 429 }
+          );
+        }
+      }
+    }
+
+    if (!product || !title) {
+      return NextResponse.json(
+        { error: 'Missing required fields (product, title)' },
+        { status: 400 }
+      );
     }
 
     let mediaUrl = '';
     let mediaType: MediaType = 'image';
     let thumbnailUrl: string | undefined;
-    let publicId: string | undefined;
-    let uploadId: string | null = null;
-    let timestamp: number | null = null;
+    const uploadId = generateUploadId();
+    const timestamp = Date.now();
 
     if (file) {
-      if (isCloudinaryConfigured()) {
-        timestamp = Date.now();
-        uploadId = generateUploadId();
-        const karmaPoints = calculateKarmaPoints(
-          { mediaType: 'image', mediaUrl: '', uploaderName: name, uploaderEmail: email, product, role: role as any, title, description },
-          true
-        );
-        const context = {
-          title,
-          description: description || '',
-          uploader_name: name,
-          uploader_email: email,
-          product,
-          role,
-          inspiration_id: uploadId,
-          timestamp: String(timestamp),
-          karma_points: String(karmaPoints),
-        };
-        const uploadResult = await uploadFile(file, context, uploadId);
+      if (isSupabaseStorageConfigured()) {
+        const uploadResult = await uploadFileToSupabase(file, uploadId);
         mediaUrl = uploadResult.url;
-        publicId = uploadResult.publicId;
-
         if (file.type.startsWith('video/')) {
           mediaType = 'video';
-          thumbnailUrl = getVideoThumbnailUrl(publicId);
+          // Supabase Storage doesn't generate video thumbnails; leave undefined or add later
         } else if (file.type === 'image/gif') {
           mediaType = 'gif';
         } else {
           mediaType = 'image';
         }
       } else {
-        // Fallback when Cloudinary is not configured: store small images as data URL
-        const MAX_DATA_URL_SIZE = 500 * 1024; // 500KB
+        const MAX_DATA_URL_SIZE = 500 * 1024;
         const isImage = file.type.startsWith('image/');
         if (!isImage || file.size > MAX_DATA_URL_SIZE) {
           return NextResponse.json(
             {
               error: isImage
-                ? 'File upload is not configured. Use an image under 500KB, or add an image link in the URL field instead.'
-                : 'File upload is not configured. Video uploads need Cloudinary. You can add a video link in the URL field instead.',
+                ? 'File upload is not configured. Set up Supabase (see docs/SUPABASE_SETUP.md). Use an image under 500KB or add a link in the URL field.'
+                : 'File upload is not configured. Set up Supabase (see docs/SUPABASE_SETUP.md) or add a video link in the URL field.',
             },
             { status: 503 }
           );
@@ -164,18 +192,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // First-upload bonus only when Redis is configured (we have history)
     let isFirstUpload = true;
-    if (isRedisConfigured()) {
-      const userProfile = await getUserProfile(email);
-      isFirstUpload = !userProfile || userProfile.uploadCount === 0;
+    if (isSupabaseStorageConfigured()) {
+      if (authProfileId) {
+        const userProfile = await getUserProfileFromSupabase(email);
+        isFirstUpload = !userProfile || userProfile.uploadCount === 0;
+      } else {
+        const userProfile = await getUserProfileFromSupabase(email);
+        isFirstUpload = !userProfile || userProfile.uploadCount === 0;
+      }
     }
 
-    if (!uploadId) uploadId = generateUploadId();
-    if (timestamp == null) timestamp = Date.now();
-
     const uploadMetadata: Omit<UploadMetadata, 'karmaPoints'> = {
-      id: uploadId!,
+      id: uploadId,
       mediaType,
       mediaUrl,
       thumbnailUrl,
@@ -183,42 +212,35 @@ export async function POST(request: NextRequest) {
       uploaderName: name,
       uploaderEmail: email,
       product,
-      role: role as any,
+      role: role as UploadMetadata['role'],
       title,
       description,
-      timestamp: timestamp!,
-      status: 'approved', // Auto-approve for MVP
+      timestamp,
+      status: 'approved',
       fileSize: file?.size,
       fileName: file?.name,
       mimeType: file?.type,
     };
 
-    // Calculate karma points
     const karmaPoints = calculateKarmaPoints(uploadMetadata, isFirstUpload);
+    const fullMetadata: UploadMetadata = { ...uploadMetadata, karmaPoints };
 
-    const fullMetadata: UploadMetadata = {
-      ...uploadMetadata,
-      karmaPoints,
-    };
-
-    if (isRedisConfigured()) {
-      await saveUpload(fullMetadata);
-      await trackUpstashCommand();
-    } else if (!isCloudinaryConfigured()) {
+    if (isSupabaseStorageConfigured()) {
+      await saveInspirationToSupabase(fullMetadata, authProfileId || undefined);
+    } else {
       await addFileUpload(fullMetadata);
     }
-    // When Cloudinary is configured (and Redis is not), metadata is stored on the asset; no extra DB write.
 
     return NextResponse.json({
       success: true,
-      uploadId: uploadId!,
+      uploadId,
       karmaPoints,
       upload: fullMetadata,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Create inspiration error:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to create inspiration' },
+      { error: error instanceof Error ? error.message : 'Failed to create inspiration' },
       { status: 500 }
     );
   }

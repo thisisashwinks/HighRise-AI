@@ -76,14 +76,6 @@ export interface FeatureFlags {
 }
 
 export interface UsageStats {
-  cloudinary: {
-    storage: number; // Percentage 0-100
-    bandwidth: number; // Percentage 0-100
-  };
-  upstash: {
-    storage: number; // Percentage 0-100
-    commands: number; // Percentage 0-100
-  };
   gemini: {
     requests: number; // Percentage 0-100 (daily)
   };

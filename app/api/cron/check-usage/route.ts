@@ -21,9 +21,8 @@ export async function GET(request: NextRequest) {
     const flags = await getFeatureFlags();
 
     // TODO: Send admin notifications if limits are exceeded
-    // For now, just log
-    if (usage.cloudinary.storage >= 90 || usage.upstash.storage >= 90) {
-      console.warn('Storage limits approaching:', usage);
+    if (usage.gemini.requests >= 90) {
+      console.warn('Gemini API usage high:', usage);
     }
 
     return NextResponse.json({

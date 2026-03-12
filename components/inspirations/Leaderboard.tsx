@@ -27,19 +27,24 @@ const getRankIcon = (rank: number) => {
 };
 
 export const Leaderboard: React.FC<LeaderboardProps> = ({ entries, loading = false }) => {
+  const containerStyle = {
+    backgroundColor: 'var(--color-surface-elevated)',
+    border: '1px solid var(--color-border)',
+  };
+
   if (loading) {
     return (
-      <div className="bg-white border border-neutral-200 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-neutral-900 mb-4">Leaderboard</h3>
+      <div className="rounded-xl p-6" style={containerStyle}>
+        <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--color-text)' }}>Leaderboard</h3>
         <div className="space-y-3">
           {[...Array(5)].map((_, i) => (
             <div key={i} className="flex items-center gap-3 animate-pulse">
-              <div className="w-6 h-6 bg-neutral-200 rounded" />
+              <div className="w-6 h-6 rounded" style={{ backgroundColor: 'var(--color-border)' }} />
               <div className="flex-1">
-                <div className="h-4 bg-neutral-200 rounded w-3/4 mb-1" />
-                <div className="h-3 bg-neutral-200 rounded w-1/2" />
+                <div className="h-4 rounded w-3/4 mb-1" style={{ backgroundColor: 'var(--color-border)' }} />
+                <div className="h-3 rounded w-1/2" style={{ backgroundColor: 'var(--color-border)' }} />
               </div>
-              <div className="h-4 bg-neutral-200 rounded w-12" />
+              <div className="h-4 rounded w-12" style={{ backgroundColor: 'var(--color-border)' }} />
             </div>
           ))}
         </div>
@@ -49,9 +54,9 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ entries, loading = fal
 
   if (entries.length === 0) {
     return (
-      <div className="bg-white border border-neutral-200 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-neutral-900 mb-4">Leaderboard</h3>
-        <p className="text-sm text-neutral-500 text-center py-4">
+      <div className="rounded-xl p-6" style={containerStyle}>
+        <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--color-text)' }}>Leaderboard</h3>
+        <p className="text-sm text-center py-4" style={{ color: 'var(--color-text-muted)' }}>
           No entries yet. Be the first to upload!
         </p>
       </div>
@@ -59,37 +64,35 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ entries, loading = fal
   }
 
   return (
-    <div className="bg-white border border-neutral-200 rounded-lg p-6">
-      <h3 className="text-lg font-semibold text-neutral-900 mb-4">Leaderboard</h3>
+    <div className="rounded-xl p-6" style={containerStyle}>
+      <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--color-text)' }}>Leaderboard</h3>
       <div className="space-y-3">
         {entries.map((entry) => (
           <div
             key={entry.email}
-            className={`
-              flex items-center gap-3 p-3 rounded-lg transition-colors
-              ${entry.rank <= 3 ? 'bg-neutral-50' : ''}
-            `}
+            className="flex items-center gap-3 p-3 rounded-lg transition-colors"
+            style={entry.rank <= 3 ? { backgroundColor: 'var(--color-surface-muted)' } : undefined}
           >
             <div className="flex-shrink-0">
               {getRankIcon(entry.rank)}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-medium text-neutral-900 truncate">
+              <p className="font-medium truncate" style={{ color: 'var(--color-text)' }}>
                 {entry.name}
               </p>
-              <p className="text-xs text-neutral-500 truncate">
+              <p className="text-xs truncate" style={{ color: 'var(--color-text-muted)' }}>
                 {entry.product}
               </p>
             </div>
-            <div className="flex items-center gap-1 text-sm font-semibold text-neutral-700">
+            <div className="flex items-center gap-1 text-sm font-semibold" style={{ color: 'var(--color-text-muted)' }}>
               <span>{entry.karmaPoints}</span>
-              <span className="text-xs text-neutral-400">pts</span>
+              <span className="text-xs" style={{ color: 'var(--color-text-subtle)' }}>pts</span>
             </div>
           </div>
         ))}
       </div>
       {entries.length >= 10 && (
-        <p className="text-xs text-neutral-400 text-center mt-4">
+        <p className="text-xs text-center mt-4" style={{ color: 'var(--color-text-subtle)' }}>
           Showing top {entries.length} contributors
         </p>
       )}

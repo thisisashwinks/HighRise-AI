@@ -108,40 +108,6 @@ export default function AdminPage() {
             <h2 className="text-xl font-semibold text-neutral-900 mb-4">Usage Statistics</h2>
             
             <div className="space-y-6">
-              {/* Cloudinary */}
-              <div>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm font-medium text-neutral-700">Cloudinary Storage</span>
-                  <span className={`text-sm font-semibold ${getUsageColor(usage.cloudinary.storage)}`}>
-                    {usage.cloudinary.storage.toFixed(1)}%
-                  </span>
-                </div>
-                <div className="w-full bg-neutral-200 rounded-full h-2">
-                  <div
-                    className={`h-2 rounded-full transition-all ${getUsageBarColor(usage.cloudinary.storage)}`}
-                    style={{ width: `${Math.min(100, usage.cloudinary.storage)}%` }}
-                  />
-                </div>
-                <p className="text-xs text-neutral-500 mt-1">Free tier: 10GB</p>
-              </div>
-
-              {/* Upstash Redis */}
-              <div>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm font-medium text-neutral-700">Upstash Redis Storage</span>
-                  <span className={`text-sm font-semibold ${getUsageColor(usage.upstash.storage)}`}>
-                    {usage.upstash.storage.toFixed(1)}%
-                  </span>
-                </div>
-                <div className="w-full bg-neutral-200 rounded-full h-2">
-                  <div
-                    className={`h-2 rounded-full transition-all ${getUsageBarColor(usage.upstash.storage)}`}
-                    style={{ width: `${Math.min(100, usage.upstash.storage)}%` }}
-                  />
-                </div>
-                <p className="text-xs text-neutral-500 mt-1">Free tier: 256MB</p>
-              </div>
-
               {/* Gemini API */}
               <div>
                 <div className="flex justify-between items-center mb-2">
