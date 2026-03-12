@@ -3,11 +3,13 @@
 import React, { Suspense, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { createClient, isAuthConfigured } from '@/lib/supabase/client';
 import { ALLOWED_EMPLOYEE_EMAIL_SUFFIX } from '@/lib/constants';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { Input } from '@/components/Input';
 import { Button } from '@/components/Button';
+
+const AUTH_NOT_CONFIGURED_MESSAGE = 'Sign-in is not configured. Add Supabase URL and anon key to your environment (see docs/SUPABASE_AUTH_SETUP.md) to enable sign-in.';
 
 function SignInForm() {
   const router = useRouter();
@@ -17,10 +19,15 @@ function SignInForm() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const authConfigured = isAuthConfigured();
 
   const handleSubmit = async (e?: React.FormEvent, isRetry = false) => {
     e?.preventDefault();
     setError(null);
+    if (!authConfigured) {
+      setError(AUTH_NOT_CONFIGURED_MESSAGE);
+      return;
+    }
     setLoading(true);
     try {
       const supabase = createClient();
@@ -40,7 +47,8 @@ function SignInForm() {
         handleSubmit(undefined, true);
         return;
       }
-      setError(err instanceof Error ? err.message : 'Sign in failed');
+      const message = err instanceof Error ? err.message : 'Sign in failed';
+      setError(message.includes('NEXT_PUBLIC_SUPABASE') ? AUTH_NOT_CONFIGURED_MESSAGE : message);
       setLoading(false);
     }
   };
@@ -59,6 +67,16 @@ function SignInForm() {
         <p className="text-neutral-600 mb-6">
           Sign in to upload inspirations and appear on the leaderboard.
         </p>
+        {!authConfigured && (
+          <div className="mb-4 p-3 rounded-lg bg-amber-50 border border-amber-200">
+            <p className="text-sm text-amber-800" role="alert">
+              {AUTH_NOT_CONFIGURED_MESSAGE}
+            </p>
+            <p className="text-xs text-amber-700 mt-1">
+              See <code className="bg-amber-100 px-1 rounded">docs/SUPABASE_AUTH_SETUP.md</code> for setup steps.
+            </p>
+          </div>
+        )}
         <form onSubmit={(e) => handleSubmit(e)} className="space-y-4">
           <Input
             label="Email"
@@ -68,6 +86,7 @@ function SignInForm() {
             placeholder={`you${ALLOWED_EMPLOYEE_EMAIL_SUFFIX}`}
             required
             fullWidth
+            disabled={!authConfigured}
           />
           <Input
             label="Password"
@@ -76,13 +95,14 @@ function SignInForm() {
             onChange={(e) => setPassword(e.target.value)}
             required
             fullWidth
+            disabled={!authConfigured}
           />
-          {error && (
+          {error && authConfigured && (
             <p className="text-sm text-red-600" role="alert">
               {error}
             </p>
           )}
-          <Button type="submit" theme="primary" width="fill-container" disabled={loading}>
+          <Button type="submit" theme="primary" width="fill-container" disabled={loading || !authConfigured}>
             {loading ? 'Signing in…' : 'Sign in'}
           </Button>
         </form>
