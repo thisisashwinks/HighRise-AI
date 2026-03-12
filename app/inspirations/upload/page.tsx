@@ -74,7 +74,7 @@ export default function UploadPage() {
             { label: 'Upload' },
           ]}
         />
-        <div className="mt-8 text-center text-neutral-600">
+        <div className="mt-8 text-center" style={{ color: 'var(--color-text-muted)' }}>
           {loading ? 'Checking sign-in…' : 'Redirecting to sign in…'}
         </div>
       </div>
@@ -92,13 +92,13 @@ export default function UploadPage() {
       />
 
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-neutral-900 mb-2">Upload Inspiration</h1>
-        <p className="text-lg text-neutral-700">
+        <h1 className="text-4xl font-bold mb-2" style={{ color: 'var(--color-text)' }}>Upload Inspiration</h1>
+        <p className="text-lg" style={{ color: 'var(--color-text-muted)' }}>
           Share component examples and design patterns with the team
         </p>
       </div>
 
-      <div className="bg-white border border-neutral-200 rounded-lg p-6">
+      <div className="rounded-lg p-6 border" style={{ backgroundColor: 'var(--color-surface-elevated)', borderColor: 'var(--color-border)' }}>
         <UploadForm
           onSubmit={handleSubmit}
           useAuthProfile={isAuthEnabled && !!user}

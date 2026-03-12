@@ -40,17 +40,17 @@ export const MediaModalDialog: React.FC<MediaModalDialogProps> = ({
         {(title || description) && (
           <DialogHeader className="px-6 pt-6 pb-4">
             {title && (
-              <DialogTitle className="text-xl sm:text-2xl">{title}</DialogTitle>
+              <DialogTitle className="text-xl sm:text-2xl" style={{ color: 'var(--color-text)' }}>{title}</DialogTitle>
             )}
             {description && (
-              <p className="text-sm text-neutral-700 mt-2">{description}</p>
+              <p className="text-sm mt-2" style={{ color: 'var(--color-text-muted)' }}>{description}</p>
             )}
           </DialogHeader>
         )}
         
         <div className="px-6 pb-6">
           {mediaType === 'video' ? (
-            <div className="relative w-full aspect-video bg-neutral-100 rounded-lg overflow-hidden">
+            <div className="relative w-full aspect-video rounded-lg overflow-hidden" style={{ backgroundColor: 'var(--color-surface-muted)' }}>
               <video
                 src={mediaUrl}
                 poster={thumbnailUrl}
@@ -62,7 +62,7 @@ export const MediaModalDialog: React.FC<MediaModalDialogProps> = ({
               </video>
             </div>
           ) : mediaType === 'gif' ? (
-            <div className="relative w-full bg-neutral-100 rounded-lg overflow-hidden">
+            <div className="relative w-full rounded-lg overflow-hidden" style={{ backgroundColor: 'var(--color-surface-muted)' }}>
               <div className="relative w-full" style={{ minHeight: '400px' }}>
                 <img
                   src={mediaUrl}
@@ -72,7 +72,7 @@ export const MediaModalDialog: React.FC<MediaModalDialogProps> = ({
               </div>
             </div>
           ) : mediaType === 'html' ? (
-            <div className="relative w-full bg-neutral-100 rounded-lg overflow-hidden">
+            <div className="relative w-full rounded-lg overflow-hidden" style={{ backgroundColor: 'var(--color-surface-muted)' }}>
               <div className="relative w-full" style={{ paddingBottom: '75%', height: 0, minHeight: '500px' }}>
                 <iframe
                   src={mediaUrl}
@@ -84,7 +84,7 @@ export const MediaModalDialog: React.FC<MediaModalDialogProps> = ({
               </div>
             </div>
           ) : (
-            <div className="relative w-full aspect-video bg-neutral-100 rounded-lg overflow-hidden">
+            <div className="relative w-full aspect-video rounded-lg overflow-hidden" style={{ backgroundColor: 'var(--color-surface-muted)' }}>
               <Image
                 src={mediaUrl}
                 alt={mediaAlt || title || 'Image'}

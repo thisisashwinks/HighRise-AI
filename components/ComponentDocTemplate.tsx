@@ -60,7 +60,7 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12">
+    <div className="docs-content max-w-6xl mx-auto px-6 py-12">
       {/* Breadcrumbs */}
       <Breadcrumbs
         items={[
@@ -73,24 +73,24 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
       {/* Section 1: Header */}
       <header className="mb-12">
         <div className="mb-2">
-          <span className="text-sm font-medium text-neutral-600 uppercase tracking-wide">
+          <span className="text-sm font-medium uppercase tracking-wide" style={{ color: 'var(--color-text-muted)' }}>
             {category}
           </span>
         </div>
-        <h1 className="text-4xl font-bold text-neutral-900 mb-4">{name}</h1>
-        <p className="text-lg text-neutral-700 leading-relaxed">{description}</p>
+        <h1 className="text-4xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>{name}</h1>
+        <p className="text-lg leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>{description}</p>
       </header>
 
       {/* Section 2: Figma Documentation Embed */}
       {figmaDocumentation && (
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold text-neutral-900 mb-4">{figmaDocumentation.title}</h2>
+          <h2 className="text-2xl font-semibold mb-4" style={{ color: 'var(--color-text)' }}>{figmaDocumentation.title}</h2>
           {figmaDocumentation.description && (
-            <p className="text-neutral-700 mb-4">{figmaDocumentation.description}</p>
+            <p className="mb-4" style={{ color: 'var(--color-text-muted)' }}>{figmaDocumentation.description}</p>
           )}
-          <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
-            <div className="p-4 bg-neutral-50 border-b border-neutral-200 flex items-center justify-between">
-              <h4 className="text-sm font-medium text-neutral-700">Figma Design</h4>
+          <div className="rounded-lg overflow-hidden border" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface-elevated)' }}>
+            <div className="p-4 border-b flex items-center justify-between" style={{ backgroundColor: 'var(--color-surface-muted)', borderColor: 'var(--color-border)' }}>
+              <h4 className="text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>Figma Design</h4>
               <a
                 href={figmaDocumentation.figmaUrl}
                 target="_blank"
@@ -120,16 +120,16 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
       {/* Section 3: Examples - Use Cases */}
       {examples && examples.length > 0 && (
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold text-neutral-900 mb-6">Examples</h2>
-          <p className="text-neutral-700 mb-6">
+          <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--color-text)' }}>Examples</h2>
+          <p className="mb-6" style={{ color: 'var(--color-text-muted)' }}>
             See how this component is used in real-world scenarios across different products. Each example shows a different use case with context about where and why the component is applied, and how these patterns could be adapted for HighLevel products.
           </p>
           <div className="columns-1 md:columns-2 gap-6" style={{ columnGap: '1.5rem' }}>
             {examples.map((example, index) => (
-              <div key={index} className="break-inside-avoid mb-6 border border-neutral-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-shadow">
+              <div key={index} className="break-inside-avoid mb-6 rounded-lg overflow-hidden border hover:shadow-lg transition-shadow" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface-elevated)' }}>
                 {/* Media Section */}
                 {example.media && (
-                  <div className="relative bg-neutral-50 border-b border-neutral-200">
+                  <div className="relative border-b" style={{ backgroundColor: 'var(--color-surface-muted)', borderColor: 'var(--color-border)' }}>
                     {example.media.type === 'video' ? (
                       <div 
                         className="relative w-full cursor-pointer" 
@@ -153,8 +153,8 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
                           Your browser does not support the video tag.
                         </video>
                         <div className="absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/30 transition-colors">
-                          <div className="bg-white/90 rounded-full p-3">
-                            <svg className="w-8 h-8 text-neutral-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <div className="rounded-full p-3" style={{ backgroundColor: 'var(--color-surface-elevated)' }}>
+                            <svg className="w-8 h-8" style={{ color: 'var(--color-text)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
@@ -163,7 +163,8 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
                       </div>
                     ) : example.media.type === 'gif' ? (
                       <div 
-                        className="relative w-full bg-neutral-900 cursor-pointer"
+                        className="relative w-full cursor-pointer"
+                        style={{ backgroundColor: 'var(--color-surface-muted)' }}
                         onClick={() => handleMediaClick(
                           'gif',
                           example.media!.url,
@@ -203,18 +204,20 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
                               example.description
                             );
                           }}
-                          className="absolute top-2 right-2 bg-white/90 hover:bg-white rounded-lg p-2 shadow-lg border border-neutral-200 transition-all z-10"
+                          className="absolute top-2 right-2 rounded-lg p-2 shadow-lg border transition-all z-10"
+                          style={{ backgroundColor: 'var(--color-surface-elevated)', borderColor: 'var(--color-border)' }}
                           aria-label="Expand to fullscreen"
                           title="Expand to fullscreen"
                         >
-                          <svg className="w-5 h-5 text-neutral-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-5 h-5" style={{ color: 'var(--color-text-muted)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
                           </svg>
                         </button>
                       </div>
                     ) : (
                       <div 
-                        className="relative w-full bg-neutral-50 cursor-pointer"
+                        className="relative w-full cursor-pointer"
+                        style={{ backgroundColor: 'var(--color-surface-muted)' }}
                         onClick={() => handleMediaClick(
                           'image',
                           example.media!.url,
@@ -237,30 +240,31 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
                 {/* Content Section */}
                 <div className="p-5">
                   <div className="flex items-start justify-between mb-2">
-                    <h3 className="text-lg font-semibold text-neutral-900 pr-2">{example.title}</h3>
+                    <h3 className="text-lg font-semibold pr-2" style={{ color: 'var(--color-text)' }}>{example.title}</h3>
                     {example.productName && (
                       example.productUrl ? (
                         <a
                           href={example.productUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-xs font-medium text-neutral-600 bg-neutral-100 hover:bg-neutral-200 px-2 py-1 rounded transition-colors flex-shrink-0"
+                          className="text-xs font-medium px-2 py-1 rounded transition-colors flex-shrink-0"
+                          style={{ color: 'var(--color-text-muted)', backgroundColor: 'var(--color-surface-muted)' }}
                         >
                           {example.productName}
                         </a>
                       ) : (
-                        <span className="text-xs font-medium text-neutral-500 bg-neutral-100 px-2 py-1 rounded flex-shrink-0">
+                        <span className="text-xs font-medium px-2 py-1 rounded flex-shrink-0" style={{ color: 'var(--color-text-subtle)', backgroundColor: 'var(--color-surface-muted)' }}>
                           {example.productName}
                         </span>
                       )
                     )}
                   </div>
                   
-                  <p className="text-sm text-neutral-700 mb-4">{example.description}</p>
+                  <p className="text-sm mb-4" style={{ color: 'var(--color-text-muted)' }}>{example.description}</p>
                   
                   {example.code && (
                     <div className="mb-4">
-                      <pre className="bg-neutral-900 text-neutral-100 p-4 rounded-lg overflow-x-auto text-sm">
+                      <pre className="p-4 rounded-lg overflow-x-auto text-sm" style={{ backgroundColor: 'var(--color-surface-muted)', color: 'var(--color-text)' }}>
                         <code>{example.code}</code>
                       </pre>
                     </div>
@@ -271,7 +275,8 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
                       {example.tags.map((tag, tagIndex) => (
                         <span
                           key={tagIndex}
-                          className="text-xs text-neutral-500 bg-neutral-50 px-2 py-0.5 rounded"
+                          className="text-xs px-2 py-0.5 rounded"
+                          style={{ color: 'var(--color-text-subtle)', backgroundColor: 'var(--color-surface-muted)' }}
                         >
                           {tag}
                         </span>
@@ -299,8 +304,8 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
 
       {/* Section 4: When to Use */}
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold text-neutral-900 mb-4">When to Use</h2>
-        <ul className="space-y-2 text-neutral-700">
+        <h2 className="text-2xl font-semibold mb-4" style={{ color: 'var(--color-text)' }}>When to Use</h2>
+        <ul className="space-y-2" style={{ color: 'var(--color-text-muted)' }}>
           {whenToUse.map((item, index) => (
             <li key={index} className="flex items-start">
               <span className="text-primary-600 mr-2">•</span>
@@ -312,8 +317,8 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
 
       {/* Section 5: When Not to Use */}
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold text-neutral-900 mb-4">When Not to Use</h2>
-        <ul className="space-y-2 text-neutral-700">
+        <h2 className="text-2xl font-semibold mb-4" style={{ color: 'var(--color-text)' }}>When Not to Use</h2>
+        <ul className="space-y-2" style={{ color: 'var(--color-text-muted)' }}>
           {whenNotToUse.map((item, index) => (
             <li key={index} className="flex items-start">
               <span className="text-red-600 mr-2">✗</span>
@@ -325,7 +330,7 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
 
       {/* Section 6: Anatomy */}
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold text-neutral-900 mb-4">Anatomy</h2>
+        <h2 className="text-2xl font-semibold mb-4" style={{ color: 'var(--color-text)' }}>Anatomy</h2>
         <div className="space-y-4">
           {anatomy.map((item) => (
             <div key={item.number} className="flex items-start">
@@ -333,8 +338,8 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
                 {item.number}
               </div>
               <div>
-                <h3 className="font-medium text-neutral-900 mb-1">{item.name}</h3>
-                <p className="text-neutral-700">{item.description}</p>
+                <h3 className="font-medium mb-1" style={{ color: 'var(--color-text)' }}>{item.name}</h3>
+                <p style={{ color: 'var(--color-text-muted)' }}>{item.description}</p>
               </div>
             </div>
           ))}
@@ -343,12 +348,12 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
 
       {/* Section 7: Variants */}
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold text-neutral-900 mb-4">Variants</h2>
+        <h2 className="text-2xl font-semibold mb-4" style={{ color: 'var(--color-text)' }}>Variants</h2>
         <div className="space-y-3">
           {variants.map((variant, index) => (
             <div key={index} className="border-l-4 border-primary-500 pl-4 py-2">
-              <h3 className="font-medium text-neutral-900 mb-1">{variant.name}</h3>
-              <p className="text-neutral-700 text-sm">{variant.description}</p>
+              <h3 className="font-medium mb-1" style={{ color: 'var(--color-text)' }}>{variant.name}</h3>
+              <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>{variant.description}</p>
             </div>
           ))}
         </div>
@@ -356,12 +361,12 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
 
       {/* Section 8: States */}
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold text-neutral-900 mb-4">States</h2>
+        <h2 className="text-2xl font-semibold mb-4" style={{ color: 'var(--color-text)' }}>States</h2>
         <div className="space-y-3">
           {states.map((state, index) => (
-            <div key={index} className="bg-neutral-50 rounded-lg p-4">
-              <h3 className="font-medium text-neutral-900 mb-1">{state.name}</h3>
-              <p className="text-neutral-700 text-sm">{state.description}</p>
+            <div key={index} className="rounded-lg p-4" style={{ backgroundColor: 'var(--color-surface-muted)' }}>
+              <h3 className="font-medium mb-1" style={{ color: 'var(--color-text)' }}>{state.name}</h3>
+              <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>{state.description}</p>
             </div>
           ))}
         </div>
@@ -369,26 +374,26 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
 
       {/* Section 9: Props / API Reference */}
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold text-neutral-900 mb-4">Props / API Reference</h2>
+        <h2 className="text-2xl font-semibold mb-4" style={{ color: 'var(--color-text)' }}>Props / API Reference</h2>
         <div className="overflow-x-auto">
           <table className="min-w-full border-collapse">
             <thead>
-              <tr className="border-b-2 border-neutral-200">
-                <th className="text-left py-3 px-4 font-semibold text-neutral-900">Name</th>
-                <th className="text-left py-3 px-4 font-semibold text-neutral-900">Type</th>
-                <th className="text-left py-3 px-4 font-semibold text-neutral-900">Default</th>
-                <th className="text-left py-3 px-4 font-semibold text-neutral-900">Description</th>
+              <tr className="border-b-2" style={{ borderColor: 'var(--color-border)' }}>
+                <th className="text-left py-3 px-4 font-semibold" style={{ color: 'var(--color-text)' }}>Name</th>
+                <th className="text-left py-3 px-4 font-semibold" style={{ color: 'var(--color-text)' }}>Type</th>
+                <th className="text-left py-3 px-4 font-semibold" style={{ color: 'var(--color-text)' }}>Default</th>
+                <th className="text-left py-3 px-4 font-semibold" style={{ color: 'var(--color-text)' }}>Description</th>
               </tr>
             </thead>
             <tbody>
               {props.map((prop, index) => (
-                <tr key={index} className="border-b border-neutral-100 hover:bg-neutral-50">
+                <tr key={index} className="border-b hover:bg-[var(--color-surface-muted)]" style={{ borderColor: 'var(--color-border)' }}>
                   <td className="py-3 px-4 font-mono text-sm text-primary-700">{prop.name}</td>
-                  <td className="py-3 px-4 font-mono text-sm text-neutral-600">{prop.type}</td>
-                  <td className="py-3 px-4 text-sm text-neutral-500">
-                    {prop.default || <span className="text-neutral-400">—</span>}
+                  <td className="py-3 px-4 font-mono text-sm" style={{ color: 'var(--color-text-muted)' }}>{prop.type}</td>
+                  <td className="py-3 px-4 text-sm" style={{ color: 'var(--color-text-subtle)' }}>
+                    {prop.default || <span style={{ color: 'var(--color-text-subtle)' }}>—</span>}
                   </td>
-                  <td className="py-3 px-4 text-sm text-neutral-700">{prop.description}</td>
+                  <td className="py-3 px-4 text-sm" style={{ color: 'var(--color-text-muted)' }}>{prop.description}</td>
                 </tr>
               ))}
             </tbody>
@@ -398,13 +403,13 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
 
       {/* Section 10: Usage Guidelines */}
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold text-neutral-900 mb-4">Usage Guidelines</h2>
+        <h2 className="text-2xl font-semibold mb-4" style={{ color: 'var(--color-text)' }}>Usage Guidelines</h2>
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <h3 className="font-semibold text-green-700 mb-3 flex items-center">
               <span className="mr-2">✓</span> Do
             </h3>
-            <ul className="space-y-2 text-neutral-700">
+            <ul className="space-y-2" style={{ color: 'var(--color-text-muted)' }}>
               {usageGuidelines.do.map((item, index) => (
                 <li key={index} className="flex items-start">
                   <span className="text-green-600 mr-2">•</span>
@@ -417,7 +422,7 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
             <h3 className="font-semibold text-red-700 mb-3 flex items-center">
               <span className="mr-2">✗</span> Don&apos;t
             </h3>
-            <ul className="space-y-2 text-neutral-700">
+            <ul className="space-y-2" style={{ color: 'var(--color-text-muted)' }}>
               {usageGuidelines.dont.map((item, index) => (
                 <li key={index} className="flex items-start">
                   <span className="text-red-600 mr-2">•</span>
@@ -432,38 +437,38 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
       {/* Section 11: AI Considerations */}
       {aiConsiderations && (
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold text-neutral-900 mb-4">AI Considerations</h2>
+          <h2 className="text-2xl font-semibold mb-4" style={{ color: 'var(--color-text)' }}>AI Considerations</h2>
           <div className="space-y-6 bg-blue-50 rounded-lg p-6 border border-blue-100">
             <div>
-              <h3 className="font-medium text-neutral-900 mb-2">Invocation</h3>
-              <p className="text-neutral-700 text-sm">{aiConsiderations.invocation}</p>
+              <h3 className="font-medium mb-2" style={{ color: 'var(--color-text)' }}>Invocation</h3>
+              <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>{aiConsiderations.invocation}</p>
             </div>
             <div>
-              <h3 className="font-medium text-neutral-900 mb-2">Latency Handling</h3>
-              <p className="text-neutral-700 text-sm">{aiConsiderations.latency}</p>
+              <h3 className="font-medium mb-2" style={{ color: 'var(--color-text)' }}>Latency Handling</h3>
+              <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>{aiConsiderations.latency}</p>
             </div>
             <div>
-              <h3 className="font-medium text-neutral-900 mb-2">Uncertainty & Errors</h3>
-              <p className="text-neutral-700 text-sm">{aiConsiderations.uncertainty}</p>
+              <h3 className="font-medium mb-2" style={{ color: 'var(--color-text)' }}>Uncertainty & Errors</h3>
+              <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>{aiConsiderations.uncertainty}</p>
             </div>
             <div>
-              <h3 className="font-medium text-neutral-900 mb-2">Manual Override</h3>
-              <p className="text-neutral-700 text-sm">{aiConsiderations.manualOverride}</p>
+              <h3 className="font-medium mb-2" style={{ color: 'var(--color-text)' }}>Manual Override</h3>
+              <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>{aiConsiderations.manualOverride}</p>
             </div>
             <div>
-              <h3 className="font-medium text-neutral-900 mb-2">Context Passing</h3>
-              <p className="text-neutral-700 text-sm">{aiConsiderations.context}</p>
+              <h3 className="font-medium mb-2" style={{ color: 'var(--color-text)' }}>Context Passing</h3>
+              <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>{aiConsiderations.context}</p>
             </div>
             {aiConsiderations.safety && (
               <div>
-                <h3 className="font-medium text-neutral-900 mb-2">Safety & Constraints</h3>
-                <p className="text-neutral-700 text-sm">{aiConsiderations.safety}</p>
+                <h3 className="font-medium mb-2" style={{ color: 'var(--color-text)' }}>Safety & Constraints</h3>
+                <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>{aiConsiderations.safety}</p>
               </div>
             )}
             {aiConsiderations.dataVisibility && (
               <div>
-                <h3 className="font-medium text-neutral-900 mb-2">Data Visibility</h3>
-                <p className="text-neutral-700 text-sm">{aiConsiderations.dataVisibility}</p>
+                <h3 className="font-medium mb-2" style={{ color: 'var(--color-text)' }}>Data Visibility</h3>
+                <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>{aiConsiderations.dataVisibility}</p>
               </div>
             )}
           </div>
@@ -472,27 +477,27 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
 
       {/* Section 12: Accessibility */}
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold text-neutral-900 mb-4">Accessibility</h2>
+        <h2 className="text-2xl font-semibold mb-4" style={{ color: 'var(--color-text)' }}>Accessibility</h2>
         <div className="space-y-4">
           <div>
-            <h3 className="font-medium text-neutral-900 mb-2">Keyboard Navigation</h3>
-            <ul className="space-y-1 text-neutral-700 text-sm ml-4">
+            <h3 className="font-medium mb-2" style={{ color: 'var(--color-text)' }}>Keyboard Navigation</h3>
+            <ul className="space-y-1 text-sm ml-4" style={{ color: 'var(--color-text-muted)' }}>
               {accessibility.keyboard.map((item, index) => (
                 <li key={index} className="list-disc">{item}</li>
               ))}
             </ul>
           </div>
           <div>
-            <h3 className="font-medium text-neutral-900 mb-2">Screen Reader Support</h3>
-            <ul className="space-y-1 text-neutral-700 text-sm ml-4">
+            <h3 className="font-medium mb-2" style={{ color: 'var(--color-text)' }}>Screen Reader Support</h3>
+            <ul className="space-y-1 text-sm ml-4" style={{ color: 'var(--color-text-muted)' }}>
               {accessibility.screenReader.map((item, index) => (
                 <li key={index} className="list-disc">{item}</li>
               ))}
             </ul>
           </div>
           <div>
-            <h3 className="font-medium text-neutral-900 mb-2">ARIA Hints</h3>
-            <ul className="space-y-1 text-neutral-700 text-sm ml-4">
+            <h3 className="font-medium mb-2" style={{ color: 'var(--color-text)' }}>ARIA Hints</h3>
+            <ul className="space-y-1 text-sm ml-4" style={{ color: 'var(--color-text-muted)' }}>
               {accessibility.ariaHints.map((item, index) => (
                 <li key={index} className="list-disc">{item}</li>
               ))}
@@ -503,13 +508,14 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
 
       {/* Section 14: Related Components */}
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold text-neutral-900 mb-4">Related Components</h2>
+        <h2 className="text-2xl font-semibold mb-4" style={{ color: 'var(--color-text)' }}>Related Components</h2>
         <div className="flex flex-wrap gap-2">
           {relatedComponents.map((component, index) => (
             <a
               key={index}
               href={`/components/${component.toLowerCase().replace(/\s+/g, '-')}`}
-              className="px-4 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 rounded-lg text-sm font-medium transition-colors"
+              className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              style={{ backgroundColor: 'var(--color-surface-muted)', color: 'var(--color-text-muted)' }}
             >
               {component}
             </a>
@@ -519,12 +525,13 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
 
       {/* Section 15: Component Playground - Coming Soon */}
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold text-neutral-900 mb-4">Component Playground</h2>
-        <div className="border border-neutral-200 rounded-lg overflow-hidden bg-white">
+        <h2 className="text-2xl font-semibold mb-4" style={{ color: 'var(--color-text)' }}>Component Playground</h2>
+        <div className="rounded-lg overflow-hidden border" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface-elevated)' }}>
           <div className="p-12 text-center">
             <div className="mb-4">
               <svg
-                className="w-16 h-16 mx-auto text-neutral-400"
+                className="w-16 h-16 mx-auto"
+                style={{ color: 'var(--color-text-subtle)' }}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -537,8 +544,8 @@ export const ComponentDocTemplate: React.FC<ComponentDocTemplateProps> = ({
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-neutral-900 mb-2">Coming Soon</h3>
-            <p className="text-neutral-600 max-w-md mx-auto">
+            <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--color-text)' }}>Coming Soon</h3>
+            <p className="max-w-md mx-auto" style={{ color: 'var(--color-text-muted)' }}>
               An interactive component playground where you can customize and test all component variants, sizes, and states in real-time.
             </p>
           </div>

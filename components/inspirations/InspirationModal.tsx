@@ -50,28 +50,29 @@ export const InspirationModal: React.FC<InspirationModalProps> = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
         <DialogHeader className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 pr-8">
-          <DialogTitle className="text-xl sm:text-2xl flex-1">{inspiration.title}</DialogTitle>
+          <DialogTitle className="text-xl sm:text-2xl flex-1" style={{ color: 'var(--color-text)' }}>{inspiration.title}</DialogTitle>
           {subProduct && (
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-neutral-100 rounded-lg border border-neutral-200 shrink-0">
-              <span className="text-sm font-medium text-neutral-700">{mainProduct}</span>
-              <span className="text-neutral-400">|</span>
-              <span className="text-sm text-neutral-600">{subProduct}</span>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border shrink-0" style={{ backgroundColor: 'var(--color-surface-muted)', borderColor: 'var(--color-border)' }}>
+              <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>{mainProduct}</span>
+              <span style={{ color: 'var(--color-text-subtle)' }}>|</span>
+              <span className="text-sm" style={{ color: 'var(--color-text-muted)' }}>{subProduct}</span>
             </div>
           )}
         </DialogHeader>
         
         <div className="space-y-4">
           {/* Media */}
-          <div className="relative w-full aspect-video bg-neutral-100 rounded-lg overflow-hidden">
+          <div className="relative w-full aspect-video rounded-lg overflow-hidden" style={{ backgroundColor: 'var(--color-surface-muted)' }}>
             {inspiration.mediaType === 'link' ? (
-              <div className="flex items-center justify-center h-full bg-gradient-to-br from-primary-50 to-primary-100">
+              <div className="flex items-center justify-center h-full" style={{ backgroundColor: 'var(--color-accent-soft)' }}>
                 <div className="text-center">
-                  <ExternalLink className="w-16 h-16 text-primary-400 mx-auto mb-4" />
+                  <ExternalLink className="w-16 h-16 mx-auto mb-4" style={{ color: 'var(--color-accent)' }} />
                   <a
                     href={inspiration.linkUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-primary-600 hover:text-primary-700 font-medium"
+                    className="font-medium"
+                    style={{ color: 'var(--color-accent)' }}
                   >
                     {inspiration.linkUrl}
                   </a>
@@ -104,41 +105,41 @@ export const InspirationModal: React.FC<InspirationModalProps> = ({
           {/* Description */}
           {inspiration.description && (
             <div>
-              <p className="text-neutral-700 whitespace-pre-wrap">{inspiration.description}</p>
+              <p className="whitespace-pre-wrap" style={{ color: 'var(--color-text-muted)' }}>{inspiration.description}</p>
             </div>
           )}
 
           {/* Metadata */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-neutral-200">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
             <div className="flex items-center gap-2">
-              <User className="w-4 h-4 text-neutral-400" />
+              <User className="w-4 h-4" style={{ color: 'var(--color-text-subtle)' }} />
               <div>
-                <p className="text-xs text-neutral-500">Uploaded by</p>
-                <p className="text-sm font-medium text-neutral-900">{inspiration.uploaderName}</p>
+                <p className="text-xs" style={{ color: 'var(--color-text-subtle)' }}>Uploaded by</p>
+                <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>{inspiration.uploaderName}</p>
               </div>
             </div>
             
             <div className="flex items-center gap-2">
-              <Building2 className="w-4 h-4 text-neutral-400" />
+              <Building2 className="w-4 h-4" style={{ color: 'var(--color-text-subtle)' }} />
               <div>
-                <p className="text-xs text-neutral-500">Product</p>
-                <p className="text-sm font-medium text-neutral-900">{inspiration.product}</p>
+                <p className="text-xs" style={{ color: 'var(--color-text-subtle)' }}>Product</p>
+                <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>{inspiration.product}</p>
               </div>
             </div>
             
             <div className="flex items-center gap-2">
-              <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+              <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
               <div>
-                <p className="text-xs text-neutral-500">Karma Points</p>
-                <p className="text-sm font-medium text-neutral-900">{inspiration.karmaPoints}</p>
+                <p className="text-xs" style={{ color: 'var(--color-text-subtle)' }}>Karma Points</p>
+                <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>{inspiration.karmaPoints}</p>
               </div>
             </div>
             
             <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-neutral-400" />
+              <Calendar className="w-4 h-4" style={{ color: 'var(--color-text-subtle)' }} />
               <div>
-                <p className="text-xs text-neutral-500">Date</p>
-                <p className="text-sm font-medium text-neutral-900">
+                <p className="text-xs" style={{ color: 'var(--color-text-subtle)' }}>Date</p>
+                <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
                   {formatDate(inspiration.timestamp)}
                 </p>
               </div>
@@ -147,12 +148,13 @@ export const InspirationModal: React.FC<InspirationModalProps> = ({
 
           {/* Link */}
           {inspiration.linkUrl && (
-            <div className="pt-4 border-t border-neutral-200">
+            <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
               <a
                 href={inspiration.linkUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium"
+                className="inline-flex items-center gap-2 font-medium"
+                style={{ color: 'var(--color-accent)' }}
               >
                 <ExternalLink className="w-4 h-4" />
                 View Source

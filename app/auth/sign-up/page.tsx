@@ -21,8 +21,8 @@ function SignUpForm() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: React.FormEvent, isRetry = false) => {
+    e?.preventDefault();
     setError(null);
     if (!isAllowedEmployeeEmail(email)) {
       setError(`Only HighLevel employee emails (${ALLOWED_EMPLOYEE_EMAIL_SUFFIX}) can sign up.`);
@@ -55,6 +55,13 @@ function SignUpForm() {
         router.refresh();
       }
     } catch (err) {
+      const isLockError = err instanceof Error && err.name === 'AbortError' && err.message.includes('steal');
+      if (isLockError && !isRetry) {
+        setLoading(false);
+        await new Promise((r) => setTimeout(r, 300));
+        handleSubmit(undefined, true);
+        return;
+      }
       setError(err instanceof Error ? err.message : 'Sign up failed');
       setLoading(false);
     }
@@ -97,7 +104,7 @@ function SignUpForm() {
         <p className="text-neutral-600 mb-6">
           Sign up to upload inspirations. Your username will be your primary identifier on the leaderboard.
         </p>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={(e) => handleSubmit(e)} className="space-y-4">
           <Input
             label="Email"
             type="email"

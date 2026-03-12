@@ -165,13 +165,13 @@ export async function POST(request: NextRequest) {
           mediaType = 'image';
         }
       } else {
-        const MAX_DATA_URL_SIZE = 500 * 1024;
+        const MAX_DATA_URL_SIZE = 2.5 * 1024 * 1024; // 2.5 MB
         const isImage = file.type.startsWith('image/');
         if (!isImage || file.size > MAX_DATA_URL_SIZE) {
           return NextResponse.json(
             {
               error: isImage
-                ? 'File upload is not configured. Set up Supabase (see docs/SUPABASE_SETUP.md). Use an image under 500KB or add a link in the URL field.'
+                ? 'File upload is not configured. Set up Supabase (see docs/SUPABASE_SETUP.md). Use an image under 2.5MB or add a link in the URL field.'
                 : 'File upload is not configured. Set up Supabase (see docs/SUPABASE_SETUP.md) or add a video link in the URL field.',
             },
             { status: 503 }

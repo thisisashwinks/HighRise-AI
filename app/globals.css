@@ -164,6 +164,8 @@
   color: var(--color-text-muted);
 }
 
+/* Component docs: use .docs-content wrapper; content uses var(--color-text), var(--color-text-muted), etc. for dark mode */
+
 /* Subtle noise overlay for depth (optional, low impact) */
 ::selection {
   background-color: var(--color-accent-soft);

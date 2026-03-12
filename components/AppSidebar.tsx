@@ -32,7 +32,7 @@ const SIDEBAR_WIDTH = 260;
 export function AppSidebar() {
   const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
-  const { user, isAuthEnabled } = useAuth();
+  const { user } = useAuth();
   const { openSearch } = useSearchOpen();
 
   return (
@@ -122,7 +122,7 @@ export function AppSidebar() {
           </ul>
         </nav>
 
-        {/* Bottom: theme + auth */}
+        {/* Bottom: theme + auth — always visible so profile/sign-in show on Vercel even if auth env is unset */}
         <div className="shrink-0 border-t p-3 space-y-2 overflow-visible" style={{ borderColor: 'var(--color-border)' }}>
           <button
             type="button"
@@ -134,20 +134,18 @@ export function AppSidebar() {
             {theme === 'dark' ? <Sun className="h-4 w-4 shrink-0" /> : <Moon className="h-4 w-4 shrink-0" />}
             <span>{theme === 'dark' ? 'Light mode' : 'Dark mode'}</span>
           </button>
-          {isAuthEnabled && (
-            user ? (
-              <div className="px-1">
-                <UserAvatarDropdown user={user} />
-              </div>
-            ) : (
-              <Link
-                href="/auth/sign-in"
-                className="flex items-center justify-center rounded-lg px-3 py-2.5 text-sm font-medium"
-                style={{ backgroundColor: 'var(--color-accent)', color: 'white' }}
-              >
-                Sign in
-              </Link>
-            )
+          {user ? (
+            <div className="px-1">
+              <UserAvatarDropdown user={user} />
+            </div>
+          ) : (
+            <Link
+              href="/auth/sign-in"
+              className="flex items-center justify-center rounded-lg px-3 py-2.5 text-sm font-medium"
+              style={{ backgroundColor: 'var(--color-accent)', color: 'white' }}
+            >
+              Sign in
+            </Link>
           )}
         </div>
       </aside>

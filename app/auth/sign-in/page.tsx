@@ -18,8 +18,8 @@ function SignInForm() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: React.FormEvent, isRetry = false) => {
+    e?.preventDefault();
     setError(null);
     setLoading(true);
     try {
@@ -33,6 +33,13 @@ function SignInForm() {
       router.push(redirectTo);
       router.refresh();
     } catch (err) {
+      const isLockError = err instanceof Error && err.name === 'AbortError' && err.message.includes('steal');
+      if (isLockError && !isRetry) {
+        setLoading(false);
+        await new Promise((r) => setTimeout(r, 300));
+        handleSubmit(undefined, true);
+        return;
+      }
       setError(err instanceof Error ? err.message : 'Sign in failed');
       setLoading(false);
     }
@@ -52,7 +59,7 @@ function SignInForm() {
         <p className="text-neutral-600 mb-6">
           Sign in to upload inspirations and appear on the leaderboard.
         </p>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={(e) => handleSubmit(e)} className="space-y-4">
           <Input
             label="Email"
             type="email"

@@ -393,13 +393,13 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Section 1: Left - Upload Media, Right - Title, Description, Product */}
-      <div className="pb-6 border-b border-neutral-200">
-        <h3 className="text-lg font-semibold text-neutral-900 mb-4">Content Details</h3>
+      <div className="pb-6 border-b" style={{ borderColor: 'var(--color-border)' }}>
+        <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--color-text)' }}>Content Details</h3>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left Side - Upload Media */}
           <div>
-            <label className="block text-sm font-medium text-neutral-900 mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>
               Upload Media <span className="text-red-500">*</span>
             </label>
           
@@ -409,22 +409,21 @@ export const UploadForm: React.FC<UploadFormProps> = ({
               onDragLeave={handleDrag}
               onDragOver={handleDrag}
               onDrop={handleDrop}
-              className={`
-                border-2 border-dashed rounded-lg p-8 text-center cursor-pointer
-                transition-colors
-                ${dragActive ? 'border-primary-500 bg-primary-50' : 'border-neutral-300 hover:border-neutral-400'}
-                ${errors.file ? 'border-red-500' : ''}
-              `}
+              className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${errors.file ? 'border-red-500' : ''}`}
+              style={{
+                borderColor: dragActive ? 'var(--color-accent)' : 'var(--color-border)',
+                backgroundColor: dragActive ? 'var(--color-accent-soft)' : 'transparent',
+              }}
               onClick={() => fileInputRef.current?.click()}
             >
-              <Upload className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-              <p className="text-neutral-700 mb-2">
+              <Upload className="w-12 h-12 mx-auto mb-4" style={{ color: 'var(--color-text-subtle)' }} />
+              <p className="mb-2" style={{ color: 'var(--color-text-muted)' }}>
                 Drag & drop, paste from clipboard, or browse
               </p>
-              <p className="text-sm text-neutral-500 mb-4">
+              <p className="text-sm mb-4" style={{ color: 'var(--color-text-muted)' }}>
                 Drop screenshots here, paste (Ctrl+V / ⌘V), or click to choose files
               </p>
-              <p className="text-xs text-neutral-400">
+              <p className="text-xs" style={{ color: 'var(--color-text-subtle)' }}>
                 Supported: JPEG, PNG, GIF, WebP, MP4, WebM (max 10MB)
               </p>
               <input
@@ -442,7 +441,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
           )}
 
           {previewUrl && file && (
-            <div className="relative border border-neutral-200 rounded-lg overflow-hidden bg-neutral-50">
+            <div className="relative border rounded-lg overflow-hidden" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface-muted)' }}>
               {mediaType === 'image' || mediaType === 'gif' ? (
                 <img src={previewUrl} alt="Preview" className="w-full h-auto max-h-64 object-contain" />
               ) : (
@@ -456,28 +455,30 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                   setMediaType(null);
                   if (fileInputRef.current) fileInputRef.current.value = '';
                 }}
-                className="absolute top-2 right-2 bg-white rounded-full p-2 shadow-lg hover:bg-neutral-100"
+                className="absolute top-2 right-2 rounded-full p-2 shadow-lg"
+                style={{ backgroundColor: 'var(--color-surface-elevated)' }}
               >
-                <X className="w-4 h-4" />
+                <X className="w-4 h-4" style={{ color: 'var(--color-text)' }} />
               </button>
-              <div className="p-2 bg-white border-t border-neutral-200">
-                <p className="text-sm text-neutral-600">{file.name}</p>
-                <p className="text-xs text-neutral-400">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+              <div className="p-2 border-t" style={{ backgroundColor: 'var(--color-surface-elevated)', borderColor: 'var(--color-border)' }}>
+                <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>{file.name}</p>
+                <p className="text-xs" style={{ color: 'var(--color-text-subtle)' }}>{(file.size / 1024 / 1024).toFixed(2)} MB</p>
               </div>
             </div>
           )}
 
           {linkUrl && (
-            <div className="border border-neutral-200 rounded-lg p-4 bg-neutral-50">
+            <div className="border rounded-lg p-4" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface-muted)' }}>
               <div className="flex items-start gap-3">
-                <LinkIcon className="w-5 h-5 text-neutral-400 mt-0.5 flex-shrink-0" />
+                <LinkIcon className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: 'var(--color-text-subtle)' }} />
                 <div className="flex-1">
                   <input
                     type="url"
                     value={linkUrl}
                     onChange={(e) => handleLinkChange(e.target.value)}
                     placeholder="https://example.com"
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-100 focus:border-primary-500"
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2"
+                    style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface-elevated)', color: 'var(--color-text)' }}
                   />
                 </div>
                 <button
@@ -486,7 +487,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                     setLinkUrl('');
                     setMediaType(null);
                   }}
-                  className="text-neutral-400 hover:text-neutral-600"
+                  style={{ color: 'var(--color-text-muted)' }}
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -502,7 +503,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                   const url = prompt('Enter a link URL:');
                   if (url) handleLinkChange(url);
                 }}
-                className="text-sm text-primary-600 hover:text-primary-700 flex items-center gap-1"
+                className="text-sm flex items-center gap-1"
+                style={{ color: 'var(--color-accent)' }}
               >
                 <LinkIcon className="w-4 h-4" />
                 Or paste a link instead
@@ -519,7 +521,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
           <div className="space-y-4">
             {/* Title */}
             <div>
-              <label className="block text-sm font-medium text-neutral-900 mb-2">
+              <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>
                 Title <span className="text-red-500">*</span>
               </label>
               <Input
@@ -535,7 +537,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-medium text-neutral-900 mb-2">
+              <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>
                 Description
               </label>
               <TextArea
@@ -590,16 +592,16 @@ export const UploadForm: React.FC<UploadFormProps> = ({
 
       {/* Section 2: Your Name, Your Email, Your Role */}
       <div className="space-y-6">
-        <h3 className="text-lg font-semibold text-neutral-900">Your Information</h3>
+        <h3 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>Your Information</h3>
 
         {useAuthProfile ? (
-          <p className="text-sm text-neutral-600">
-            Uploading as <strong>{authDisplayName || 'Signed-in user'}</strong>
+          <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+            Uploading as <strong style={{ color: 'var(--color-text)' }}>{authDisplayName || 'Signed-in user'}</strong>
           </p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-neutral-900 mb-2">Your name</label>
+              <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>Your name</label>
               <Select
                 options={nameOptions}
                 value={nameSelectValue}
@@ -621,7 +623,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-900 mb-2">Your email</label>
+              <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>Your email</label>
               <Select
                 options={emailOptions}
                 value={emailSelectValue}
@@ -662,7 +664,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
       )}
 
       {/* Actions */}
-      <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200">
+      <div className="flex justify-end gap-3 pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
         {onCancel && (
           <Button
             type="button"
