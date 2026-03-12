@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { componentRegistry } from '@/data/components';
+import { componentRegistry, comingSoonComponents } from '@/data/components';
 import { ChevronRight } from 'lucide-react';
 
 const SECONDARY_SIDEBAR_WIDTH = 240;
@@ -68,6 +68,31 @@ export function ComponentsSidebar() {
               </li>
             );
           })}
+          {comingSoonComponents.length > 0 && (
+            <li className="mt-4 pt-3 border-t" style={{ borderColor: 'var(--color-border)' }}>
+              <div className="px-3 mb-2">
+                <h3 className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: 'var(--color-text-subtle)' }}>
+                  Coming soon
+                </h3>
+              </div>
+              <ul className="space-y-0.5" aria-label="Coming soon components">
+                {comingSoonComponents.map((component) => (
+                  <li key={component.name}>
+                    <span
+                      className="flex items-center gap-2 rounded-md px-3 py-2 text-sm cursor-not-allowed block"
+                      style={{ color: 'var(--color-text-subtle)' }}
+                      title="Coming soon"
+                    >
+                      <span className="flex-1 truncate">{component.name}</span>
+                      <span className="text-[9px] font-medium uppercase tracking-wider shrink-0" style={{ color: 'var(--color-text-subtle)', opacity: 0.8 }}>
+                        Soon
+                      </span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          )}
         </ul>
       </nav>
     </aside>
